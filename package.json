@@ -1,19 +1,21 @@
 {
-  "name": "fyp",
+  "name": "foodgrid",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/UsamaFaisal/Food-Grid-FYP-2022.git"
+  "dependencies": {
+    "expo": "~47.0.6",
+    "expo-status-bar": "~1.4.2",
+    "react": "18.1.0",
+    "react-native": "0.70.5"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/UsamaFaisal/Food-Grid-FYP-2022/issues"
+  "devDependencies": {
+    "@babel/core": "^7.12.9"
   },
-  "homepage": "https://github.com/UsamaFaisal/Food-Grid-FYP-2022#readme"
+  "private": true
 }
