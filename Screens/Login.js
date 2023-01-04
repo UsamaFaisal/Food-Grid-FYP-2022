@@ -16,6 +16,8 @@ import EmailField from '../components/EmailField';
 import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
+import * as firebase from 'firebase';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 
 
@@ -68,17 +70,23 @@ export default function Login({ navigation }) {
                         color={disable?'#555555':'#000000'}
                         title='Log In'
                         btntextcolor='#fff'
-                        navigation={() => {setdisable(true);
+                        navigation={async() => {setdisable(true);
                        // if(mail=='admin1@gmail.com' && password=='adminadmin')
                         
-                            if(login(mail,password))
+                            if(await login(mail,password) && mail=='admin1@gmail.com' && password=='adminadmin')
                             {
-                                console.log('Admin logged in ');
+                                console.log('Admin logged in');
                                  navigation.navigate('Admindashboard') 
+                            }
+                            else if(await login(mail,password))
+                            {
+                                console.log('User Logged in');
+                                navigation.navigate('Welcome') 
+
                             }
                             else
                             {
-                                console.log('Ni hua login');
+                                console.log('Ni hua login'); 
                             }
                         /*else
                         {
