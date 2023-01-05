@@ -16,12 +16,18 @@ import EmailField from '../components/EmailField';
 import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
+import * as firebase from 'firebase'
 
 export default function Signup({ navigation }) {
     const [disable,setdisable]=useState(false);
+    
+    const [name, setname] = useState("");
+    const [phone, setphone] = useState("");
     const [mail, setmail] = useState("");
     const [password, setpassword] = useState("");
-    const [name, setname] = useState("");
+    const [disease, setdisease] = useState("");
+    const [allergicitems, setallergicitems] = useState("");
+    
     const [error, seterror] = useState("");
      
    const {register}= useContext(AuthContext);
@@ -30,16 +36,25 @@ export default function Signup({ navigation }) {
         seterror(value);
         setdisable(false)
     }
+    
+    function getname(val) {
+        setname(val)
+    }
+    function getphone(val) {
+        setphone(val)
+    }
     function getemail(val) {
         setmail(val.toLowerCase().trim());
     }
     function getpassword(val) {
         setpassword(val)
     }
-    function getname(val) {
-        setname(val)
+    function getdisease(val) {
+        setdisease(val)
     }
-
+    function getallergicitems(val) {
+        setallergicitems(val)
+    }
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
@@ -55,9 +70,14 @@ export default function Signup({ navigation }) {
                 <View style={styles.EmailWrapper}>
                     <EmailField
                         title='Name'
-                        Icon
+                        //Icon
                         email='Enter Name'
                         onChange={setname} />
+                    <EmailField
+                        title='Phone'
+                        //Icon
+                        email='Enter Phone'
+                        onChange={setphone} />
                     <EmailField
                         title='Email address'
                         email='Enter email'
@@ -66,13 +86,23 @@ export default function Signup({ navigation }) {
                     <PasswordField
                         title='Password'
                         onChange={setpassword} />
+                    <EmailField
+                        title='Disease'
+                        email='Enter Disease'
+                        onChange={setdisease}
+                    />
+                    <EmailField
+                        title='Allergic Items'
+                        email='Enter Allergic Items'
+                        onChange={setallergicitems}
+                    />
                 </View>
 
                 <View style={styles.BtnWrapper}>
                     <Btn
                         title='Sign Up'
-                        disabled={disable}
-                        color={disable?'#555555':'#000000'}
+                      //  disabled={disable}
+                       color={disable?'#555555':'#000000'}
                         btntextcolor='#fff'
                         //onPress={()=> register(mail,password)}
                         navigation={
@@ -90,6 +120,16 @@ export default function Signup({ navigation }) {
                                     setdisable(true);
                                  
                                 }
+                                var userid = firebase.database().ref().push().key;
+
+                                    firebase.database().ref('Users/'+userid).set({
+                                    username:name,
+                                    phone:phone,
+                                    email:mail,
+                                    password:password,
+                                    disease:disease,
+                                    allergicitems:allergicitems
+                                });
                                 register(mail,password)
                                 navigation.navigate('Login');
                             }

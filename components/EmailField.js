@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         marginVertical:10
     },
     EmailBody: {
-        height: hp('7%'),
+        height: hp('4%'),
         width: wp('90%'),
         alignSelf: 'center',
         flexDirection: 'row',
