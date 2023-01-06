@@ -7,6 +7,9 @@ import Onboarding from "../Screens/Onboarding";
 import Signup from "../Screens/Signup";
 import Login from "../Screens/Login";
 import Admindashboard from "../Screens/Admindashboard";
+import Dashboard from "../Screens/Dashboard";
+import Message from "../Screens/Message";
+import AdminMessage from "../Screens/AdminMessage";
 import { AuthContext } from "./Authenticationprovider";
 import * as firebase from 'firebase';
 import { useContext } from "react";
@@ -37,6 +40,10 @@ const onAuthStateChanged=(user)=>{
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />
         {user ? <Stack.Screen name="Admindashboard" component={Admindashboard} /> :<Stack.Screen name="Admindashboard" component={Admindashboard} />}
+        {user ? <Stack.Screen name="Dashboard" component={Dashboard} /> :<Stack.Screen name="Dashboard" component={Dashboard} />}
+        {user ? <Stack.Screen name="Message" component={Message} /> :<Stack.Screen name="Message" component={Message} />}
+        {user ? <Stack.Screen name="AdminMessage" component={AdminMessage} /> :<Stack.Screen name="AdminMessage" component={AdminMessage} />}
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

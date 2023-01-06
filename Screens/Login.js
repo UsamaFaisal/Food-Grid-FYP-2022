@@ -66,12 +66,11 @@ export default function Login({ navigation }) {
                 </View>
                 <View style={styles.BtnWrapper}>
                     <Btn
-                        disabled={disable}
+                        //disabled={disable}
                         color={disable?'#555555':'#000000'}
                         title='Log In'
                         btntextcolor='#fff'
                         navigation={async() => {setdisable(true);
-                       // if(mail=='admin1@gmail.com' && password=='adminadmin')
                         
                             if(await login(mail,password) && mail=='admin1@gmail.com' && password=='adminadmin')
                             {
@@ -81,7 +80,7 @@ export default function Login({ navigation }) {
                             else if(await login(mail,password))
                             {
                                 console.log('User Logged in');
-                                navigation.navigate('Welcome') 
+                                navigation.navigate('Dashboard') 
 
                             }
                             else

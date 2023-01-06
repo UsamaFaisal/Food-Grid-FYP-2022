@@ -10,68 +10,55 @@ import {
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
-import { AntDesign } from '@expo/vector-icons';
-import Header from '../components/Header'
-import { SearchBar } from 'react-native-elements';
 import EmailField from '../components/EmailField';
-import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
-import { AuthContext } from '../routes/Authenticationprovider';
+import * as firebase from 'firebase';
 
-export default function Dashboard({ navigation }) {
+
+
+
+export default function AdminMessage({ navigation }) {
     const [disable,setdisable]=useState(false);
-    const [mail,setmail]=useState("");
-    const [password,setpassword]=useState("");
+    const [msg,setmsg]=useState("");
     const [error,seterror]=useState("");
-      
-  
-
-    const {logout}=useContext(AuthContext);
+    
     function errors(value){
         seterror(value);
         console.log(value)
         setdisable(false)
     }
-    
+    function getmsg(val) {
+        setmsg(val.toLowerCase().trim())
+        //console.log(mail)
+    }
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
-            <ScrollView>
-            <SearchBar placeholder="Search..."
-             //onChangeText={(text) => setSearchText(text)}
-             //value={searchText}
-             lightTheme
-             round
-             />
-
+            <ScrollView>         
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
+                <View style={styles.EmailWrapper}>
+                    <EmailField
+                        title='Message'
+                        Icon
+                        email='Enter Message'
+                        onChange={getmsg}
+                    />
+                </View>
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
-                        color={'#555555'}
-                        title='Chat'
+                        color={disable?'#555555':'#000000'}
+                        title='Send'
                         btntextcolor='#fff'
                         navigation={() => {
-                            navigation.navigate('Message');
                             //setdisable(true);
+                            
+                        
                     }} 
                         />
                 </View>
-                <View style={styles.SignUBtnWrapper}>
-                    <Btn
-                        title='Logout'
-                        color='#fff'
-                        btntextcolor='#000000'
-                        navigation={
-                            () => {
-                                logout();
-                                navigation.navigate('Login')
-                            }
-                        } />
-                </View>
-                 
+                
             </ScrollView>
-            
         </View>
     );
 }

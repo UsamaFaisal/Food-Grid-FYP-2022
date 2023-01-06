@@ -15,7 +15,7 @@ import Header from '../components/Header'
 import EmailField from '../components/EmailField';
 import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
-
+import { AuthContext } from '../routes/Authenticationprovider';
 
 
 export default function Admindashboard({ navigation }) {
@@ -23,6 +23,7 @@ export default function Admindashboard({ navigation }) {
     const [mail,setmail]=useState("");
     const [password,setpassword]=useState("");
     const [error,seterror]=useState("");
+    const {logout}=useContext(AuthContext);
     function errors(value){
         seterror(value);
         console.log(value)
@@ -46,31 +47,35 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                 <View style={styles.BtnWrapper}>
                     <Btn
-                        disabled={disable}
+                        //disabled={disable}
                         color={disable?'#555555':'#000000'}
                         title='Manage Users'
                         btntextcolor='#fff'
-                        navigation={() => {setdisable(true);
+                        navigation={() => {
+                            //setdisable(true);
                     }} 
                         />
                 </View>
                 <View style={styles.BtnWrapper}>
                     <Btn
-                        disabled={disable}
+                       // disabled={disable}
                         color={disable?'#555555':'#000000'}
                         title='Manage Food Items'
                         btntextcolor='#fff'
-                        navigation={() => {setdisable(true);
+                        navigation={() => {
+                            //setdisable(true);
                     }} 
                         />
                 </View>
                 <View style={styles.BtnWrapper}>
                     <Btn
-                        disabled={disable}
+                        //disabled={disable}
                         color={disable?'#555555':'#000000'}
                         title='Chat'
                         btntextcolor='#fff'
-                        navigation={() => {setdisable(true);
+                        navigation={() => {
+                            //setdisable(true);
+                            navigation.navigate('AdminMessage');
                     }} 
                         />
                 </View>
@@ -81,6 +86,7 @@ export default function Admindashboard({ navigation }) {
                         btntextcolor='#000000'
                         navigation={
                             () => {
+                                logout();
                                 navigation.navigate('Login')
                             }
                         } />
