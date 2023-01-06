@@ -6,13 +6,15 @@ import {
     StatusBar,
     Image,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    FlatList
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import EmailField from '../components/EmailField';
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
+import { GiftedChat } from 'react-native-gifted-chat';
 
 
 
@@ -21,16 +23,26 @@ export default function Message({ navigation }) {
     const [disable,setdisable]=useState(false);
     const [msg,setmsg]=useState("");
     const [error,seterror]=useState("");
-    
+    var [messages, setMessages] = useState([]);
     function errors(value){
         seterror(value);
         console.log(value)
         setdisable(false)
     }
-    function getmsg(val) {
-        setmsg(val.toLowerCase().trim())
+    //function getmsg(val) {
+      //  setmsg(val)
         //console.log(mail)
-    }
+    //}
+    function sendMessage() {
+        //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
+        firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).push({
+          message: msg,
+          sender: firebase.auth().currentUser.uid,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+      
+      
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
@@ -41,9 +53,12 @@ export default function Message({ navigation }) {
                         title='Message'
                         Icon
                         email='Enter Message'
-                        onChange={getmsg}
+                        onChange={setmsg}
+                    
                     />
+                    
                 </View>
+                
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
@@ -52,16 +67,41 @@ export default function Message({ navigation }) {
                         btntextcolor='#fff'
                         navigation={() => {
                             //setdisable(true);
-                            
-                        
+                            firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).on('child_added', snapshot => {
+                                // update the chat interface with the 
+                                var namm=[];
+                                snapshot.forEach(element => {
+                                    namm.push(element.val());
+                                    console.log(element);
+                                });
+                                setMessages(namm);
+                              }); 
+                              
+                        sendMessage();     
                     }} 
                         />
                 </View>
                 
+               {/* <View>
+                {messages.foreach(element =>
+                 <Text key={element.timestamp}> {element.message} </Text> )}
+                </View> */}
             </ScrollView>
+            {/* <FlatList
+            data={messages}
+            renderItem={({ item }) => <Text>{item.message}</Text>}
+            keyExtractor={item => item.id}
+             /> */}
+            
         </View>
     );
 }
+
+  
+  
+  
+  
+  
 const styles = StyleSheet.create({
     error:{
         flex: 1,

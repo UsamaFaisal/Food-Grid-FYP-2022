@@ -52,6 +52,7 @@ export default function Admindashboard({ navigation }) {
                         title='Manage Users'
                         btntextcolor='#fff'
                         navigation={() => {
+                            navigation.navigate('ManageUsers');
                             //setdisable(true);
                     }} 
                         />
