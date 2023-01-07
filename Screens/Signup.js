@@ -17,6 +17,7 @@ import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
 import * as firebase from 'firebase'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 export default function Signup({ navigation }) {
     const [disable,setdisable]=useState(false);
@@ -29,7 +30,7 @@ export default function Signup({ navigation }) {
     const [allergicitems, setallergicitems] = useState("");
     
     const [error, seterror] = useState("");
-     
+     const flagg=false;
    const {register}= useContext(AuthContext);
 
     function errors(value) {
@@ -55,6 +56,107 @@ export default function Signup({ navigation }) {
     function getallergicitems(val) {
         setallergicitems(val)
     }
+    // function checkIfUserExists(email,password) {
+    //     firebase.auth().createUserWithEmailAndPassword(email, password)
+    //     .then(u => {})
+    //     .catch(error => {
+    //        switch (error.code) {
+    //           case 'Error: The email address is already in use by another account.':
+    //             return true
+    //             break;
+    //           default:
+    //             return false
+    //             //console.log(error.message);
+    //             break;
+    //         }
+    //     });
+    //   }
+    async function getEmails(mail) {
+        try {
+          const snapshot = await firebase.database().ref('Users').once('value');
+          const users = snapshot.val();
+          //const emails = [];
+            for (const user of Object.values(users)) 
+            {
+                    console.log(user.email)
+                    console.log(mail)
+                    if(user.email.toString() === mail.toString())
+                    {
+                        console.log('aya')
+                        return true;
+                    }
+            }
+            return false
+          //console.log(emails);
+        } catch (error) {
+          console.log(error);
+        }
+        return false
+      } 
+         
+    const handlevalidation=()=>{
+        const validator = require('validator');
+        // getEmails(mail).then(result => {
+        //     console.log(result);
+        //     if(result){
+        //         seterror("mail already")
+        //     return false;
+        //     }
+        //   });
+        if(name.length==0){
+            seterror("Name Required")
+            return false;
+        }
+        if(phone.length==0 || (phone.length<11 || phone.length>11)){
+            seterror("PhoneNumber Not Valid")
+            return false;
+        }
+        if (!validator.isEmail(mail) || mail.length==0)
+        {
+            seterror("Email Not valid")
+            return false;
+        }
+        if (password.length<6)
+        {
+            seterror("Password's length should be minimum of 6 characters")
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+        
+    };
+    
+    const registeruserr=()=>{
+        var t=true
+        var userid = firebase.database().ref().push().key;
+        firebase.database().ref('Users/'+userid).set({
+        username:name,
+        phone:phone,
+        email:mail,
+        password:password,
+        disease:disease,
+        allergicitems:allergicitems
+    })
+    register(mail,password).then(result=>{
+        if(!result)
+        {
+            t=false
+        }
+
+    });
+    return t
+    };
+    const func=()=>{
+    if(handlevalidation() && registeruserr())
+    {
+        
+          return true
+    }
+    else 
+        return false;
+    };
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
@@ -107,31 +209,12 @@ export default function Signup({ navigation }) {
                         //onPress={()=> register(mail,password)}
                         navigation={
                             () => {
-
-                                const validator = require('validator');
-                                if(name.length<2){
-                                    seterror("Please enter a valid name")
-                                }
-                                else if (!validator.isEmail(mail))
-                                    seterror("Email is not valid")
-                                else if (password.length<6)
-                                seterror("Password's length should be minimum of 6 characters")
-                                else{
-                                    setdisable(true);
                                  
-                                }
-                                var userid = firebase.database().ref().push().key;
-
-                                    firebase.database().ref('Users/'+userid).set({
-                                    username:name,
-                                    phone:phone,
-                                    email:mail,
-                                    password:password,
-                                    disease:disease,
-                                    allergicitems:allergicitems
-                                });
-                                register(mail,password)
-                                navigation.navigate('Login');
+                        if(func())
+                        {
+                            navigation.navigate('Login');                        }        
+                                
+                                
                             }
                         } />
                 </View>

@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,} from 'react';
 import {
     StyleSheet,
     Text,
     View,
     StatusBar,
-    VirtualizedList,
-    Image,
-    TouchableOpacity,
     FlatList,
-    Pressable,
-    ScrollView
+    Button,
+    Alert
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
+import {useNavigation} from '@react-navigation/native';
 
-export default function ManageUsers({ navigation }) {
+export default function ManageUsers() {
     const [users,setUsers]=useState([]);
+    const [user,setUser]=useState([]);
     const [disable,setdisable]=useState(false);
     const [error,seterror]=useState("");
-    
+    const navigation = useNavigation();
     function errors(value){
         seterror(value);
         console.log(value)
@@ -28,18 +27,22 @@ export default function ManageUsers({ navigation }) {
     }
 
     useEffect(()=>{
-        
         const dbRef = firebase.database().ref();
         dbRef.child("Users").get().then((snapshot) => {
           if (snapshot.exists()) {
             var arr=[];
+            var arr2=[];
             snapshot.forEach(element => {
                 arr.push(element.val())
-      //          console.log(element.val().email);
+                arr2.push(element.key)
+                // console.log(arr2);
+                //var id = element.key;
+                //console.log(id);
+
 
             });
             setUsers(arr);
-            //console.log(snapshot.val());
+            setUser(arr2)
           } else {
             console.log("No data available");
           }
@@ -47,39 +50,59 @@ export default function ManageUsers({ navigation }) {
           console.error(error);
         });
     },[]);
+
+    const EditUser = (id)=>{
+      navigation.navigate('EditUser',{id})
+    }
+
+    const onDelete = (id) => {
+        const fireDb = firebase.database().ref();
+        fireDb.child(`Users/${id}`).remove((err)=>{
+          if(!err)
+          {
+            Alert.alert('Success', 'Delete User successful!', [{text: 'OK'}]);
+          }
+          else{
+            Alert.alert('User Not Found', [{text: 'OK'}]);
+          }
+        })
+    }
     return (
-        <View style={styles.container}>
-            <StatusBar style='auto' />
-            <ScrollView>
-                <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
-                <View style={styles.BtnWrapper}>
-                    <Btn
-                        //disabled={disable}
-                        color={disable?'#555555':'#000000'}
-                        title='Add User'
-                        btntextcolor='#fff'
-                        navigation={() => {
-                            console.log(users);
-                           // setdisable(true);
-                    }} 
-                        />
-                </View>
-               
-            </ScrollView>
-            
-            <FlatList style={styles.itemContainer1}
-                  data = {users}
-                  renderItem={({ item }) => (
-                <View style={styles.itemContainer}>
-                 <Text style={styles.itemTitle}>Username: {item.username}</Text>
-                 <Text style={styles.itemSubtitle}>Email: {item.email}</Text>
-                 <Text style={styles.itemSubtitle}>Phone: {item.phone}</Text>
-                 <Text style={styles.itemSubtitle}>Allergic Items: {item.allergicitems}</Text>
-                 <Text style={styles.itemSubtitle}>Disease: {item.disease}</Text>
-                 </View>)}/>
-        </View>
-    );
-}
+      <View style={styles.container}>
+          <StatusBar style='auto' />
+              <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
+              <View style={styles.BtnWrapper}>
+                  <Btn
+                      //disabled={disable}
+                      color={disable?'#555555':'#000000'}
+                      title='Add User'
+                      btntextcolor='#fff'
+                      navigation={() => {
+                          console.log(users);
+                         // setdisable(true);
+                  }} 
+                      />
+              </View>
+          <FlatList 
+                data = {users}
+                renderItem={({ item,index }) => (
+              <View style={styles.itemContainer}>
+                {/* <Text style={styles.itemTitle}>ID: {user[index]}</Text> */}
+               <Text style={styles.itemTitle}>Username: {item.username}</Text>
+               <Text style={styles.itemSubtitle}>Email: {item.email}</Text>
+               <Text style={styles.itemSubtitle}>Phone: {item.phone}</Text>
+               <Text style={styles.itemSubtitle}>Allergic Items: {item.allergicitems}</Text>
+               <Text style={styles.itemSubtitle}>Disease: {item.disease}</Text>
+               <Button  title="Update" onPress={() => EditUser(user[index])}
+                />
+                <Text></Text>
+                <Button title="Delete" onPress={()=> onDelete(user[index])}
+                />
+               </View>)}
+            />
+      </View>
+  );
+  }
 const styles = StyleSheet.create({
     error:{
         flex: 1,
@@ -87,6 +110,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         color:'#ff0000',
         fontSize:24
+    },
+    btndelete:{
+      color:"#FF0000",
+      backgroundColor:"#FF0000"
     },
     container: {
         flex: 1,

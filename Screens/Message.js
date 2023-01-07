@@ -21,7 +21,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 
 export default function Message({ navigation }) {
     const [disable,setdisable]=useState(false);
-    const [msg,setmsg]=useState("");
+    const [msg,setmsg]=useState([]);
     const [error,seterror]=useState("");
     var [messages, setMessages] = useState([]);
     function errors(value){
@@ -44,8 +44,11 @@ export default function Message({ navigation }) {
       
       
     return (
+          
         <View style={styles.container}>
             <StatusBar style='auto' />
+            
+            
             <ScrollView>         
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                 <View style={styles.EmailWrapper}>
@@ -72,26 +75,25 @@ export default function Message({ navigation }) {
                                 var namm=[];
                                 snapshot.forEach(element => {
                                     namm.push(element.val());
-                                    console.log(element);
+                                    //console.log("Elemnt:",element.val());
                                 });
                                 setMessages(namm);
-                              }); 
-                              
+                               // console.log("Message",messages);
+                               // console.log("Message",typeof(messages));
+                                
+                              });        
                         sendMessage();     
                     }} 
                         />
                 </View>
-                
-               {/* <View>
-                {messages.foreach(element =>
-                 <Text key={element.timestamp}> {element.message} </Text> )}
-                </View> */}
             </ScrollView>
-            {/* <FlatList
-            data={messages}
-            renderItem={({ item }) => <Text>{item.message}</Text>}
-            keyExtractor={item => item.id}
-             /> */}
+             <FlatList
+                  data = {Object.values(messages)}
+                  renderItem={({ item }) => (
+                <View style={styles.messageContainer}>
+                 <Text style={styles.sender}> {item.sender}</Text>
+                 <Text style={styles.text}>{item.message}</Text>
+                 </View>)}/>
             
         </View>
     );
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        //backgroundColor: "#47b749",
     },
     EmailWrapper: {
         height: hp('15%'),
@@ -136,6 +138,22 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         marginBottom: 10
-    }
+    },
+    messageContainer: {
+        flexDirection: 'row',
+        padding: 10,
+        margin: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 10,
+        alignItems: 'flex-start',
+      },
+      sender: {
+        fontWeight: 'bold',
+      },
+      text: {
+        color:'#000000',
+        marginLeft: 10,
+      },
 
 });
