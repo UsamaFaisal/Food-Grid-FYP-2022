@@ -27,9 +27,26 @@ export const AuthProvider = ({ children }) => {
       },
       register: async (email, password) => {
         try {
-          await firebase.auth().createUserWithEmailAndPassword(email, password);
+          const user=await firebase.auth().createUserWithEmailAndPassword(email, password);
+          if(user)
+          {return true}
+          else
+          {return false}
         } catch (e) {
           console.log(e);
+          //return false
+        }
+        return false
+      },
+      update:async function (email, password) {
+        try {
+          console.log(email);
+          const user = firebase.auth().currentUser;
+          await user.updateEmail(email);
+          await user.updatePassword(password);
+          console.log('Email and password updated successfully');
+        } catch (error) {
+          console.log(error);
         }
       },
       logout: async () => {

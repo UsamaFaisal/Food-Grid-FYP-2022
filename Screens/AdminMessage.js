@@ -4,6 +4,7 @@ import {
     Text,
     View,
     StatusBar,
+    FlatList,
     Image,
     TouchableOpacity,
     ScrollView
@@ -13,24 +14,38 @@ import { RFValue as rf } from "react-native-responsive-fontsize";
 import EmailField from '../components/EmailField';
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
+import { useNavigation,useRoute } from '@react-navigation/native';
 
 
 
 
-export default function AdminMessage({ navigation }) {
+export default function AdminMessage() {
     const [disable,setdisable]=useState(false);
     const [msg,setmsg]=useState("");
     const [error,seterror]=useState("");
-    
+    const navigation = useNavigation();
+    const route=useRoute();
+    const userid= route.params.id;
+
+    var [messages, setMessages] = useState([]);
     function errors(value){
         seterror(value);
         console.log(value)
         setdisable(false)
     }
-    function getmsg(val) {
-        setmsg(val.toLowerCase().trim())
-        //console.log(mail)
-    }
+    // function getmsg(val) {
+    //     setmsg(val.toLowerCase().trim())
+    //     //console.log(mail)
+    // }
+    function sendMessage() {
+        //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
+        firebase.database().ref('chat/'+ userid).push({
+          message: msg,
+          sender: firebase.auth().currentUser.uid,
+          timestamp: new Date() 
+          //firebase.database.ServerValue.TIMESTAMP
+        });
+      }
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
@@ -41,7 +56,7 @@ export default function AdminMessage({ navigation }) {
                         title='Message'
                         Icon
                         email='Enter Message'
-                        onChange={getmsg}
+                        onChange={setmsg}
                     />
                 </View>
                 <View style={styles.BtnWrapper}>
@@ -52,6 +67,17 @@ export default function AdminMessage({ navigation }) {
                         btntextcolor='#fff'
                         navigation={() => {
                             //setdisable(true);
+                            sendMessage(); 
+                            //setdisable(true);
+                            firebase.database().ref('chat/'+ userid).get().then ((snapshot) => {
+                                // update the chat interface with the 
+                                var namm=[];
+                                snapshot.forEach(element => {
+                                    namm.push(element.val());
+                                    //console.log("Elemnt:",element.val());
+                                });
+                                setMessages(namm);
+                              }); 
                             
                         
                     }} 
@@ -59,6 +85,13 @@ export default function AdminMessage({ navigation }) {
                 </View>
                 
             </ScrollView>
+            <FlatList
+                  data = {messages}
+                  renderItem={({ item }) => (
+                <View style={styles.messageContainer}>
+                 {/* <Text style={styles.sender}> {item.sender}</Text> */}
+                 <Text style={styles.text}>{item.message}</Text>
+                 </View>)}/>
         </View>
     );
 }

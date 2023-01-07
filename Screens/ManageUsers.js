@@ -65,7 +65,9 @@ export default function ManageUsers() {
           else{
             Alert.alert('User Not Found', [{text: 'OK'}]);
           }
+        
         })
+        
     }
     return (
       <View style={styles.container}>
@@ -78,7 +80,8 @@ export default function ManageUsers() {
                       title='Add User'
                       btntextcolor='#fff'
                       navigation={() => {
-                          console.log(users);
+                        navigation.navigate('AddUser');
+                         // console.log(users);
                          // setdisable(true);
                   }} 
                       />

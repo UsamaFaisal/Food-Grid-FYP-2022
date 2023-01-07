@@ -18,27 +18,42 @@ import { GiftedChat } from 'react-native-gifted-chat';
 
 
 
-
-export default function Message({ navigation }) {
+export default function Message({navigation}) {
     const [disable,setdisable]=useState(false);
     const [msg,setmsg]=useState([]);
     const [error,seterror]=useState("");
     var [messages, setMessages] = useState([]);
+    const [mid, setmid] = useState([]);
+   
+
     function errors(value){
         seterror(value);
         console.log(value)
         setdisable(false)
     }
+    
+    // console.log(id)
+    const AdminMessage=(id)=>{
+        console.log("1",id)
+    navigation.navigate('AdminMessage',{id});
+    console.log("2",id)
+    }
+    
+   
+    
     //function getmsg(val) {
       //  setmsg(val)
         //console.log(mail)
     //}
+    
     function sendMessage() {
         //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
         firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).push({
           message: msg,
           sender: firebase.auth().currentUser.uid,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
+          timestamp: new Date() 
+          //firebase.database.ServerValue.TIMESTAMP
+          
         });
       }
       
@@ -51,10 +66,9 @@ export default function Message({ navigation }) {
             
             <ScrollView>         
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
-                <View style={styles.EmailWrapper}>
+                <View >
                     <EmailField
-                        title='Message'
-                        Icon
+                        title='Message'    
                         email='Enter Message'
                         onChange={setmsg}
                     
@@ -64,13 +78,15 @@ export default function Message({ navigation }) {
                 
                 <View style={styles.BtnWrapper}>
                     <Btn
-                        //disabled={disable}
                         color={disable?'#555555':'#000000'}
                         title='Send'
                         btntextcolor='#fff'
                         navigation={() => {
+                            sendMessage(); 
+                            const id=firebase.auth().currentUser.uid;
+                            AdminMessage(id);
                             //setdisable(true);
-                            firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).on('child_added', snapshot => {
+                            firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).get().then ((snapshot) => {
                                 // update the chat interface with the 
                                 var namm=[];
                                 snapshot.forEach(element => {
@@ -78,20 +94,17 @@ export default function Message({ navigation }) {
                                     //console.log("Elemnt:",element.val());
                                 });
                                 setMessages(namm);
-                               // console.log("Message",messages);
-                               // console.log("Message",typeof(messages));
-                                
                               });        
-                        sendMessage();     
+                            
                     }} 
                         />
                 </View>
             </ScrollView>
              <FlatList
-                  data = {Object.values(messages)}
+                  data = {messages}
                   renderItem={({ item }) => (
                 <View style={styles.messageContainer}>
-                 <Text style={styles.sender}> {item.sender}</Text>
+                 {/* <Text style={styles.sender}> {item.sender}</Text> */}
                  <Text style={styles.text}>{item.message}</Text>
                  </View>)}/>
             
@@ -99,11 +112,6 @@ export default function Message({ navigation }) {
     );
 }
 
-  
-  
-  
-  
-  
 const styles = StyleSheet.create({
     error:{
         flex: 1,
@@ -114,7 +122,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        //backgroundColor: "#47b749",
+        backgroundColor: "#47b749",
     },
     EmailWrapper: {
         height: hp('15%'),
@@ -144,6 +152,7 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         borderWidth: 1,
+        color:'#000000',
         borderColor: '#ccc',
         borderRadius: 10,
         alignItems: 'flex-start',
@@ -153,7 +162,8 @@ const styles = StyleSheet.create({
       },
       text: {
         color:'#000000',
-        marginLeft: 10,
+        textAlign: 'right',
+      //  marginLeft: 270,
       },
 
 });

@@ -6,7 +6,8 @@ import {
     StatusBar,
     Image,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Alert
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
@@ -22,12 +23,12 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 export default function Signup({ navigation }) {
     const [disable,setdisable]=useState(false);
     
-    const [name, setname] = useState("");
-    const [phone, setphone] = useState("");
+    const [name, setname] = useState("@username");
+    const [phone, setphone] = useState("@contact");
     const [mail, setmail] = useState("");
     const [password, setpassword] = useState("");
-    const [disease, setdisease] = useState("");
-    const [allergicitems, setallergicitems] = useState("");
+    const [disease, setdisease] = useState("@disease");
+    const [allergicitems, setallergicitems] = useState("@allergicitems");
     
     const [error, seterror] = useState("");
      const flagg=false;
@@ -103,14 +104,14 @@ export default function Signup({ navigation }) {
         //     return false;
         //     }
         //   });
-        if(name.length==0){
-            seterror("Name Required")
-            return false;
-        }
-        if(phone.length==0 || (phone.length<11 || phone.length>11)){
-            seterror("PhoneNumber Not Valid")
-            return false;
-        }
+        // if(name.length==0){
+        //     seterror("Name Required")
+        //     return false;
+        // }
+        // if(phone.length==0 || (phone.length<11 || phone.length>11)){
+        //     seterror("PhoneNumber Not Valid")
+        //     return false;
+        // }
         if (!validator.isEmail(mail) || mail.length==0)
         {
             seterror("Email Not valid")
@@ -127,18 +128,47 @@ export default function Signup({ navigation }) {
         }
         
     };
+    
+    const registeruserr=()=>{
+        var t=true
+        var userid = firebase.database().ref().push().key;
+        firebase.database().ref('Users/'+userid).set({
+        username:name,
+        phone:phone,
+        email:mail,
+        password:password,
+        disease:disease,
+        allergicitems:allergicitems
+    })
+    register(mail,password).then(result=>{
+        if(!result)
+        {
+            t=false
+        }
+
+    });
+    return t
+    };
+    const func=()=>{
+    if(handlevalidation() && registeruserr())
+    {
+          return true
+    }
+    else 
+        return false;
+    };
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
             <ScrollView>
                 <Header
-                    title='Sign Up'
-                    back={() => navigation.goBack()} />
+                    title='Add User'
+                    back={() => navigation.goBack('ManageUsers')} />
                 <View style={styles.error}>
                     <Text style={styles.error}>{error}</Text>
                 </View>
                 <View style={styles.EmailWrapper}>
-                    <EmailField
+                    {/* <EmailField
                         title='Name'
                         //Icon
                         email='Enter Name'
@@ -147,7 +177,7 @@ export default function Signup({ navigation }) {
                         title='Phone'
                         //Icon
                         email='Enter Phone'
-                        onChange={setphone} />
+                        onChange={setphone} /> */}
                     <EmailField
                         title='Email address'
                         email='Enter email'
@@ -156,7 +186,7 @@ export default function Signup({ navigation }) {
                     <PasswordField
                         title='Password'
                         onChange={setpassword} />
-                    <EmailField
+                    {/* <EmailField
                         title='Disease'
                         email='Enter Disease'
                         onChange={setdisease}
@@ -165,49 +195,24 @@ export default function Signup({ navigation }) {
                         title='Allergic Items'
                         email='Enter Allergic Items'
                         onChange={setallergicitems}
-                    />
+                    /> */}
                 </View>
 
                 <View style={styles.BtnWrapper}>
                     <Btn
-                        title='Sign Up'
+                        title='Add User'
                       //  disabled={disable}
                        color={disable?'#555555':'#000000'}
                         btntextcolor='#fff'
-                        navigation={async() => {
-                        if(handlevalidation())
-                        {
-                        if(await register(mail,password))
+                        //onPress={()=> register(mail,password)}
+                        navigation={
+                            () => {       
+                            if(func())
                             {
-                                var userid = firebase.database().ref().push().key;
-                                firebase.database().ref('Users/'+userid).set({
-                                username:name,
-                                phone:phone,
-                                email:mail,
-                                password:password,
-                                disease:disease,
-                                allergicitems:allergicitems})
-                                
-                                navigation.navigate('Login');  
-                                seterror("");                     
-                                 
-                            }   
-                            else
-                            {
-                                seterror('USER ALREADY THERE')
-                            }     
-                            }}
+                                Alert.alert('Added User Successfully!');
+                            }        
+                        }
                         } />
-                        
-                </View>
-                <View style={styles.SignUBtnWrapper}>
-                    <Text style={styles.AccountTxt}>Already have an account?</Text>
-                    <Btn
-                        title='Log In'
-                        color='#fff'
-                        btntextcolor='#000000'
-                        
-                        navigation={() => navigation.navigate('Login')} />
                 </View>
             </ScrollView>
         </View>
@@ -245,8 +250,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10
     }
-
-
-
-
 });

@@ -18,6 +18,7 @@ import EmailField from '../components/EmailField';
 import PasswordField from '../components/PasswordField';
 import Header from '../components/Header'
 import { AuthContext } from '../routes/Authenticationprovider';
+import { registerCustomIconType } from 'react-native-elements';
 
 const EditUser = () => {
     const [disable,setdisable]=useState(false);
@@ -37,6 +38,7 @@ const EditUser = () => {
     const [error,seterror]=useState("");
     const navigation = useNavigation();
     const {register}= useContext(AuthContext);
+    const {update}= useContext(AuthContext);
     const route = useRoute();
     const itemId = route.params.id;
     function errors(value){
@@ -151,6 +153,7 @@ const EditUser = () => {
                                     disease:disease,
                                     allergicitems:allergicitems
                                 });
+                                update(mail,password)
                                 register(mail,password)
                                 Alert.alert('Success', 'Update User successfully!', [{text: 'OK'}]);
                             }
