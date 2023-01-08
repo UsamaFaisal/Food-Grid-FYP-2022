@@ -13,8 +13,10 @@ import AdminMessage from "../Screens/AdminMessage";
 import ManageUsers from "../Screens/ManageUsers";
 import ManageFooditems from "../Screens/ManageFooditems";
 import EditUser from "../Screens/EditUser";
+import EditFooditem from "../Screens/EditFooditem";
 import AddUser from "../Screens/AddUser";
 import AddFooditem from "../Screens/AddFooditem";
+import ChatHandling from "../Screens/ChatHandling"
 import { AuthContext } from "./Authenticationprovider";
 import * as firebase from 'firebase';
 import { useContext } from "react";
@@ -52,8 +54,9 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="ManageFooditems" component={ManageFooditems} /> :<Stack.Screen name="ManageFooditems" component={ManageFooditems} />}
         {user ? <Stack.Screen name="AddUser" component={AddUser} /> :<Stack.Screen name="AddUser" component={AddUser} />}
         {user ? <Stack.Screen name="AddFooditem" component={AddFooditem} /> :<Stack.Screen name="AddFooditem" component={AddFooditem} />}
-       
+        {user ? <Stack.Screen name="EditFooditem" component={EditFooditem} /> :<Stack.Screen name="EditFooditem" component={EditFooditem} />}
         {user ? <Stack.Screen name="EditUser" component={EditUser} /> :<Stack.Screen name="EditUser" component={EditUser} />}
+        {user ? <Stack.Screen name="ChatHandling" component={ChatHandling} /> :<Stack.Screen name="ChatHandling" component={ChatHandling} />}
        
       </Stack.Navigator>
     </NavigationContainer>

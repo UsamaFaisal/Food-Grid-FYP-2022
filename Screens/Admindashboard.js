@@ -42,7 +42,7 @@ export default function Admindashboard({ navigation }) {
             <StatusBar style='auto' />
             <ScrollView>
                 <Header
-                    title='Log In'
+                    title='Dashboard'
                      />
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                 <View style={styles.BtnWrapper}>

@@ -19,9 +19,14 @@ import { AuthContext } from '../routes/Authenticationprovider';
 import * as firebase from 'firebase'
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+
+const Stack = createStackNavigator();
 export default function Signup({ navigation }) {
     const [disable,setdisable]=useState(false);
-    
     const [name, setname] = useState("");
     const [phone, setphone] = useState("");
     const [mail, setmail] = useState("");
@@ -130,50 +135,56 @@ export default function Signup({ navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
-            <ScrollView>
                 <Header
-                    title='Sign Up'
+                    //title='Sign Up'
                     back={() => navigation.goBack()} />
+
+        <Text style ={styles.TextLable}>
+            <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>F O O D </Text>
+            <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>G R I D </Text>     
+        </Text>
+      {/* <Text style={styles.TextLable3}>Sign Up </Text> */}
+                <ScrollView>
                 <View style={styles.error}>
                     <Text style={styles.error}>{error}</Text>
                 </View>
                 <View style={styles.EmailWrapper}>
                     <EmailField
-                        title='Name'
                         //Icon
-                        email='Enter Name'
+                        email='Name'
                         onChange={setname} />
+                        
                     <EmailField
-                        title='Phone'
+                      //  title='Phone'
                         //Icon
-                        email='Enter Phone'
+                        email='Phone No'
                         onChange={setphone} />
                     <EmailField
-                        title='Email address'
-                        email='Enter email'
+                        //title='Email address'
+                        email='Email'
                         onChange={setmail}
                     />
                     <PasswordField
-                        title='Password'
+                      //  title='Password'
+                
                         onChange={setpassword} />
                     <EmailField
-                        title='Disease'
-                        email='Enter Disease'
+                        //title='Disease'
+                        email='Disease'
                         onChange={setdisease}
                     />
                     <EmailField
-                        title='Allergic Items'
-                        email='Enter Allergic Items'
+                      //  title='Allergic Items'
+                        email='Allergic Items'
                         onChange={setallergicitems}
                     />
                 </View>
-
-                <View style={styles.BtnWrapper}>
+                <View>
                     <Btn
                         title='Sign Up'
                       //  disabled={disable}
                        color={disable?'#555555':'#000000'}
-                        btntextcolor='#fff'
+                        btntextcolor='white'
                         navigation={async() => {
                         if(handlevalidation())
                         {
@@ -200,16 +211,13 @@ export default function Signup({ navigation }) {
                         } />
                         
                 </View>
-                <View style={styles.SignUBtnWrapper}>
+                <View>
                     <Text style={styles.AccountTxt}>Already have an account?</Text>
-                    <Btn
-                        title='Log In'
-                        color='#fff'
-                        btntextcolor='#000000'
-                        
-                        navigation={() => navigation.navigate('Login')} />
+                    <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+                            <Text style={styles.AccountTxt1}>    Login   </Text>
+                        </TouchableOpacity>
                 </View>
-            </ScrollView>
+                </ScrollView>
         </View>
     );
 }
@@ -223,30 +231,62 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        backgroundColor: "#6ebe44",
     },
     EmailWrapper: {
         height: hp('45%'),
         justifyContent: 'space-evenly',
-        marginBottom: 10,
+        marginBottom: 50,
+        marginTop:20
 
+    },
+    text:{
+        fontSize: rf(37),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
     },
     BtnWrapper: {
         height: hp('10%'),
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        color: '#6ebe44',
+        bottom:-20
     },
     SignUBtnWrapper: {
-        height: hp('18%'),
-        justifyContent: 'flex-end'
+        height: hp('10%'),
+        justifyContent: 'flex-end',
+        color: 'white',
     },
     AccountTxt: {
-        fontSize: rf(10),
+        fontSize: rf(12),
         color: '#fff',
+        textAlign: 'left',
+        marginBottom: 10,
+        bottom:-35,
+        right:-65
+    },
+    AccountTxt1: {
+        fontSize: rf(12),
+        fontWeight:'bold',
+        color: '#fff',
+        textAlign: 'left',
+        marginBottom: 10,
+        bottom:-8,
+        right:-200
+    },
+    TextLable: {
+        fontSize: rf(20),
+        color: '#fcfefc',
         textAlign: 'center',
-        marginBottom: 10
-    }
-
-
+        fontWeight: 'bold'
+    },
+    TextLable3: {
+        fontSize: rf(25),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'Agency',
+        bottom:-20        
+    },
 
 
 });

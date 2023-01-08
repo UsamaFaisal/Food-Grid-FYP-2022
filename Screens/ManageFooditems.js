@@ -6,12 +6,15 @@ import {
     StatusBar,
     FlatList,
     Button,
-    Alert
+    Alert,
+    TouchableOpacity,
+    
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
+import  Header  from '../components/Header';
 import {useNavigation} from '@react-navigation/native';
 
 export default function ManageFooditems() {
@@ -51,9 +54,9 @@ export default function ManageFooditems() {
         });
     },[]);
 
-    // const EditFooditem = (id)=>{
-    //   navigation.navigate('EditFoooditem',{id})
-    // }
+    const EditFooditem = (id)=>{
+      navigation.navigate('EditFooditem',{id})
+    }
 
     const onDelete = (id) => {
         const fireDb = firebase.database().ref();
@@ -69,13 +72,22 @@ export default function ManageFooditems() {
         })   
     }
     return (
+
       <View style={styles.container}>
-          <StatusBar style='auto' />
-              <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
+          <StatusBar style='auto' /> 
+        
+                <Header
+                    //title='Sign Up'
+                    back={() => navigation.goBack()} />         
+          <Text style ={styles.TextLable}>
+        <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>M A N A G E   </Text>
+        <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>I T E M  </Text>     
+      </Text>
+  
               <View style={styles.BtnWrapper}>
                   <Btn
                       //disabled={disable}
-                      color={disable?'#555555':'#000000'}
+                      color={disable?'#555555':'green'}
                       title='Add Fooditem'
                       btntextcolor='#fff'
                       navigation={() => {
@@ -84,7 +96,17 @@ export default function ManageFooditems() {
                          // setdisable(true);
                   }} 
                       />
-              </View>
+                       </View>
+                       {/* <Text style={styles.TextLable3}>Available Items </Text>     */}
+             {/* <View style={styles.itemTitle4}>     
+              <Text >
+              <Text style={styles.itemTitle}>   Name    </Text>
+               <Text style={styles.itemTitle}>  Quantity</Text>
+               <Text style={styles.itemTitle}>      Price</Text>
+               <Text style={styles.itemTitle}>      Update</Text>
+               <Text style={styles.itemTitle}>      Delete</Text>
+               </Text>
+               </View>   */}
           <FlatList 
                 data = {users}
                 renderItem={({ item,index }) => (
@@ -93,11 +115,12 @@ export default function ManageFooditems() {
                <Text style={styles.itemTitle}>Name: {item.itemname}</Text>
                <Text style={styles.itemSubtitle}>Quantity: {item.itemquantity}</Text>
                <Text style={styles.itemSubtitle}>Price: {item.itemprice}</Text>
-               {/* <Button  title="Update" onPress={() => EditFooditem(user[index])}
-                /> */}
+               <Text></Text>
+               <Button color="green" title="Update" onPress={() => EditFooditem(user[index])}
+                />
                 <Text></Text>
-                <Button title="Delete" onPress={()=> onDelete(user[index])}
-                /> 
+                <Button color="red" title="Delete" onPress={()=> onDelete(user[index])}
+                />
                </View>)}
             />
       </View>
@@ -117,10 +140,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        backgroundColor: "#6ebe44",
     },
      itemName:{
-       fontWeight:'300'
+       fontWeight:'300',
      },
      itemEmail:{
        fontWeight:'300'
@@ -131,6 +154,7 @@ const styles = StyleSheet.create({
     BtnWrapper: {
         height: hp('15%'),
         justifyContent: 'flex-end'
+
     },
     itemContainer1: {
         padding: 10,
@@ -149,18 +173,64 @@ const styles = StyleSheet.create({
         borderRadius: 4
       },
       itemTitle: {
+
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'white' ,
+        paddingTop: 20 
+      },
+      itemTitle4: {
+
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white' ,
+        paddingTop: 40 
       },
       itemSubtitle: {
         fontSize: 14,
-        color: '#999'
+        color: 'white',
+        fontWeight:'bold'
       },
     AccountTxt: {
         fontSize: rf(10),
         color: '#fff',
         textAlign: 'center',
         marginBottom: 10
+    },
+    button: {
+        fontSize: rf(6),
+        color: 'red',
+        textAlign: 'right',
+        marginBottom: 10,
+        bottom:11,
+        right:-200
+
+    },
+    AccountTxt1: {
+        fontSize: rf(12),
+        color: 'black',
+        borderColor:"blue", 
+        textAlign: 'left',
+        marginBottom: 10,
+        bottom:-11,
+        right:-50
+    },
+    TextLable: {
+        fontSize: rf(37),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    TextLable3: {
+        fontSize: rf(25),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'Agency',
+        bottom:-20        
+    },
+    itembtn:{
+        color:'green',
     }
+
 
 });

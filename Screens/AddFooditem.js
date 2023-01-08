@@ -105,58 +105,60 @@ export default function AddFooditem({ navigation }) {
             <StatusBar style='auto' />
             <ScrollView>
                 <Header
-                    title='Add Fooditems'
-                    back={() => navigation.goBack('ManageFooditems')} />
+                    //title='Sign Up'
+                    back={() => navigation.goBack()} />
+      <Text style={styles.TextLable3}>Add Food Items </Text>
                 <View style={styles.error}>
                     <Text style={styles.error}>{error}</Text>
                 </View>
-                <View style={styles.EmailWrapper}>
+                <View >
                     <EmailField
-                        title='Name'
+                      //  title='Name'
                         //Icon
-                        email='Enter Name'
+                        email='Name'
                         onChange={setname} />
+                    
                     <EmailField
-                        title='Quantity'
+                      //  title='Quantity'
                         //Icon
-                        email='Enter Quantity'
+                        email='Quantity'
                         onChange={setquantity} />
                     <EmailField
-                        title='Price'
-                        email='Enter Price'
+                      //  title='Price'
+                        email='Price'
                         onChange={setprice}
                     />
                     <EmailField
-                        title='Calories'
-                        email='Enter Calories'
+                       // title='Calories'
+                        email='Calories'
                         onChange={setcalories} />
                     <EmailField
-                        title='Fats'
-                        email='Enter Fats'
+                      //  title='Fats'
+                        email='Fats'
                         onChange={setfats}
                     />
                     <EmailField
-                        title='Sodium'
-                        email='Enter Sodium'
+                       // title='Sodium'
+                        email='Sodium'
                         onChange={setsodium}
                     />
                     <EmailField
-                        title='Carbs'
-                        email='Enter Carbs'
+                       // title='Carbs'
+                        email='Carbs'
                         onChange={setcarbs}
                     />
                     <EmailField
-                        title='Protein'
-                        email='Enter Protein'
+                       // title='Protein'
+                        email='Protein'
                         onChange={setprotein}
                     />
                     <EmailField
-                        title='Sugar'
-                        email='Enter Sugar'
+                     //   title='Sugar'
+                        email='Sugar'
                         onChange={setsugar}
                     />
                 </View>
-
+                </ScrollView>
                 <View style={styles.BtnWrapper}>
                     <Btn
                         title='Add Fooditem'
@@ -172,7 +174,7 @@ export default function AddFooditem({ navigation }) {
                         }
                         } />
                 </View>
-            </ScrollView>
+                <Text></Text>
         </View>
     );
 }
@@ -186,13 +188,13 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        backgroundColor: "#6ebe44",
     },
     EmailWrapper: {
         height: hp('45%'),
         justifyContent: 'space-evenly',
-        marginBottom: 10,
-
+        marginBottom: 50,
+        marginTop:20
     },
     BtnWrapper: {
         height: hp('10%'),
@@ -207,5 +209,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         marginBottom: 10
-    }
+    },    
+    TextLable3: {
+        fontSize: rf(37),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
 });

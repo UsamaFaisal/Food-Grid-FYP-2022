@@ -46,22 +46,30 @@ export default function Login({ navigation }) {
             <StatusBar style='auto' />
             <ScrollView>
                 <Header
-                    title='Log In'
-                     />
-               
-                
-                <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
+                  //  title='Log In'
+                     
+               back={() => navigation.goBack()} />
+          
+            <Text style ={styles.TextLable}>
+                <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>F O O D </Text>
+                <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>G R I D </Text>     
+            </Text>
+                <Text style={styles.TextLable3}>Sign In </Text>
+                <Text></Text>
+                <View style={styles.error}>
+                    <Text style={styles.error}>{error}</Text>
+                </View>
                 <View style={styles.EmailWrapper}>
                     <EmailField
-                        title='Email'
-                        Icon
-                        email='Enter email'
+                       // title='Email'
+                       // Icon
+                        email='Email'
                         onChange={getemail}
                     />
                 </View>
                 <View style={styles.PasswordWrapper}>
                     <PasswordField
-                        title='Password'
+                      //  title='Password'
                         onChange={getpassword} />
                 </View>
                 <View style={styles.BtnWrapper}>
@@ -85,7 +93,8 @@ export default function Login({ navigation }) {
                             }
                             else
                             {
-                                console.log('Ni hua login'); 
+                                seterror("INVALID DETAILS");
+                                console.log('Invalid Details'); 
                             }
                         /*else
                         {
@@ -98,16 +107,12 @@ export default function Login({ navigation }) {
                         />
                 </View>
                 <View style={styles.SignUBtnWrapper}>
-                    <Text style={styles.AccountTxt}>Dont't have an account?</Text>
-                    <Btn
-                        title='Sign Up'
-                        color='#fff'
-                        btntextcolor='#000000'
-                        navigation={
-                            () => {
-                                navigation.navigate('Signup')
-                            }
-                        } />
+                    <Text style={styles.AccountTxt}>Dont't have an account ?</Text>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Signup')}>
+                        <Text style={styles.AccountTxt1}>     Sign Up    </Text>
+                    </TouchableOpacity>    
+                        
+                    
                 </View>
             </ScrollView>
         </View>
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        backgroundColor: "#6ebe44",
     },
     EmailWrapper: {
         height: hp('15%'),
@@ -147,6 +152,44 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         marginBottom: 10
-    }
+    },
+
+
+    TextLable: {
+        fontSize: rf(25),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    TextLable3: {
+        fontSize: rf(25),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'Agency',
+        bottom:-20        
+    },
+    SignUBtnWrapper: {
+        height: hp('18%'),
+        justifyContent: 'flex-end',
+        color: 'white',
+        
+    },
+    AccountTxt: {
+        fontSize: rf(12),
+        color: '#fff',
+        textAlign: 'left',
+        marginBottom: 10,
+        bottom:19,
+        right:-65
+    },
+    AccountTxt1: {
+        fontSize: rf(12),
+        fontWeight:'bold',
+        color: '#fff',
+        textAlign: 'left',
+        marginBottom: 10,
+        bottom:46,
+        right:-190
+    },
 
 });

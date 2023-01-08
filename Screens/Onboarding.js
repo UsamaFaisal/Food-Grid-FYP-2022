@@ -16,57 +16,69 @@ export default function Onboarding({ navigation }) {
             <StatusBar style='auto' />
             <PagerView style={styles.viewPager} initialPage={0}>
                 <View style={styles.page} key="1">
-                    <View style={styles.TextWrapper}>
-                        <Text style={styles.TextLable}>Encourage interracial
-                            communication and{'\n'}collaboration</Text>
-                    </View>
+                 
                     <View style={styles.PicWrapper}>
                         <View style={styles.BodyPic}>
-                            <Image source={require('../assets/icon.png')}
+                             <Image source={require('../assets/food.jpg')}
                                 style={{ height: '100%', width: '100%' }} />
                         </View>
                     </View>
+                    <View style={styles.TextWrapper}>
+                   
+                    <Text style={styles.TextLable}>Order Food
+                        </Text>
+                        <Text style={styles.TextLable3}>These kind of delicious food can be </Text>   
+                <Text style={styles.TextLable3}>Accessable on restaurant and also u can order </Text>
+                <Text style={styles.TextLable3}>it online by using our app </Text>
+                
+               </View>
                     <View style={styles.DotWrapper}>
                         <View style={[styles.Dots,{backgroundColor:'#fff'} ]}></View>
                         <View style={styles.Dots}></View>
                         <View style={styles.Dots}></View>
                     </View>
-                    <View style={styles.SkipWrapper}>
-                        
-                    </View>
+               
                 </View>
+
+
+
                 <View style={styles.page} key="2">
-                    <View style={styles.TextWrapper}>
-                        <Text style={styles.TextLable}>Provide healing
-                        , emotional calidation, and{'\n'}resources to those who are impacted by{'\n'} 
-                        substantiated bias behaivior</Text>
-                    </View>
+                    
                     <View style={styles.PicWrapper}>
                         <View style={styles.BodyPic}>
-                            <Image source={require('../assets/icon.png')}
+                            <Image source={require('../assets/screen1.jpg')}
                                 style={{ height: '100%', width: '100%' }} />
                         </View>
+                    </View>
+                    <View style={styles.TextWrapper}>
+                    <Text style={styles.TextLable}>Choose Online
+                    </Text>
+                    <Text style={styles.TextLable3}>These kind of delicious food can be </Text>   
+                <Text style={styles.TextLable3}>Accessable on restaurant and also u can order </Text>
+                <Text style={styles.TextLable3}>it online by using our app </Text>
                     </View>
                     <View style={styles.DotWrapper}>
                         <View style={styles.Dots}></View>
                         <View style={[styles.Dots,{backgroundColor:'#fff'} ]}></View>
                         <View style={styles.Dots}></View>
                     </View>
-                    <View style={styles.SkipWrapper}>
-                        
-                    </View>
+                   
                 </View>
                 <View style={styles.page} key="3">
-                    <View style={styles.TextWrapper}>
-                        <Text style={styles.TextLable}>lorem ipsum dolar sit amet,
-                        consectetuer{'\n'}adipiscing elit, sod diam nomummy{'\n'}nibh euismod tincuin
-                        </Text>
-                    </View>
+                  
                     <View style={styles.PicWrapper}>
                         <View style={styles.BodyPic}>
-                            <Image source={require('../assets/icon.png')}
+                            <Image source={require('../assets/OnlineShop.jpg')}
                                 style={{ height: '100%', width: '100%' }} />
                         </View>
+                    </View>
+                    <View style={styles.TextWrapper}>
+
+                   <Text style={styles.TextLable}>Free Dilvery
+                  </Text>
+                  <Text style={styles.TextLable3}>These kind of delicious food can be </Text>   
+                <Text style={styles.TextLable3}>Accessable on restaurant and also u can order </Text>
+                <Text style={styles.TextLable3}>it online by using our app </Text>
                     </View>
                     <View style={styles.DotWrapper}>
                         <View style={styles.Dots}></View>
@@ -75,9 +87,10 @@ export default function Onboarding({ navigation }) {
                     </View>
                     <View style={styles.SkipWrapper}>
                         <TouchableOpacity onPress={()=>navigation.navigate('Signup')}>
-                            <Text style={styles.SkipText}>Signup</Text>
+                            <Text style={styles.SkipText}>   Signup   </Text>
                         </TouchableOpacity>
                     </View>
+
                 </View>
             </PagerView>
 
@@ -88,7 +101,7 @@ export default function Onboarding({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        backgroundColor: "#6ebe44",
     },
     viewPager: {
         flex: 1
@@ -100,9 +113,19 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     TextLable: {
-        fontSize: rf(12),
-        color: '#fff',
-        textAlign: 'center'
+        fontSize: rf(30),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        bottom:80
+
+    },
+    TextLable3: {
+        fontSize: rf(15),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'Agency'
+        
     },
     PicWrapper: {
         height: hp('65%'),
@@ -115,6 +138,7 @@ const styles = StyleSheet.create({
         width: wp('80%'),
         borderRadius: 10,
         overflow: 'hidden'
+
     },
     DotWrapper: {
         flexDirection: 'row',
@@ -137,7 +161,32 @@ const styles = StyleSheet.create({
     },
     SkipText: {
         fontSize: rf(15),
-        color: '#fff'
-    }
-
+        color: 'white',
+        borderRadius: 4,
+        backgroundColor:'green',
+        bottom:-25,
+        height:30,
+        width:100,
+        textAlign:"center"
+    },
+    SkipText1: {
+        fontSize: rf(25),
+        color: '#454545',
+        bottom:-35,   
+    },
+    IconWrappr: {
+        height: hp('6%'),
+        width: hp('10%'),
+        borderRadius: 5,
+        borderWidth: 5,
+        borderColor: '#FFFF00',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        backgroundColor: '#FFFFE0 ',
+        position: 'absolute', 
+        right: -20, 
+        marginRight:0, 
+        bottom:-30,   
+      },
 });

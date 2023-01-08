@@ -18,9 +18,9 @@ export default function PasswordField(props) {
         <Text style={styles.PasswordText}>{props.title}</Text>
             <View style={styles.container}>
                 <TextInput
-                placeholder='Enter Password'
+                placeholder='Password'
                 secureTextEntry={true}
-                placeholderTextColor='#000000'
+                placeholderTextColor='white'
                 style={styles.InputText}
                 onChangeText={props.onChange}/>
            
@@ -31,23 +31,23 @@ export default function PasswordField(props) {
 const styles = StyleSheet.create({
     Contain:{
         width:wp('100%'),
-        paddingHorizontal:wp('5%'),
+        paddingHorizontal:wp('15%'),
     },
     container: {
         width: wp("90%"),
-        paddingHorizontal: wp('5%'),
-        height:hp('4%'),
-        backgroundColor:'#fff',
+        paddingHorizontal: wp('2%'),
+        height:hp('6%'),
+        backgroundColor:'#6ebe44',
         alignSelf:'center',
         borderRadius:5,
         borderWidth:1,
-        borderColor:'#000000',
+        borderColor:'#454545',
         overflow:'hidden'
 
     },
     PasswordText:{
         fontSize:rf(10),
-        color:'#fff',
+        color:'#FFFFFF',
        marginVertical:10
     },
     InputText:{
@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
         fontSize:rf(10),
         color:'#000000'
     }
-    
-
 
 
 

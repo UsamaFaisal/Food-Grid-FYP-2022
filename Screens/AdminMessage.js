@@ -15,7 +15,7 @@ import EmailField from '../components/EmailField';
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
 import { useNavigation,useRoute } from '@react-navigation/native';
-
+import { Button } from 'react-native-elements';
 
 
 
@@ -33,64 +33,48 @@ export default function AdminMessage() {
         console.log(value)
         setdisable(false)
     }
-    // function getmsg(val) {
-    //     setmsg(val.toLowerCase().trim())
-    //     //console.log(mail)
-    // }
-    function sendMessage() {
-        //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
-        firebase.database().ref('chat/'+ userid).push({
-          message: msg,
-          sender: firebase.auth().currentUser.uid,
-          timestamp: new Date() 
-          //firebase.database.ServerValue.TIMESTAMP
-        });
+    const m = firebase.auth().currentUser && firebase.auth().currentUser.email;
+    useEffect(()=>{
+        const dbRef = firebase.database().ref();
+                            dbRef.child("chat").get().then((snapshot) => {
+                            if (snapshot.exists()) {
+                                var arr2=[];
+                                var arr1=[];
+                                snapshot.forEach(element => {
+                                    arr2.push(element.key)
+                                    arr1.push(element.val())                                    
+                                });
+                                setMessages(arr2);
+                                setmsg(arr1);
+                                // console.log('message');
+                            } else {
+                                console.log("No data available");
+                            }
+                            }).catch((error) => {
+                            console.error(error);
+                            });
+        
+    },[]);
+    const chatt = (id)=>{
+
+        navigation.navigate('ChatHandling',{id})
       }
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
             <ScrollView>         
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
-                <View style={styles.EmailWrapper}>
-                    <EmailField
-                        title='Message'
-                        Icon
-                        email='Enter Message'
-                        onChange={setmsg}
-                    />
-                </View>
-                <View style={styles.BtnWrapper}>
-                    <Btn
-                        //disabled={disable}
-                        color={disable?'#555555':'#000000'}
-                        title='Send'
-                        btntextcolor='#fff'
-                        navigation={() => {
-                            //setdisable(true);
-                            sendMessage(); 
-                            //setdisable(true);
-                            firebase.database().ref('chat/'+ userid).get().then ((snapshot) => {
-                                // update the chat interface with the 
-                                var namm=[];
-                                snapshot.forEach(element => {
-                                    namm.push(element.val());
-                                    //console.log("Elemnt:",element.val());
-                                });
-                                setMessages(namm);
-                              }); 
-                            
-                        
-                    }} 
-                        />
-                </View>
-                
+               
             </ScrollView>
             <FlatList
                   data = {messages}
-                  renderItem={({ item }) => (
+                  renderItem={({ item, index }) => (
                 <View style={styles.messageContainer}>
-                 {/* <Text style={styles.sender}> {item.sender}</Text> */}
-                 <Text style={styles.text}>{item.message}</Text>
+                 <Text style={styles.sender}> {messages[index]}</Text>
+                 {/* <Text style={styles.sender}> {msg[index]}</Text> */}
+                 <Button  title="Message"  onPress={() => chatt(messages[index])}
+                />
+                 {/* <Text style={styles.text}>{item.message}</Text> */}
                  </View>)}/>
         </View>
     );
