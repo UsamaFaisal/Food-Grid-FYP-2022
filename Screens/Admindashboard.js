@@ -64,6 +64,7 @@ export default function Admindashboard({ navigation }) {
                         title='Manage Food Items'
                         btntextcolor='#fff'
                         navigation={() => {
+                            navigation.navigate('ManageFooditems');
                             //setdisable(true);
                     }} 
                         />

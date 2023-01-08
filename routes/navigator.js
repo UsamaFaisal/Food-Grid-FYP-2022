@@ -11,8 +11,10 @@ import Dashboard from "../Screens/Dashboard";
 import Message from "../Screens/Message";
 import AdminMessage from "../Screens/AdminMessage";
 import ManageUsers from "../Screens/ManageUsers";
+import ManageFooditems from "../Screens/ManageFooditems";
 import EditUser from "../Screens/EditUser";
 import AddUser from "../Screens/AddUser";
+import AddFooditem from "../Screens/AddFooditem";
 import { AuthContext } from "./Authenticationprovider";
 import * as firebase from 'firebase';
 import { useContext } from "react";
@@ -47,7 +49,10 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="Message" component={Message} /> :<Stack.Screen name="Message" component={Message} />}
         {user ? <Stack.Screen name="AdminMessage" component={AdminMessage} /> :<Stack.Screen name="AdminMessage" component={AdminMessage} />}
         {user ? <Stack.Screen name="ManageUsers" component={ManageUsers} /> :<Stack.Screen name="ManageUsers" component={ManageUsers} />}
+        {user ? <Stack.Screen name="ManageFooditems" component={ManageFooditems} /> :<Stack.Screen name="ManageFooditems" component={ManageFooditems} />}
         {user ? <Stack.Screen name="AddUser" component={AddUser} /> :<Stack.Screen name="AddUser" component={AddUser} />}
+        {user ? <Stack.Screen name="AddFooditem" component={AddFooditem} /> :<Stack.Screen name="AddFooditem" component={AddFooditem} />}
+       
         {user ? <Stack.Screen name="EditUser" component={EditUser} /> :<Stack.Screen name="EditUser" component={EditUser} />}
        
       </Stack.Navigator>
