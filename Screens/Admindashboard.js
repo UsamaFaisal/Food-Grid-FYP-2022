@@ -48,7 +48,7 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
-                        color={disable?'#555555':'#000000'}
+                        color={disable?'#555555':'green'}
                         title='Manage Users'
                         btntextcolor='#fff'
                         navigation={() => {
@@ -60,7 +60,7 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.BtnWrapper}>
                     <Btn
                        // disabled={disable}
-                        color={disable?'#555555':'#000000'}
+                        color={disable?'#555555':'green'}
                         title='Manage Food Items'
                         btntextcolor='#fff'
                         navigation={() => {
@@ -72,7 +72,7 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
-                        color={disable?'#555555':'#000000'}
+                        color={disable?'#555555':'green'}
                         title='Chat'
                         btntextcolor='#fff'
                         navigation={() => {
@@ -84,8 +84,8 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.SignUBtnWrapper}>
                     <Btn
                         title='Logout'
-                        color='#fff'
-                        btntextcolor='#000000'
+                        color='#000000'
+                        btntextcolor='#fff'
                         navigation={
                             () => {
                                 logout();

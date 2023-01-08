@@ -90,6 +90,7 @@ export default function ChatHandling() {
             <StatusBar style='auto' />
             <Header title='User' 
                 back={() => navigation.goBack('AdminMessage')}></Header>
+                     
                 <FlatList
                     data = {messages}
                     renderItem={({ item,index }) => (

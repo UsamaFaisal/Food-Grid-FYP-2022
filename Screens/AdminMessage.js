@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext,useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -17,15 +17,15 @@ import * as firebase from 'firebase';
 import { useNavigation,useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-elements';
 
-
+import Header from '../components/Header';
 
 export default function AdminMessage() {
     const [disable,setdisable]=useState(false);
     const [msg,setmsg]=useState("");
     const [error,seterror]=useState("");
     const navigation = useNavigation();
-    const route=useRoute();
-    const userid= route.params.id;
+    //const route=useRoute();
+    //const userid= route.params.id;
 
     var [messages, setMessages] = useState([]);
     function errors(value){
@@ -62,6 +62,12 @@ export default function AdminMessage() {
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
+            <Header
+                    //title='Sign Up'
+                    back={() => navigation.goBack('AdminDashboard')} /> 
+            <Text style ={styles.TextLable}>
+        <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>U S E R </Text>
+        <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>M E S S A G E S  </Text></Text>
             <ScrollView>         
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                
@@ -95,6 +101,12 @@ const styles = StyleSheet.create({
         height: hp('15%'),
         justifyContent: 'flex-end',
         marginBottom: 10
+    },
+    TextLable: {
+        fontSize: rf(37),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
     },
     PasswordWrapper: {
         height: hp('12%'),

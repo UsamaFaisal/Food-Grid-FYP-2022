@@ -13,6 +13,9 @@ import { RFValue as rf } from "react-native-responsive-fontsize";
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
 import {useNavigation} from '@react-navigation/native';
+import Header from '../components/Header';
+
+
 
 export default function ManageUsers() {
     const [users,setUsers]=useState([]);
@@ -61,6 +64,7 @@ export default function ManageUsers() {
           if(!err)
           {
             Alert.alert('Success', 'Delete User successful!', [{text: 'OK'}]);
+            navigation.navigate('ManageUsers')
           }
           else{
             Alert.alert('User Not Found', [{text: 'OK'}]);
@@ -72,11 +76,17 @@ export default function ManageUsers() {
     return (
       <View style={styles.container}>
           <StatusBar style='auto' />
-              <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
+              <Header
+                    //title='Sign Up'
+                    back={() => navigation.goBack('AdminDashboard')} />         
+          <Text style ={styles.TextLable}>
+        <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>M A N A G E   </Text>
+        <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>U S E R  </Text>     
+      </Text>
               <View style={styles.BtnWrapper}>
                   <Btn
                       //disabled={disable}
-                      color={disable?'#555555':'#000000'}
+                      color={disable?'#555555':'green'}
                       title='Add User'
                       btntextcolor='#fff'
                       navigation={() => {
@@ -96,11 +106,12 @@ export default function ManageUsers() {
                <Text style={styles.itemSubtitle}>Phone: {item.phone}</Text>
                <Text style={styles.itemSubtitle}>Allergic Items: {item.allergicitems}</Text>
                <Text style={styles.itemSubtitle}>Disease: {item.disease}</Text>
-               <Button  title="Update" onPress={() => EditUser(user[index])}
+               <Text></Text>
+               <Button color="green" title="Update" onPress={() => EditUser(user[index])}
                 />
                 <Text></Text>
-                <Button title="Delete" onPress={()=> onDelete(user[index])}
-                />
+                <Button color="red" title="Delete" onPress={()=> onDelete(user[index])}
+                ></Button>
                </View>)}
             />
       </View>
@@ -131,6 +142,12 @@ const styles = StyleSheet.create({
      itemContact:{
        fontWeight:'300'
      },
+     TextLable: {
+        fontSize: rf(37),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
     BtnWrapper: {
         height: hp('15%'),
         justifyContent: 'flex-end'
@@ -153,11 +170,12 @@ const styles = StyleSheet.create({
       },
       itemTitle: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color:'white'
       },
       itemSubtitle: {
         fontSize: 14,
-        color: '#999'
+        color:'white'
       },
     AccountTxt: {
         fontSize: rf(10),
