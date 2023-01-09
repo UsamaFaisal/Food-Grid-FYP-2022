@@ -2,7 +2,9 @@ import React, { useState,useContext } from 'react';
 import {
     StyleSheet,
     Text,
+    TextInput,
     View,
+    FlatList,
     StatusBar,
     Image,
     TouchableOpacity,
@@ -11,20 +13,22 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import { AntDesign } from '@expo/vector-icons';
-import Header from '../components/Header'
-import { SearchBar } from 'react-native-elements';
+import Header from '../components/Header';
+import * as firebase from 'firebase';
+import { Button, SearchBar } from 'react-native-elements';
 import EmailField from '../components/EmailField';
 import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
-
 export default function Dashboard({ navigation }) {
     const [disable,setdisable]=useState(false);
     const [mail,setmail]=useState("");
-    const [password,setpassword]=useState("");
+    const [searchText, setSearchText] = useState('');
+  const [items, setItems] = useState([]);
     const [error,seterror]=useState("");
-      
-  
+    
+    
+
 
     const {logout}=useContext(AuthContext);
     function errors(value){
@@ -32,19 +36,53 @@ export default function Dashboard({ navigation }) {
         console.log(value)
         setdisable(false)
     }
-    
-    return (
-        <View style={styles.container}>
+    const searchfun=()=>{
+        firebase.database().ref('Fooditems')
+        .orderByChild('itemname')
+        .startAt(searchText)
+        .endAt(searchText + '\uf8ff')
+        .once('value')
+        .then((snapshot) => {
+          const items = snapshot.val();
+          if(items===null)
+          {
+            return;
+          }
+          setItems(Object.values(items));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+       return (
+         
+         <View style={styles.container}>
             <StatusBar style='auto' />
+                <View>
+        <Text></Text>   
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <TextInput 
+            style={{ borderRadius: 10,alignSelf: 'center', backgroundColor:'white',width:'80%',height: 40, borderColor: 'gray', borderWidth: 1 }}
+            onChangeText={setSearchText}
+            value={searchText}
+        />
+        <Button title="Search" onPress={searchfun} />
+        </View> 
+        
+        <Text></Text>
+        
+        <FlatList
+                    data = {items}
+                    renderItem={({ item,index }) => (
+                    <View style={styles.messageContainer}>
+                    <Text style={styles.itemSubtitle}>Name:{item.itemname}</Text>
+                    <Text style={styles.itemSubtitle}>Price:{item.itemprice}</Text>
+                    <Text style={styles.itemSubtitle}>Quantity:{item.itemquantity}</Text>
+                    </View>)}
+                />
+        </View>
+             
             <ScrollView>
-            <SearchBar placeholder="Search..."
-             //onChangeText={(text) => setSearchText(text)}
-             //value={searchText}
-             lightTheme
-             round
-             />
-
-                <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
@@ -57,7 +95,8 @@ export default function Dashboard({ navigation }) {
                     }} 
                         />
                 </View>
-                <View style={styles.SignUBtnWrapper}>
+               <Text></Text>
+                <View >
                     <Btn
                         title='Logout'
                         color='#fff'
@@ -69,8 +108,7 @@ export default function Dashboard({ navigation }) {
                             }
                         } />
                 </View>
-                 
-            </ScrollView>
+                </ScrollView>
             
         </View>
     );
@@ -87,11 +125,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#47b749",
     },
+    itemSubtitle: {
+        fontSize: 14,
+        color:'white'
+      },
     EmailWrapper: {
         height: hp('15%'),
         justifyContent: 'flex-end',
         marginBottom: 10
     },
+    messageContainer: {
+        //flexDirection: 'row',
+        padding: 10,
+        margin: 10,
+        borderWidth: 1,
+        color:'#000000',
+        borderColor: '#ccc',
+        borderRadius: 10,
+        alignItems: 'flex-start',
+      },
     PasswordWrapper: {
         height: hp('12%'),
         justifyContent: 'flex-end'

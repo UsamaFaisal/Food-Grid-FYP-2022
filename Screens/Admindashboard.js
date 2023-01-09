@@ -42,8 +42,10 @@ export default function Admindashboard({ navigation }) {
             <StatusBar style='auto' />
             <ScrollView>
                 <Header
-                    title='Dashboard'
+                    //title='Dashboard'
+                    back={() => navigation.goBack('Login')}
                      />
+                 <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>DASHBOARD</Text>
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                 <View style={styles.BtnWrapper}>
                     <Btn
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     BtnWrapper: {
-        height: hp('15%'),
+        height: hp('10%'),
         justifyContent: 'flex-end'
     },
     SignUBtnWrapper: {
