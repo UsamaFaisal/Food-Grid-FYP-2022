@@ -53,9 +53,9 @@ export default function Onboarding({ navigation }) {
                     <View style={styles.TextWrapper}>
                     <Text style={styles.TextLable}>Choose Online
                     </Text>
-                    <Text style={styles.TextLable3}>These kind of delicious food can be </Text>   
-                <Text style={styles.TextLable3}>Accessable on restaurant and also u can order </Text>
-                <Text style={styles.TextLable3}>it online by using our app </Text>
+                    <Text style={styles.TextLable3}>Customer choosing the restaurant </Text>   
+                <Text style={styles.TextLable3}>of their choice, scanning the menu items,  </Text>
+                <Text style={styles.TextLable3}> choosing an item, and finally choosing for pick-up.</Text>
                     </View>
                     <View style={styles.DotWrapper}>
                         <View style={styles.Dots}></View>
@@ -76,9 +76,9 @@ export default function Onboarding({ navigation }) {
 
                    <Text style={styles.TextLable}>Free Dilvery
                   </Text>
-                  <Text style={styles.TextLable3}>These kind of delicious food can be </Text>   
-                <Text style={styles.TextLable3}>Accessable on restaurant and also u can order </Text>
-                <Text style={styles.TextLable3}>it online by using our app </Text>
+                  <Text style={styles.TextLable3}>Delivery of food directly to the recipient's address</Text>   
+                <Text style={styles.TextLable3}> without charge to the recipient: Before free delivery </Text>
+                <Text style={styles.TextLable3}>people had to pick up their food </Text>
                     </View>
                     <View style={styles.DotWrapper}>
                         <View style={styles.Dots}></View>

@@ -83,6 +83,18 @@ export default function Admindashboard({ navigation }) {
                     }} 
                         />
                 </View>
+                <View style={styles.BtnWrapper}>
+                    <Btn
+                       // disabled={disable}
+                        color={disable?'#555555':'green'}
+                        title='Notify User'
+                        btntextcolor='#fff'
+                        navigation={() => {
+                         //   navigation.navigate('Admindashboard');
+                            //setdisable(true);
+                    }} 
+                        />
+                </View>
                 <View style={styles.SignUBtnWrapper}>
                     <Btn
                         title='Logout'

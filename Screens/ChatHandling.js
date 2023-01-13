@@ -31,7 +31,7 @@ export default function ChatHandling() {
     const [mid, setmid] = useState([]);
     const route = useRoute();
     const itemId = route.params.id;
-    const sendername = '{Admin}'
+    const sendername = 'Admin: '
     function errors(value){
         seterror(value);
         console.log(value)
@@ -69,7 +69,7 @@ export default function ChatHandling() {
     function sendMessage() {
         //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
         firebase.database().ref('chat/'+ itemId).push({
-          message: msg + sendername,
+          message: sendername+msg,
           email:m,
           sender: firebase.auth().currentUser.uid,
           timestamp: new Date() 
