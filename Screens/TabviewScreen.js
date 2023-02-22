@@ -13,19 +13,15 @@ import {
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 //import SideMenu from 'react-native-sidebar';
-import HomeCarousel from '../components/Carousel';
+//import HomeCarousel from '../components/Carousel';
+import TabViewComponent from '../components/Tabview';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Welcome from '../Screens/Welcome'
 import { RFValue as rf } from "react-native-responsive-fontsize";
-import * as firebase from 'firebase';
-import { Button, SearchBar } from 'react-native-elements';
 import { AuthContext } from '../routes/Authenticationprovider';
-export default function Dashboard({ navigation }) {
+export default function TabviewScreen({ navigation }) {
     const Tab = createBottomTabNavigator();
     const [disable,setdisable]=useState(false);
-    const [searchText, setSearchText] = useState('');
-  const [items, setItems] = useState([]);
     const [error,seterror]=useState("");
     const {logout}=useContext(AuthContext);
     function errors(value){
@@ -69,103 +65,13 @@ export default function Dashboard({ navigation }) {
           </View>
         );
       };
-    const searchfun=()=>{
-        firebase.database().ref('Fooditems')
-        .orderByChild('itemname')
-        .startAt(searchText)
-        .endAt(searchText + '\uf8ff')
-        .once('value')
-        .then((snapshot) => {
-          const items = snapshot.val();
-          if(items===null)
-          {
-            return;
-          }
-          setItems(Object.values(items));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
        return (
         
         <SafeAreaView style={{ flex: 1 }}>
-            
         <Header />
-         <View style={styles.container}>
-            <StatusBar style='auto' />
-         <View>
-         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-         {/* ye search bar ha */}
-                <TextInput 
-                    style={{ borderRadius: 10,alignSelf: 'center', backgroundColor:'white',width:'80%',height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    onChangeText={setSearchText}
-                    value={searchText}
-                  /> 
-                <Button title="Search" onPress={searchfun} />
-        </View> 
-        <Text></Text>
-        {/* ye jb search hoga to list show krega */}
-        <FlatList
-                    data = {items}
-                    renderItem={({ item,index }) => (
-                    <View style={styles.messageContainer}>
-                    <Text style={styles.itemSubtitle}>Name:{item.itemname}</Text>
-                    <Text style={styles.itemSubtitle}>Price:{item.itemprice}</Text>
-                    <Text style={styles.itemSubtitle}>Quantity:{item.itemquantity}</Text>
-                    </View>)}
-                />
-        </View>
-         
-        <View style={styles.containern}>
-           <HomeCarousel />
-        </View>
-    {/* yha ye buutons wala scene shuru ha     */}
-    <ScrollView>
-        <View style={styles.container1}>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TabviewScreen')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1} >Customize Food</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 2 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 2</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 2 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 2</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 2 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 2</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 2 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Button 2</Text>
-                </TouchableOpacity>
-            </View>     
-        </View>
-    </ScrollView>
-        </View>
+        <TabViewComponent />
+        {/* <View style={styles.container}>
+        </View> */}
         <Footer />
         </SafeAreaView>
     );
@@ -182,12 +88,6 @@ const styles = StyleSheet.create({
         flex: 1,
         //backgroundColor: "#47b749",
     },
-    containern: {
-      width: '100%',
-      height:'40%',
-      paddingBottom:15,
-      backgroundColor:"#eeeee4",
-  },
     itemSubtitle: {
         fontSize: 14,
         color:'white'

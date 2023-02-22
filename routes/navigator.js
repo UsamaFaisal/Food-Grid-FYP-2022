@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 //import Loading from "../Screens/Loading";
 import Welcome from "../Screens/Welcome";
 import Onboarding from "../Screens/Onboarding";
+import TabviewScreen from "../Screens/TabviewScreen";
 import Signup from "../Screens/Signup";
 import Login from "../Screens/Login";
 import Admindashboard from "../Screens/Admindashboard";
@@ -42,12 +43,13 @@ const onAuthStateChanged=(user)=>{
     return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>     
-        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="TabviewScreen" component={TabviewScreen} />
         <Stack.Screen name="Onboarding" component={Onboarding} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />
         {user ? <Stack.Screen name="Admindashboard" component={Admindashboard} /> :<Stack.Screen name="Admindashboard" component={Admindashboard} />}
-        {user ? <Stack.Screen name="Dashboard" component={Dashboard} /> :<Stack.Screen name="Dashboard" component={Dashboard} />}
+        {/* {user ? <Stack.Screen name="Dashboard" component={Dashboard} /> :<Stack.Screen name="Dashboard" component={Dashboard} />} */}
         {user ? <Stack.Screen name="Message" component={Message} /> :<Stack.Screen name="Message" component={Message} />}
         {user ? <Stack.Screen name="AdminMessage" component={AdminMessage} /> :<Stack.Screen name="AdminMessage" component={AdminMessage} />}
         {user ? <Stack.Screen name="ManageUsers" component={ManageUsers} /> :<Stack.Screen name="ManageUsers" component={ManageUsers} />}
