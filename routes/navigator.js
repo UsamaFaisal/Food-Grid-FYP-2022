@@ -2,9 +2,12 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 //import Loading from "../Screens/Loading";
+import GiveFeedback from "../Screens/GiveFeedback";
 import Welcome from "../Screens/Welcome";
+import MakePayment from "../Screens/MakePayment";
 import Onboarding from "../Screens/Onboarding";
 import TabviewScreen from "../Screens/TabviewScreen";
+import Tabviewallscreen from "../Screens/Tabviewallscreen";
 import Signup from "../Screens/Signup";
 import Login from "../Screens/Login";
 import Admindashboard from "../Screens/Admindashboard";
@@ -44,7 +47,10 @@ const onAuthStateChanged=(user)=>{
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>     
         <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen name="GiveFeedback" component={GiveFeedback} />
+        <Stack.Screen name="MakePayment" component={MakePayment} />
         <Stack.Screen name="TabviewScreen" component={TabviewScreen} />
+        <Stack.Screen name="Tabviewallscreen" component={Tabviewallscreen} />
         <Stack.Screen name="Onboarding" component={Onboarding} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />
