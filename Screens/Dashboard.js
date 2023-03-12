@@ -77,7 +77,7 @@ export default function Dashboard({ navigation }) {
         .once('value')
         .then((snapshot) => {
           const items = snapshot.val();
-          if(items===null)
+          if(items===null || items=="")
           {
             return;
           }

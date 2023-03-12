@@ -70,8 +70,6 @@ export default function TabviewScreen({ navigation }) {
         <SafeAreaView style={{ flex: 1 }}>
         <Header />
         <TabViewComponent />
-        {/* <View style={styles.container}>
-        </View> */}
         <Footer />
         </SafeAreaView>
     );
