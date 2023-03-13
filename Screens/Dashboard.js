@@ -14,6 +14,7 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 //import SideMenu from 'react-native-sidebar';
 import HomeCarousel from '../components/Carousel';
+//import SideDrawer from 'react-native-side-drawer';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Welcome from '../Screens/Welcome'
@@ -23,6 +24,7 @@ import { Button, SearchBar } from 'react-native-elements';
 import { AuthContext } from '../routes/Authenticationprovider';
 export default function Dashboard({ navigation }) {
     const Tab = createBottomTabNavigator();
+
     const [disable,setdisable]=useState(false);
     const [searchText, setSearchText] = useState('');
   const [items, setItems] = useState([]);
@@ -33,55 +35,75 @@ export default function Dashboard({ navigation }) {
         console.log(value)
         setdisable(false)
     }
+    
     const Header = () => {
-        return (
-          <View style={{ height: 50, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Header</Text>
-          </View>
-        );
-      };
+      const onPressCart = () => {
+        navigation.navigate('Login');
+      }
+      return (
+        <View style={styles.header}>
+          <TouchableOpacity>
+        <Image source={require('../assets/drawer_icon.png')} style={styles.cartIcon} />
+      </TouchableOpacity>
+          <Image source={require('../assets/foodpic.png')} style={styles.logoIcon} />
+          <TouchableOpacity onPress={onPressCart}>
+            <Image source={require('../assets/cart_icon.png')} style={styles.cartIcon} />
+          </TouchableOpacity>
+        </View>
+      );
+    };
       
       const Footer = () => {
         const navigation = useNavigation();
         return (
             <View style={styles.footerContainer}>
               {/* Ye footer ha */}
-                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                      <Image style={styles.footerIcon} source={require('../assets/icon.png')} />
+                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Dashboard')}>
+                      <Image style={styles.footerIcon} source={require('../assets/home_icon.png')} />
                       <Text style={styles.footerButtonText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                      <Image style={styles.footerIcon} source={require('../assets/icon.png')} />
+                      <Image style={styles.footerIcon} source={require('../assets/menu_icon.png')} />
                       <Text style={styles.footerButtonText}>Menu</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                      <Image style={styles.footerIcon} source={require('../assets/icon.png')} />
+                      <Image style={styles.footerIcon} source={require('../assets/deals_icon.png')} />
                       <Text style={styles.footerButtonText}>Deals</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Message')}>
-                      <Image style={styles.footerIcon} source={require('../assets/icon.png')} />
+                      <Image style={styles.footerIcon} source={require('../assets/chat_icon.png')} />
                       <Text style={styles.footerButtonText}>Chat</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('GiveFeedback')}>
-                      <Image style={styles.footerIcon} source={require('../assets/icon.png')} />
+                      <Image style={styles.footerIcon} source={require('../assets/more_icon.png')} />
                       <Text style={styles.footerButtonText}>More</Text>
                 </TouchableOpacity>
           </View>
         );
       };
     const searchfun=()=>{
-        firebase.database().ref('Fooditems')
+      if(searchText.trim() === '') {
+        // set the items to an empty array to clear the previous search results
+        setItems([]);
+        return;
+      }
+      
+      firebase.database().ref('Fooditems')
         .orderByChild('itemname')
         .startAt(searchText)
         .endAt(searchText + '\uf8ff')
         .once('value')
         .then((snapshot) => {
-          const items = snapshot.val();
-          if(items===null || items=="")
-          {
-            return;
-          }
-          setItems(Object.values(items));
+          // const items = snapshot.val();
+          // if(items===null || items=="")
+          // {
+          //   // set the items to an empty array to clear the previous search results
+          //   setItems([]);
+          //   return;
+          // }
+          // else{
+            setItems(Object.values(items));
+            //setSearchClicked(true);
         })
         .catch((error) => {
           console.error(error);
@@ -103,16 +125,20 @@ export default function Dashboard({ navigation }) {
                 <Button title="Search" onPress={searchfun} />
         </View> 
         <Text></Text>
+
         {/* ye jb search hoga to list show krega */}
-        <FlatList
-                    data = {items}
-                    renderItem={({ item,index }) => (
-                    <View style={styles.messageContainer}>
-                    <Text style={styles.itemSubtitle}>Name:{item.itemname}</Text>
-                    <Text style={styles.itemSubtitle}>Price:{item.itemprice}</Text>
-                    <Text style={styles.itemSubtitle}>Quantity:{item.itemquantity}</Text>
-                    </View>)}
-                />
+      
+          <FlatList
+            data={items}
+            renderItem={({ item, index }) => (
+              <View style={styles.messageContainer}>
+                <Text style={styles.itemSubtitle}>Name: {item.itemname}</Text>
+                <Text style={styles.itemSubtitle}>Price: {item.itemprice}</Text>
+                <Text style={styles.itemSubtitle}>Quantity: {item.itemquantity}</Text>
+              </View>
+            )}
+          />
+      
         </View>
         <View style={styles.containern}>
            <HomeCarousel />
@@ -122,7 +148,7 @@ export default function Dashboard({ navigation }) {
         <View style={styles.container1}>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TabviewScreen')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
+                    <Image style={styles.buttonImage1} source={require('../assets/Customizeorder.jpg')} />
                     <Text style={styles.buttonText1} >Customize Order</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Tabviewallscreen')}>
@@ -183,7 +209,7 @@ const styles = StyleSheet.create({
       width: '100%',
       height:'40%',
       paddingBottom:15,
-      backgroundColor:"#eeeee4",
+    backgroundColor:"#eeeee4",
   },
     itemSubtitle: {
         fontSize: 14,
@@ -315,6 +341,28 @@ const styles = StyleSheet.create({
       footerButtonText: {
         //fontWeight: 'bold',
         fontSize: 16,
+      },
+      header: {
+        height: 50,
+        backgroundColor: '#ffffff',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+      },
+      menuIcon: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+      },
+      logoIcon: {
+        width: 50,
+        height: 50,
+      },
+      cartIcon: {
+        width: 30,
+        height: 30,
+        marginLeft: 10,
       },
 
 });

@@ -42,6 +42,7 @@
     "react-native-pusher-push-notifications": "^2.5.2",
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-responsive-screen": "^1.4.2",
+    "react-native-side-drawer": "^2.1.0",
     "react-native-sidebar": "^0.3.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-splash-screen": "^3.3.0",
