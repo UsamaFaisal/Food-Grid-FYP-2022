@@ -1,17 +1,372 @@
+import { useState, useEffect } from 'react';
 import * as React from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions, Text, FlatList,StyleSheet,TouchableOpacity, ScrollView,Image } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import * as firebase from 'firebase';
+import { Button } from 'react-native-elements';
 
-const FirstRoute = () => (
-  <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
-);
+const images = new Map();
+images.set('Plane', require('../assets/Plane.png'));
+images.set('ChickenTikka', require('../assets/ChickenTikka.png'));
 
-const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-);
-const ThirdRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#000000' }} />
+const HorizontalList = ({ title, data, onSelect }) => {
+  return (
+    <View>
+        <View style={styles.itemContainer}>
+          <Text>{title}</Text>
+          <FlatList
+            horizontal
+            data={data}
+            renderItem={({ item }) => (
+            <View style={styles.itemContainerinner}> 
+            <TouchableOpacity>
+            {/* <Image style={styles.imgsize} source={require(`http/assets/${item.itemName}.png`)} /> */}
+            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            {/* <Image style={styles.imgsize} source={item.itemName.toString()} /> */}
+              <Text style= {styles.listtext} onPress={() => onSelect(item)}> 
+              {item.itemName}  
+              </Text>
+            </TouchableOpacity>
+              </View>
+            )}
+            //keyExtractor={(item) => item.id}
+          />
+          
+        </View>
+        
+    </View>
   );
+};
+function FirstRoute() {
+  const [breads, setBreads] = useState([]);
+  const [flavors, setFlavors] = useState([]);
+  const [sauces, setSauces] = useState([]);
+  const [veggies, setVeggies] = useState([]);
+
+  useEffect(() => {
+    // fetch breads data from Firebase
+    const fetchbreads = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Pizza/Breads');
+      const snapshot = await dbRef.once('value');
+      const Bitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Bitem = childSnapshot.val();
+        Bitems.push(Bitem);
+      });
+      setBreads(Bitems);
+    };
+    const fetchflavours = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Pizza/Flavours');
+      const snapshot = await dbRef.once('value');
+      const Fitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Fitem = childSnapshot.val();
+        Fitems.push(Fitem);
+      });
+      setFlavors(Fitems);
+    };
+    
+    // fetch sauces data from Firebase
+    const fetchsauces = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Pizza/Sauces');
+      const snapshot = await dbRef.once('value');
+      const Sitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Sitem = childSnapshot.val();
+        Sitems.push(Sitem);
+      });
+      setSauces(Sitems);
+    };
+
+    // fetch veggies data from Firebase
+    const fetchvegies = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Pizza/Vegies');
+      const snapshot = await dbRef.once('value');
+      const Vitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Vitem = childSnapshot.val();
+        Vitems.push(Vitem);
+      });
+      setVeggies(Vitems);
+    };
+
+    fetchbreads();
+    fetchflavours();
+    // fetchsauces();
+    // fetchvegies();
+  }, []);
+
+  const handleBreadSelect = (bread) => {
+    // handle bread selection
+  };
+
+  const handleFlavorSelect = (flavor) => {
+    // handle flavor selection
+  };
+
+  const handleSauceSelect = (sauce) => {
+    // handle sauce selection
+  };
+
+  const handleVeggieSelect = (veggie) => {
+    // handle veggie selection
+  };
+  const [count, setCount] = useState(1);
+  const decrement = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  const addToCart = () => {
+    // code to add item to cart
+  };
+  return(
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+            <View>
+                <HorizontalList title="Breads" data={breads} onSelect={handleBreadSelect} />
+                <HorizontalList title="Flavors" data={flavors} onSelect={handleFlavorSelect} />
+                <HorizontalList title="Sauces" data={sauces} onSelect={handleSauceSelect} />
+                <HorizontalList title="Veggies" data={veggies} onSelect={handleVeggieSelect} />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={decrement}>
+                <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={{ marginHorizontal: 10 }}>{count}</Text>
+                <TouchableOpacity onPress={increment}>
+                <Text style={styles.buttonText}>+</Text>          
+              </TouchableOpacity>
+            
+                <Button title="Add to cart" onPress={addToCart} />   
+            </View>
+    </ScrollView>
+  );
+}
+function SecondRoute (){ 
+  const [breads, setBreads] = useState([]);
+  const [flavors, setFlavors] = useState([]);
+  const [sauces, setSauces] = useState([]);
+  const [veggies, setVeggies] = useState([]);
+
+  useEffect(() => {
+    // fetch breads data from Firebase
+    const fetchbreads = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Burger/Breads');
+      const snapshot = await dbRef.once('value');
+      const Bitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Bitem = childSnapshot.val();
+        Bitems.push(Bitem);
+      });
+      setBreads(Bitems);
+    };
+    const fetchflavours = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Burger/Flavours');
+      const snapshot = await dbRef.once('value');
+      const Fitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Fitem = childSnapshot.val();
+        Fitems.push(Fitem);
+      });
+      setFlavors(Fitems);
+    };
+    
+    // fetch sauces data from Firebase
+    const fetchsauces = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Burger/Sauces');
+      const snapshot = await dbRef.once('value');
+      const Sitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Sitem = childSnapshot.val();
+        Sitems.push(Sitem);
+      });
+      setSauces(Sitems);
+    };
+    // fetch veggies data from Firebase
+    const fetchvegies = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Burger/Vegies');
+      const snapshot = await dbRef.once('value');
+      const Vitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Vitem = childSnapshot.val();
+        Vitems.push(Vitem);
+      });
+      setVeggies(Vitems);
+    };
+
+    // fetchbreads();
+    // fetchflavours();
+    // fetchsauces();
+    // fetchvegies();
+  }, []);
+
+  const handleBreadSelect = (bread) => {
+    // handle bread selection
+  };
+
+  const handleFlavorSelect = (flavor) => {
+    // handle flavor selection
+  };
+
+  const handleSauceSelect = (sauce) => {
+    // handle sauce selection
+  };
+
+  const handleVeggieSelect = (veggie) => {
+    // handle veggie selection
+  };
+  const [count, setCount] = useState(1);
+  const decrement = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  const addToCart = () => {
+    // code to add item to cart
+  };
+  return(
+    <ScrollView style={{ flex: 1, backgroundColor: '#673ab7' }}>
+            <View>
+                <HorizontalList title="Breads" data={breads} onSelect={handleBreadSelect} />
+                <HorizontalList title="Flavors" data={flavors} onSelect={handleFlavorSelect} />
+                <HorizontalList title="Sauces" data={sauces} onSelect={handleSauceSelect} />
+                <HorizontalList title="Veggies" data={veggies} onSelect={handleVeggieSelect} />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={decrement}>
+                <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={{ marginHorizontal: 10 }}>{count}</Text>
+                <TouchableOpacity onPress={increment}>
+                <Text style={styles.buttonText}>+</Text>          
+              </TouchableOpacity>
+            
+                <Button title="Add to cart" onPress={addToCart} />   
+            </View>
+    </ScrollView>
+  );
+  }
+function ThirdRoute() { 
+  const [flavors, setFlavors] = useState([]);
+  const [toppings, setToppings] = useState([]);
+  const [coatings, setCoatings] = useState([]);
+  const [shape, setShape] = useState([]);
+
+  useEffect(() => {
+    // fetch breads data from Firebase
+    const fetchflavours = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Biscuits/Flavour');
+      const snapshot = await dbRef.once('value');
+      const Fitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Fitem = childSnapshot.val();
+        Fitems.push(Fitem);
+      });
+      setFlavors(Fitems);
+    };
+    const fetchtoppings = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Biscuits/Toppings');
+      const snapshot = await dbRef.once('value');
+      const Titems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Titem = childSnapshot.val();
+        Titems.push(Titem);
+      });
+      setToppings(Titems);
+    };
+    
+    // fetch sauces data from Firebase
+    const fetchcoatings = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Biscuits/Coatings');
+      const snapshot = await dbRef.once('value');
+      const Citems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Citem = childSnapshot.val();
+        Citems.push(Citem);
+      });
+      setCoatings(Citems);
+    };
+
+    // fetch veggies data from Firebase
+    const fetcshapes = async () => {
+      const dbRef = firebase.database().ref('/Singlefooditem/Biscuits/Shape');
+      const snapshot = await dbRef.once('value');
+      const Sitems = [];
+      snapshot.forEach((childSnapshot) => {
+        const Sitem = childSnapshot.val();
+        Sitems.push(Sitem);
+      });
+      setShape(Sitems);
+    };
+    
+    // fetchflavours();
+    // fetchtoppings();
+    // fetchcoatings();
+    // fetcshapes();
+  }, []);
+
+  
+
+  const handleFlavorSelect = (flavor) => {
+    // handle flavor selection
+  };
+  const handleToppingsSelect = (topping) => {
+    // handle bread selection
+  };
+
+  const handleCoatingsSelect = (coating) => {
+    // handle sauce selection
+  };
+
+  const handleShapeSelect = (shape) => {
+    // handle veggie selection
+  };
+  const [count, setCount] = useState(1);
+  const decrement = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  const addToCart = () => {
+    // code to add item to cart
+  };
+  return(
+    <ScrollView style={{ flex: 1, backgroundColor: '#fc03e3' }}>
+            <View>
+                <HorizontalList title="Flavours" data={flavors} onSelect={handleFlavorSelect} />
+                <HorizontalList title="Toppings" data={toppings} onSelect={handleToppingsSelect} />
+                <HorizontalList title="Coatings" data={coatings} onSelect={handleCoatingsSelect} />
+                <HorizontalList title="Shapes" data={shape} onSelect={handleShapeSelect} />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={decrement}>
+                <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={{ marginHorizontal: 10 }}>{count}</Text>
+                <TouchableOpacity onPress={increment}>
+                <Text style={styles.buttonText}>+</Text>          
+              </TouchableOpacity>
+            
+                <Button title="Add to cart" onPress={addToCart} />   
+            </View>
+    </ScrollView>
+  );
+};
 const renderScene = SceneMap({
   first: FirstRoute,
   second: SecondRoute,
@@ -37,3 +392,69 @@ export default function TabViewExample() {
     />
   );
 }
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      backgroundColor: "#6ebe44",
+  },
+  itemContainer: {
+      // height:100,
+      // width:100,
+      padding: 10,
+      marginVertical: 8,
+      marginHorizontal: 16,
+      borderWidth: 1,
+      borderColor: '#000000',
+      borderRadius: 4
+    },
+    listtext:{
+      textAlign:'center',
+    },
+    itemContainerinner: {
+      height:100,
+      width:90,
+      // padding: 10,
+      backgroundColor:"#fff",
+      justifyContent:'center',
+      alignItems:'center',
+      marginVertical: 10,
+      marginHorizontal: 16,
+      //borderWidth: 1,
+      borderColor: '#000000',
+      borderRadius: 15
+    },
+    itemTitle: {
+
+      fontSize: 14,
+      fontWeight:'bold',
+      color: '#000000' ,
+      paddingTop: 10 
+    },
+    itemSubtitle: {
+      fontSize: 14,
+      color: 'white',
+      fontWeight:'bold'
+    },
+    button: {
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      backgroundColor: 'green',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonText: {
+      color: 'black',
+      fontSize: 30,
+      fontWeight: 'bold',
+    },
+
+    imgsize: {
+      width: 75,
+      height: 70,
+      borderRadius: 15,
+      marginTop: 10,
+      //alignContent:'center',
+    },
+
+});

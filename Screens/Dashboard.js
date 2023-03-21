@@ -12,12 +12,13 @@ import {
     ScrollView,
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-//import SideMenu from 'react-native-sidebar';
+import { OffCanvas3D } from 'react-native-off-canvas-menu';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import HomeCarousel from '../components/Carousel';
-//import SideDrawer from 'react-native-side-drawer';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Welcome from '../Screens/Welcome'
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import * as firebase from 'firebase';
 import { Button, SearchBar } from 'react-native-elements';
@@ -29,100 +30,55 @@ export default function Dashboard({ navigation }) {
     const [searchText, setSearchText] = useState('');
   const [items, setItems] = useState([]);
     const [error,seterror]=useState("");
+    
     const {logout}=useContext(AuthContext);
     function errors(value){
         seterror(value);
         console.log(value)
         setdisable(false)
-    }
-    
-    const Header = () => {
-      const onPressCart = () => {
-        navigation.navigate('Login');
-      }
-      return (
-        <View style={styles.header}>
-          <TouchableOpacity>
-        <Image source={require('../assets/drawer_icon.png')} style={styles.cartIcon} />
-      </TouchableOpacity>
-          <Image source={require('../assets/foodpic.png')} style={styles.logoIcon} />
-          <TouchableOpacity onPress={onPressCart}>
-            <Image source={require('../assets/cart_icon.png')} style={styles.cartIcon} />
-          </TouchableOpacity>
-        </View>
-      );
-    };
+    } 
       
-      const Footer = () => {
-        const navigation = useNavigation();
-        return (
-            <View style={styles.footerContainer}>
-              {/* Ye footer ha */}
-                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Dashboard')}>
-                      <Image style={styles.footerIcon} source={require('../assets/home_icon.png')} />
-                      <Text style={styles.footerButtonText}>Home</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                      <Image style={styles.footerIcon} source={require('../assets/menu_icon.png')} />
-                      <Text style={styles.footerButtonText}>Menu</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                      <Image style={styles.footerIcon} source={require('../assets/deals_icon.png')} />
-                      <Text style={styles.footerButtonText}>Deals</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Message')}>
-                      <Image style={styles.footerIcon} source={require('../assets/chat_icon.png')} />
-                      <Text style={styles.footerButtonText}>Chat</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('GiveFeedback')}>
-                      <Image style={styles.footerIcon} source={require('../assets/more_icon.png')} />
-                      <Text style={styles.footerButtonText}>More</Text>
-                </TouchableOpacity>
-          </View>
-        );
+      const searchfun = () => {
+        if (searchText.trim() === '') {
+          setItems([]);
+          return;
+        }
+      
+        firebase
+          .database()
+          .ref('Food/Fastfood')
+          .orderByChild('itemName')
+          .startAt(searchText)
+          .endAt(searchText + '\uf8ff')
+          .once('value')
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              const data = snapshot.val();
+              const items = Object.values(data);
+              setItems(items);
+            } else {
+              setItems([]);
+              seterror('Item not Found');
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       };
-    const searchfun=()=>{
-      if(searchText.trim() === '') {
-        // set the items to an empty array to clear the previous search results
-        setItems([]);
-        return;
-      }
-      
-      firebase.database().ref('Fooditems')
-        .orderByChild('itemname')
-        .startAt(searchText)
-        .endAt(searchText + '\uf8ff')
-        .once('value')
-        .then((snapshot) => {
-          // const items = snapshot.val();
-          // if(items===null || items=="")
-          // {
-          //   // set the items to an empty array to clear the previous search results
-          //   setItems([]);
-          //   return;
-          // }
-          // else{
-            setItems(Object.values(items));
-            //setSearchClicked(true);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
        return (
         <SafeAreaView style={{ flex: 1 }}>
         <Header />
          <View style={styles.container}>
             <StatusBar style='auto' />
          <View>
-         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+         <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginTop:15 }}>
          {/* ye search bar ha */}
                 <TextInput 
-                    style={{ borderRadius: 10,alignSelf: 'center', backgroundColor:'white',width:'80%',height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={{ borderRadius: 15,alignSelf: 'center', backgroundColor:'white',width:'70%',height: 40, borderColor: 'gray', borderWidth: 1,paddingLeft:10,marginLeft:10 }}
                     onChangeText={setSearchText}
                     value={searchText}
                   /> 
-                <Button title="Search" onPress={searchfun} />
+                <Button buttonStyle={{ borderRadius: 15 }} title="Search" onPress={searchfun} />
         </View> 
         <Text></Text>
 
@@ -130,12 +86,15 @@ export default function Dashboard({ navigation }) {
       
           <FlatList
             data={items}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => navigation.navigate('Tabviewallscreen')}>
               <View style={styles.messageContainer}>
-                <Text style={styles.itemSubtitle}>Name: {item.itemname}</Text>
-                <Text style={styles.itemSubtitle}>Price: {item.itemprice}</Text>
-                <Text style={styles.itemSubtitle}>Quantity: {item.itemquantity}</Text>
+                <Text style={styles.itemSubtitle}>{item.itemName}</Text>
+                <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
+              
               </View>
+              </TouchableOpacity>
+             
             )}
           />
       
@@ -213,7 +172,7 @@ const styles = StyleSheet.create({
   },
     itemSubtitle: {
         fontSize: 14,
-        color:'white'
+        color:'black'
       },
     EmailWrapper: {
         height: hp('15%'),
@@ -243,6 +202,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         //flexDirection: 'row',
 
+      },
+      buttonn:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 50,
+        width: 50,
+        //backgroundColor: '#cccccc',
+        borderRadius: 20,
+        margin: 20,
+        flexDirection: 'row',
       },
       button1: {
         alignItems: 'center',
@@ -318,51 +287,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10
     },
-    footerContainer: {
-        height: 70,
-        backgroundColor: '#ffffff',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-      },
-      footerIcon: {
-        height: 20,
-        width: 20,
-        //marginRight: 10,
-      },
-      footerButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 40,
-        width: 70,
-        //backgroundColor: '#cccccc',
-        borderRadius: 20,
-      },
-      footerButtonText: {
-        //fontWeight: 'bold',
-        fontSize: 16,
-      },
-      header: {
-        height: 50,
-        backgroundColor: '#ffffff',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-      },
       menuIcon: {
         width: 30,
         height: 30,
         marginRight: 10,
-      },
-      logoIcon: {
-        width: 50,
-        height: 50,
-      },
-      cartIcon: {
-        width: 30,
-        height: 30,
-        marginLeft: 10,
       },
 
 });

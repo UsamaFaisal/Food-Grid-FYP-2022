@@ -1,10 +1,20 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
-import { View, useWindowDimensions, Text, FlatList,StyleSheet } from 'react-native';
+import { View, useWindowDimensions, Text, FlatList,StyleSheet,Image, TouchableOpacity } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import * as firebase from 'firebase';
 import { Button } from 'react-native-elements';
 //import { ScrollView } from 'react-navigation';
+
+const images = new Map();
+images.set('ChickenBurger', require('../assets/ChickenBurger.png'));
+images.set('ZingerBurger', require('../assets/ZingerBurger.png'));
+images.set('PattyBurger', require('../assets/PattyBurger.png'));
+images.set('ChickenShawarma', require('../assets/ChickenShawarma.png'));
+images.set('Coke', require('../assets/Coke.png'));
+images.set('7up', require('../assets/7up.png'));
+images.set('DietCoke', require('../assets/DietCoke.png'));
+images.set('ChocolateBiscuit', require('../assets/ChocolateBiscuit.png'));
 
 function FirstRoute() {
   const [fastfoodItems, setFastfoodItems] = useState([]);
@@ -25,15 +35,18 @@ function FirstRoute() {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#ff4081' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <FlatList
         data={fastfoodItems}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemTitle}>Name: {item.itemName}</Text>
-            <Text style={styles.itemSubtitle}>Price: {item.itemPrice}</Text>
+          <View >
+            <TouchableOpacity style={styles.itemContainer}>
+            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            <Text style={styles.itemTitle}>{item.itemName}</Text>
+            <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
-            <Button title="Add to Cart"/>
+            </TouchableOpacity>
+            {/* <Button title="Add to Cart"/> */}
           </View>
         )}
       />
@@ -59,15 +72,18 @@ function SecondRoute(){
       }, []);
     
   return (
-  <View style={{ flex: 1, backgroundColor: '#673ab7' }}>
+  <View style={{ flex: 1, backgroundColor: '#fff' }}>
     <FlatList
         data={drinksItems}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemTitle}>Name: {item.itemName}</Text>
-            <Text style={styles.itemSubtitle}>Price: {item.itemPrice}</Text>
+          <View >
+            <TouchableOpacity style={styles.itemContainer}>
+            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            <Text style={styles.itemTitle}>{item.itemName}</Text>
+            <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
-            <Button title="Add to Cart"/>
+            </TouchableOpacity>
+            {/* <Button title="Add to Cart"/> */}
           </View>
         )}
       />
@@ -91,15 +107,18 @@ function ThirdRoute() {
         fetchBiscuitsItems();
       }, []);
     return(
-  <View style={{ flex: 1, backgroundColor: '#000000' }}>
+  <View style={{ flex: 1, backgroundColor: '#fff' }}>
     <FlatList
         data={biscuitsItems}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemTitle}>Name: {item.itemName}</Text>
-            <Text style={styles.itemSubtitle}>Price: {item.itemPrice}</Text>
+          <View >
+            <TouchableOpacity style={styles.itemContainer}>
+            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            <Text style={styles.itemTitle}>{item.itemName}</Text>
+            <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
-            <Button title="Add to Cart"/>
+            </TouchableOpacity>
+            {/* <Button title="Add to Cart"/> */}
           </View>
         )}
       />
@@ -143,6 +162,8 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 16,
         borderWidth: 1,
+        alignContent:'center',
+        alignItems:'center',
         borderColor: '#ddd',
         borderRadius: 4
       },
@@ -150,13 +171,22 @@ const styles = StyleSheet.create({
 
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'white' ,
+        color: 'black' ,
         paddingTop: 20 
       },
       itemSubtitle: {
         fontSize: 14,
-        color: 'white',
+        color: 'black',
         fontWeight:'bold'
+      },
+     
+      imgsize: {
+        width: 100,
+        height: 100,
+        borderRadius: 15,
+        marginTop: 10,
+        alignContent:'center',
+        //alignContent:'center',
       },
 
 });

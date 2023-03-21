@@ -3,8 +3,8 @@ import { View, Image, StyleSheet,Dimensions } from 'react-native';
 import Carousel ,{ Pagination } from 'react-native-snap-carousel';
 const { width, height } = Dimensions.get('window');
 const images = [
+  require('../assets/food.jpg'),
   require('../assets/slideimg3.jpg'),
-  require('../assets/slideimg4.jpg'),
   require('../assets/slideimg5.jpg'),
   require('../assets/food.jpg'),
 ];

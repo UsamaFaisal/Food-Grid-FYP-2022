@@ -15,7 +15,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 //import SideMenu from 'react-native-sidebar';
 //import HomeCarousel from '../components/Carousel';
 import TabViewComponent from '../components/Tabview';
-import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import { AuthContext } from '../routes/Authenticationprovider';
@@ -29,44 +30,7 @@ export default function TabviewScreen({ navigation }) {
         console.log(value)
         setdisable(false)
     }
-    const Header = () => {
-        return (
-          <View style={{ height: 50, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Header</Text>
-          </View>
-        );
-      };
-      
-      const Footer = () => {
-        const navigation = useNavigation();
-        return (
-          <View style={styles.footerContainer}>
-          {/* Ye footer ha */}
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                  <Image style={styles.footerIcon} source={require('../assets/home_icon.png')} />
-                  <Text style={styles.footerButtonText}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                  <Image style={styles.footerIcon} source={require('../assets/menu_icon.png')} />
-                  <Text style={styles.footerButtonText}>Menu</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
-                  <Image style={styles.footerIcon} source={require('../assets/deals_icon.png')} />
-                  <Text style={styles.footerButtonText}>Deals</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Message')}>
-                  <Image style={styles.footerIcon} source={require('../assets/chat_icon.png')} />
-                  <Text style={styles.footerButtonText}>Chat</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('GiveFeedback')}>
-                  <Image style={styles.footerIcon} source={require('../assets/more_icon.png')} />
-                  <Text style={styles.footerButtonText}>More</Text>
-            </TouchableOpacity>
-      </View>
-        );
-      };
        return (
-        
         <SafeAreaView style={{ flex: 1 }}>
         <Header />
         <TabViewComponent />

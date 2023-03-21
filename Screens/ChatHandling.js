@@ -39,33 +39,6 @@ export default function ChatHandling() {
     }
 
     const m = firebase.auth().currentUser && firebase.auth().currentUser.email;
-    // console.log(id)
-    // const AdminMessage=(id)=>{
-    //     console.log("1",id)
-    // navigation.navigate('AdminMessage',{id});
-    // console.log("2",id)
-    // }
-    
-   
-    
-    //function getmsg(val) {
-      //  setmsg(val)
-        //console.log(mail)
-    //}
-    
-    // function sendMessage() {
-    //     //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
-    //     firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).push({
-    //       message: msg,
-    //       sender: firebase.auth().currentUser.uid,
-    //       timestamp: new Date() 
-    //       //firebase.database.ServerValue.TIMESTAMP
-          
-    //     });
-    //   }
-
-    
-
     function sendMessage() {
         //setMessages(previousMessages=>GiftedChat.append(previousMessages,messages));
         firebase.database().ref('chat/'+ itemId).push({
@@ -76,6 +49,16 @@ export default function ChatHandling() {
           //firebase.database.ServerValue.TIMESTAMP
         });
       }
+    function updatemessages()
+    {
+        firebase.database().ref('chat/'+ itemId).get('child').then ((snapshot) => {
+            var msg=[];
+            snapshot.forEach(element => {
+                msg.push(element.val());
+            });
+            setMessages(msg);
+          });
+    }; 
     useEffect(()=>{
         firebase.database().ref('chat/'+ itemId).get('child').then ((snapshot) => {
             var msg=[];
@@ -88,10 +71,8 @@ export default function ChatHandling() {
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
-            <Header title='User' 
-                back={() => navigation.goBack('AdminMessage')}></Header>
-                     
-                <FlatList
+            <Header/>
+            <FlatList
                     data = {messages}
                     renderItem={({ item,index }) => (
                     <View style={styles.messageContainer}>
@@ -112,7 +93,9 @@ export default function ChatHandling() {
                         title='Send Message'
                         btntextcolor='#fff'
                         navigation={() => {
-                            sendMessage();}} 
+                            sendMessage();
+                            updatemessages();
+                        }} 
                         />
                 </View>
 

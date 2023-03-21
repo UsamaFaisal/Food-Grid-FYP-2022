@@ -146,8 +146,8 @@ const EditUser = () => {
                                  
                                 // }
                                     firebase.database().ref('Users/'+itemId).set({
-                                    username:name,
-                                    phone:phone,
+                                    name:name,
+                                    phoneno:phone,
                                     email:mail,
                                     password:password,
                                     disease:disease,

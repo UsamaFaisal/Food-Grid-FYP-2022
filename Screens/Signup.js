@@ -192,8 +192,8 @@ export default function Signup({ navigation }) {
                             {
                                 var userid = firebase.database().ref().push().key;
                                 firebase.database().ref('Users/'+userid).set({
-                                username:name,
-                                phone:phone,
+                                name:name,
+                                phoneno:phone,
                                 email:mail,
                                 password:password,
                                 disease:disease,

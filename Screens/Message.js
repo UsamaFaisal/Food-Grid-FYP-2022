@@ -25,6 +25,7 @@ export default function Message({navigation}) {
     const [error,seterror]=useState("");
     const [messages, setMessages] = useState([]);
     const [mid, setmid] = useState([]);
+    const [messageInput, setMessageInput] = useState('');
    const sendername='User: '
 
     function errors(value){
@@ -43,8 +44,22 @@ export default function Message({navigation}) {
           timestamp: new Date() 
           //firebase.database.ServerValue.TIMESTAMP
           
-        });
+            });
+            
+    //    }
       }
+      function updatemessages()
+        {
+            firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).get().then ((snapshot) => {
+                // update the chat interface with the 
+                var namm=[];
+                snapshot.forEach(element => {
+                    namm.push(element.val());
+                    //console.log("Elemnt:",element.val());
+                });
+                setMessages(namm);
+              });
+        }; 
       useEffect(()=>{
         firebase.database().ref('chat/'+ firebase.auth().currentUser.uid).get().then ((snapshot) => {
             // update the chat interface with the 
@@ -55,7 +70,7 @@ export default function Message({navigation}) {
             });
             setMessages(namm);
           });
-          
+
     },[]);
       
     return (
@@ -77,22 +92,22 @@ export default function Message({navigation}) {
                 <EmailField   
                     email='Enter Message'
                     onChange={setmsg}
+                    //  value={messageInput}
                 />
-            </View>
-            
+            </View>            
             <View style={styles.BtnWrapper}>
                 <Btn
                     color={disable?'#555555':'#000000'}
                     title='Send'
                     btntextcolor='#fff'
                     navigation={() => {
-                        sendMessage();       
+                        sendMessage();  
+                        updatemessages();
+                        // setMessageInput('');     
                 }}
                     />
             </View>
             <Text></Text><Text></Text>
-
-        
     </View>
 );    
     

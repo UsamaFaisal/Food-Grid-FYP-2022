@@ -101,9 +101,9 @@ export default function ManageUsers() {
                 renderItem={({ item,index }) => (
               <View style={styles.itemContainer}>
                 {/* <Text style={styles.itemTitle}>ID: {user[index]}</Text> */}
-               <Text style={styles.itemTitle}>Username: {item.username}</Text>
+               <Text style={styles.itemTitle}>Username: {item.name}</Text>
                <Text style={styles.itemSubtitle}>Email: {item.email}</Text>
-               <Text style={styles.itemSubtitle}>Phone: {item.phone}</Text>
+               <Text style={styles.itemSubtitle}>Phone: {item.phoneno}</Text>
                <Text style={styles.itemSubtitle}>Allergic Items: {item.allergicitems}</Text>
                <Text style={styles.itemSubtitle}>Disease: {item.disease}</Text>
                <Text></Text>
