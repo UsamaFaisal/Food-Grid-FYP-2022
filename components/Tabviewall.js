@@ -41,7 +41,11 @@ function FirstRoute() {
         renderItem={({ item }) => (
           <View >
             <TouchableOpacity style={styles.itemContainer}>
-            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            {/* <Image style={styles.imgsize} source={images.get(item.itemName)} /> */}
+            <Image
+              style={styles.imgsize}
+              source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
+            />
             <Text style={styles.itemTitle}>{item.itemName}</Text>
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
@@ -78,7 +82,11 @@ function SecondRoute(){
         renderItem={({ item }) => (
           <View >
             <TouchableOpacity style={styles.itemContainer}>
-            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            <Image
+              style={styles.imgsize}
+              source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
+            />
+            {/* <Image style={styles.imgsize} source={images.get(item.itemName)} /> */}
             <Text style={styles.itemTitle}>{item.itemName}</Text>
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
@@ -113,7 +121,10 @@ function ThirdRoute() {
         renderItem={({ item }) => (
           <View >
             <TouchableOpacity style={styles.itemContainer}>
-            <Image style={styles.imgsize} source={images.get(item.itemName)} />
+            <Image
+              style={styles.imgsize}
+              source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
+            />
             <Text style={styles.itemTitle}>{item.itemName}</Text>
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>

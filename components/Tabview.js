@@ -6,9 +6,49 @@ import * as firebase from 'firebase';
 import { Button } from 'react-native-elements';
 
 const images = new Map();
-images.set('Plane', require('../assets/Plane.png'));
-images.set('ChickenTikka', require('../assets/ChickenTikka.png'));
 
+images.set('OriginalCrust', require('../assets/OriginalCrust.png'));
+images.set('ThinzaCrust', require('../assets/ThinzaCrust.png'));
+images.set('XtremeCrust', require('../assets/XtremeCrust.png'));
+images.set('PanCrust', require('../assets/PanCrust.png'));
+images.set('CrispyChicken', require('../assets/CrispyChicken.png'));
+images.set('FootLong', require('../assets/FootLong.png'));
+images.set('Fruits', require('../assets/Fruits.png'));
+images.set('ChickenTikka', require('../assets/ChickenTikka.png'));
+images.set('Pepperoni', require('../assets/Pepperoni.png'));
+images.set('ChickenFajita', require('../assets/ChickenFajita.png'));
+images.set('Cheeselicious', require('../assets/Cheeselicious.png'));
+images.set('Vegeterian', require('../assets/Vegeterian.png'));
+images.set('TurkeyChunks', require('../assets/TurkeyChunks.png'));
+images.set('FieryChicken', require('../assets/FieryChicken.png'));
+images.set('BBQChicken', require('../assets/BBQChicken.png'));
+images.set('Mild', require('../assets/Mild.png'));
+images.set('Hot', require('../assets/Hot.png'));
+images.set('ExtraHot', require('../assets/ExtraHot.png'));
+images.set('FierySauce', require('../assets/FierySauce.png'));
+images.set('Onion', require('../assets/Onion.png'));
+images.set('Tomato', require('../assets/Tomato.png'));
+images.set('Mushrooms', require('../assets/Mushrooms.png'));
+images.set('Capsicum', require('../assets/Capsicum.png'));
+images.set('Brioche', require('../assets/Brioche.png'));
+images.set('Sourdough', require('../assets/Sourdough.png'));
+images.set('Englishmuffin', require('../assets/Englishmuffin.png'));
+images.set('Chicken', require('../assets/ChickenBurger.png'));
+images.set('Cheese', require('../assets/Cheese.png'));
+images.set('Bacon', require('../assets/Bacon.png'));
+images.set('BBQ', require('../assets/BBQ.png'));
+images.set('Plain', require('../assets/Round.png'));
+images.set('Chocolate', require('../assets/Chocolate.png'));
+images.set('Vanilla', require('../assets/Vanilla.png'));
+images.set('Straberry', require('../assets/Straberry.png'));
+images.set('Sprinkles', require('../assets/Sprinkles.png'));
+images.set('Nuts', require('../assets/Nuts.png'));
+images.set('Chips', require('../assets/Chips.png'));
+images.set('Caramel', require('../assets/Caramel.png'));
+images.set('Honey', require('../assets/Honey.png'));
+images.set('Round', require('../assets/Round.png'));
+images.set('Square', require('../assets/Square.png'));
+images.set('Heart', require('../assets/Heart.png'));
 const HorizontalList = ({ title, data, onSelect }) => {
   return (
     <View>
@@ -20,9 +60,12 @@ const HorizontalList = ({ title, data, onSelect }) => {
             renderItem={({ item }) => (
             <View style={styles.itemContainerinner}> 
             <TouchableOpacity>
-            {/* <Image style={styles.imgsize} source={require(`http/assets/${item.itemName}.png`)} /> */}
-            <Image style={styles.imgsize} source={images.get(item.itemName)} />
-            {/* <Image style={styles.imgsize} source={item.itemName.toString()} /> */}
+            <Image
+              style={styles.imgsize}
+              source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
+            />
+            {/* <Image style={styles.imgsize} source={images.get(item.itemName)} /> */}
+           
               <Text style= {styles.listtext} onPress={() => onSelect(item)}> 
               {item.itemName}  
               </Text>
@@ -92,8 +135,8 @@ function FirstRoute() {
 
     fetchbreads();
     fetchflavours();
-    // fetchsauces();
-    // fetchvegies();
+    fetchsauces();
+    fetchvegies();
   }, []);
 
   const handleBreadSelect = (bread) => {
@@ -199,10 +242,10 @@ function SecondRoute (){
       setVeggies(Vitems);
     };
 
-    // fetchbreads();
-    // fetchflavours();
-    // fetchsauces();
-    // fetchvegies();
+     fetchbreads();
+     fetchflavours();
+     fetchsauces();
+     fetchvegies();
   }, []);
 
   const handleBreadSelect = (bread) => {
@@ -235,7 +278,7 @@ function SecondRoute (){
     // code to add item to cart
   };
   return(
-    <ScrollView style={{ flex: 1, backgroundColor: '#673ab7' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View>
                 <HorizontalList title="Breads" data={breads} onSelect={handleBreadSelect} />
                 <HorizontalList title="Flavors" data={flavors} onSelect={handleFlavorSelect} />
@@ -309,10 +352,10 @@ function ThirdRoute() {
       setShape(Sitems);
     };
     
-    // fetchflavours();
-    // fetchtoppings();
-    // fetchcoatings();
-    // fetcshapes();
+    fetchflavours();
+    fetchtoppings();
+    fetchcoatings();
+    fetcshapes();
   }, []);
 
   
@@ -346,7 +389,7 @@ function ThirdRoute() {
     // code to add item to cart
   };
   return(
-    <ScrollView style={{ flex: 1, backgroundColor: '#fc03e3' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View>
                 <HorizontalList title="Flavours" data={flavors} onSelect={handleFlavorSelect} />
                 <HorizontalList title="Toppings" data={toppings} onSelect={handleToppingsSelect} />
@@ -418,7 +461,7 @@ const styles = StyleSheet.create({
       justifyContent:'center',
       alignItems:'center',
       marginVertical: 10,
-      marginHorizontal: 16,
+      marginHorizontal: 12,
       //borderWidth: 1,
       borderColor: '#000000',
       borderRadius: 15
