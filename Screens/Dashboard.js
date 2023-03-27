@@ -1,4 +1,4 @@
-import React, { useState,useContext ,useEffect,useRef} from 'react';
+import React, { useState,useContext ,useEffect} from 'react';
 import {
     StyleSheet,
     Text,
@@ -25,13 +25,14 @@ import { Button, SearchBar } from 'react-native-elements';
 import { AuthContext } from '../routes/Authenticationprovider';
 export default function Dashboard({ navigation }) {
     const Tab = createBottomTabNavigator();
-
     const [disable,setdisable]=useState(false);
     const [searchText, setSearchText] = useState('');
   const [items, setItems] = useState([]);
     const [error,seterror]=useState("");
     
     const {logout}=useContext(AuthContext);
+  
+    // Access the params object from the route
     function errors(value){
         seterror(value);
         console.log(value)
@@ -73,6 +74,7 @@ export default function Dashboard({ navigation }) {
          <View>
          <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginTop:15 }}>
          {/* ye search bar ha */}
+         
                 <TextInput 
                     style={{ borderRadius: 15,alignSelf: 'center', backgroundColor:'white',width:'70%',height: 40, borderColor: 'gray', borderWidth: 1,paddingLeft:10,marginLeft:10 }}
                     onChangeText={setSearchText}

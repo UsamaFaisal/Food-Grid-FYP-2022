@@ -1,27 +1,23 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
     View,
-    StatusBar,
     Image,
     TouchableOpacity,
+    TextInput,
     ScrollView
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
-import Header from '../components/Header'
-
+import { FontAwesome5 } from 'react-native-vector-icons';
 import EmailField from '../components/EmailField';
 import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
 import * as firebase from 'firebase'
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-
-
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+// import { TextInput } from 'react-native-paper';
 
 
 const Stack = createStackNavigator();
@@ -33,11 +29,9 @@ export default function Signup({ navigation }) {
     const [password, setpassword] = useState("");
     const [disease, setdisease] = useState("");
     const [allergicitems, setallergicitems] = useState("");
-    
     const [error, seterror] = useState("");
-     const flagg=false;
    const {register}= useContext(AuthContext);
-
+   const [showPassword, setShowPassword] = useState(false);
     function errors(value) {
         seterror(value);
         setdisable(false)
@@ -61,21 +55,6 @@ export default function Signup({ navigation }) {
     function getallergicitems(val) {
         setallergicitems(val)
     }
-    // function checkIfUserExists(email,password) {
-    //     firebase.auth().createUserWithEmailAndPassword(email, password)
-    //     .then(u => {})
-    //     .catch(error => {
-    //        switch (error.code) {
-    //           case 'Error: The email address is already in use by another account.':
-    //             return true
-    //             break;
-    //           default:
-    //             return false
-    //             //console.log(error.message);
-    //             break;
-    //         }
-    //     });
-    //   }
     async function getEmails(mail) {
         try {
           const snapshot = await firebase.database().ref('Users').once('value');
@@ -101,13 +80,6 @@ export default function Signup({ navigation }) {
          
     const handlevalidation=()=>{
         const validator = require('validator');
-        // getEmails(mail).then(result => {
-        //     console.log(result);
-        //     if(result){
-        //         seterror("mail already")
-        //     return false;
-        //     }
-        //   });
         if(name.length==0){
             seterror("Name Required")
             return false;
@@ -132,52 +104,107 @@ export default function Signup({ navigation }) {
         }
         
     };
+    const handlename = () => {
+        // Only allow alphabets and limit input to 15 characters
+        const regex = /^[a-zA-Z]{0,15}$/;
+        if (!regex.test(name)) {
+          seterror('Please enter a valid name (letters only, max 15 characters)');
+        } else {
+          seterror('');
+        }
+      };
+      const handlephone = () => {
+        // Regex to check if phone number is valid
+        const regex = /^[0-9]{11}$/;
+        if (!regex.test(phone)) {
+          seterror('Phone Number Not Valid');
+        }
+        else {
+            seterror('');
+          }
+      };
+      const handleEmail = () => {
+        // Regular expression to check if input is a valid email address containing '@' symbol and ending with 'gmail.com'
+        const emailRegex = /\S+@gmail\.com$/;
+        if (!emailRegex.test(mail)) {
+          seterror('Please enter a valid email address');
+        } else {
+          seterror('');
+        }
+      };
+    const handlePassword = () => {
+        // Regular expression to check if password meets certain criteria (contains at least one uppercase letter, one lowercase letter, one number, and one special character)
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        if (!passwordRegex.test(password)) {
+          seterror('Please enter a valid password (at least 8 characters, containing at least one uppercase letter, one lowercase letter, one number, and one special character)');
+        } else {
+          seterror('');
+        }
+      };
     return (
         <View style={styles.container}>
-            <StatusBar style='auto' />
-                <Header
-                    //title='Sign Up'
-                    back={() => navigation.goBack()} />
-
-        <Text style ={styles.TextLable}>
-            <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>F O O D </Text>
-            <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>G R I D </Text>     
-        </Text>
-      {/* <Text style={styles.TextLable3}>Sign Up </Text> */}
-                <ScrollView>
-                <View style={styles.error}>
-                    <Text style={styles.error}>{error}</Text>
-                </View>
-                <View style={styles.EmailWrapper}>
-                    <EmailField
-                        //Icon
-                        email='Name'
-                        onChange={setname} />
+            <Text style ={styles.TextLable}>
+                <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>F O O D </Text>
+                <Text style={{ color: 'black' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>G R I D </Text>     
+            </Text>
+            
+        <ScrollView style={{marginBottom:10}}>
+            
+            <View >
+                <Text style={styles.error}>{error}</Text>
+            </View>
+            <Text></Text>
+            <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Name'
+                        placeholderTextColor='#000000'
+                        value={name}
                         
-                    <EmailField
-                      //  title='Phone'
-                        //Icon
-                        email='Phone No'
-                        onChange={setphone} />
-                    <EmailField
-                        //title='Email address'
-                        email='Email'
-                        onChange={setmail}
+                        onchangeEditing={handlename}
+                        // onEndEditing={handlename}
+                        onChangeText={setname}
                     />
-                    <PasswordField
-                      //  title='Password'
-                
-                        onChange={setpassword} />
-                    <EmailField
-                        //title='Disease'
-                        email='Disease'
-                        onChange={setdisease}
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Phone No'
+                        placeholderTextColor='#000000'
+                        value={phone}
+                        maxLength={11}
+                        keyboardType='numeric'
+                        onchangeEditing={handlephone}
+                        onChangeText={setphone}
+                    />  
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Email'
+                        placeholderTextColor='#000000'
+                        value={mail}
+                        autoCapitalize='none'
+                        keyboardType='email-address'
+                        onchangeEditing={handleEmail}
+                        onChangeText={setmail}
                     />
-                    <EmailField
-                      //  title='Allergic Items'
-                        email='Allergic Items'
-                        onChange={setallergicitems}
-                    />
+                    <View style={styles.inputContainer}>  
+                            <TextInput
+                                style={styles.inputc}
+                                placeholder='Password'
+                                placeholderTextColor='#000000'
+                                value={password}
+                                secureTextEntry={!showPassword}
+                                onBlur={handlePassword}
+                                onChangeText={setpassword}
+                            />
+                            <TouchableOpacity
+                                    onPress={() => setShowPassword(!showPassword)}
+                                    style={styles.iconContainer}>
+                                    <FontAwesome5 
+                                        name={showPassword ? 'eye-slash' : 'eye'} 
+                                        size={20} 
+                                        color='gray' 
+                                    />
+                            </TouchableOpacity>
+                    </View>             
                 </View>
                 <View>
                     <Btn
@@ -227,11 +254,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         color: '#ff0000',
-        fontSize: 24
+        marginTop:15,
+        marginLeft:15,
+        fontSize: 15
     },
     container: {
         flex: 1,
-        backgroundColor: "#6ebe44",
+        backgroundColor: "#fff",
     },
     EmailWrapper: {
         height: hp('45%'),
@@ -259,7 +288,7 @@ const styles = StyleSheet.create({
     },
     AccountTxt: {
         fontSize: rf(12),
-        color: '#fff',
+        color: '#000000',
         textAlign: 'left',
         marginBottom: 10,
         bottom:-35,
@@ -268,7 +297,7 @@ const styles = StyleSheet.create({
     AccountTxt1: {
         fontSize: rf(12),
         fontWeight:'bold',
-        color: '#fff',
+        color: '#000000',
         textAlign: 'left',
         marginBottom: 10,
         bottom:-8,
@@ -278,7 +307,8 @@ const styles = StyleSheet.create({
         fontSize: rf(20),
         color: '#fcfefc',
         textAlign: 'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginTop:100,
     },
     TextLable3: {
         fontSize: rf(25),
@@ -287,6 +317,32 @@ const styles = StyleSheet.create({
         fontWeight: 'Agency',
         bottom:-20        
     },
-
-
+    input: {
+        height: 45,
+        borderRadius: 7,
+        borderWidth: 1,
+        borderColor: '#000000',
+        paddingHorizontal: 15,
+        marginHorizontal: 15,
+        marginBottom: 20,
+      },
+      inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 7,
+        borderWidth:1,
+        paddingHorizontal: 10,
+        marginHorizontal: 15,
+        marginBottom: 20,        
+      },
+      iconContainer: {
+        padding: 10,
+      },
+      inputc: {
+        flex: 1,
+        fontSize: 16,
+        color: 'black',
+        paddingVertical: 10,
+      },
 });
