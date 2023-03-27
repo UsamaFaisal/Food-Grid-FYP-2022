@@ -9,9 +9,11 @@ import Onboarding from "../Screens/Onboarding";
 import TabviewScreen from "../Screens/TabviewScreen";
 import Tabviewallscreen from "../Screens/Tabviewallscreen";
 import Signup from "../Screens/Signup";
+import ManageCart from "../Screens/ManageCart";
 import Login from "../Screens/Login";
 import Admindashboard from "../Screens/Admindashboard";
 import Dashboard from "../Screens/Dashboard";
+import TrackOrder from "../Screens/TrackOrder";
 import Message from "../Screens/Message";
 import AdminMessage from "../Screens/AdminMessage";
 import ManageUsers from "../Screens/ManageUsers";
@@ -55,6 +57,7 @@ const onAuthStateChanged=(user)=>{
         <Stack.Screen name="Onboarding" component={Onboarding} />
         
         <Stack.Screen name="Login" component={Login} />
+        {user ? <Stack.Screen name="TrackOrder" component={TrackOrder} /> :<Stack.Screen name="TrackOrder" component={TrackOrder} />}
         {user ? <Stack.Screen name="Admindashboard" component={Admindashboard} /> :<Stack.Screen name="Admindashboard" component={Admindashboard} />}
         {user ? <Stack.Screen name="Dashboard" component={Dashboard} /> :<Stack.Screen name="Dashboard" component={Dashboard} />}
         {user ? <Stack.Screen name="Message" component={Message} /> :<Stack.Screen name="Message" component={Message} />}
@@ -66,7 +69,7 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="EditFooditem" component={EditFooditem} /> :<Stack.Screen name="EditFooditem" component={EditFooditem} />}
         {user ? <Stack.Screen name="EditUser" component={EditUser} /> :<Stack.Screen name="EditUser" component={EditUser} />}
         {user ? <Stack.Screen name="ChatHandling" component={ChatHandling} /> :<Stack.Screen name="ChatHandling" component={ChatHandling} />}
-       
+        {user ? <Stack.Screen name="ManageCart" component={ManageCart} /> :<Stack.Screen name="ManageCart" component={ManageCart} />}
       </Stack.Navigator>
     </NavigationContainer>
   );

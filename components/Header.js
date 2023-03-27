@@ -24,7 +24,7 @@ export default function Header (){
           <Image source={require('../assets/drawer_icon.png')} style={styles.cartIcon}/>
         </TouchableOpacity>
             <Image source={require('../assets/foodpic.png')} style={styles.logoIcon} />
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ManageCart')}>
           <Image source={require('../assets/cart_icon.png')} style={styles.cartIcon} />
         </TouchableOpacity>
         {/* <OffCanvas3D

@@ -5,7 +5,7 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import * as firebase from 'firebase';
 import { Button } from 'react-native-elements';
 //import { ScrollView } from 'react-navigation';
-
+import Cart from './Cart';
 const images = new Map();
 images.set('ChickenBurger', require('../assets/ChickenBurger.png'));
 images.set('ZingerBurger', require('../assets/ZingerBurger.png'));
@@ -33,15 +33,14 @@ function FirstRoute() {
 
     fetchFastfoodItems();
   }, []);
-
+  // Cart.push("Hello");
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <FlatList
         data={fastfoodItems}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity style={styles.itemContainer}>
-            {/* <Image style={styles.imgsize} source={images.get(item.itemName)} /> */}
+            <TouchableOpacity style={styles.itemContainer} onPress={()=>Cart.push(item)} >
             <Image
               style={styles.imgsize}
               source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
@@ -50,7 +49,7 @@ function FirstRoute() {
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
             </TouchableOpacity>
-            {/* <Button title="Add to Cart"/> */}
+            
           </View>
         )}
       />
@@ -91,7 +90,7 @@ function SecondRoute(){
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
             </TouchableOpacity>
-            {/* <Button title="Add to Cart"/> */}
+           
           </View>
         )}
       />
@@ -129,7 +128,6 @@ function ThirdRoute() {
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
             </TouchableOpacity>
-            {/* <Button title="Add to Cart"/> */}
           </View>
         )}
       />

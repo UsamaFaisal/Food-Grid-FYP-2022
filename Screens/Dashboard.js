@@ -118,7 +118,7 @@ export default function Dashboard({ navigation }) {
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
+                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TrackOrder')}>
                     <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
                     <Text style={styles.buttonText1}>Track Order</Text>
                 </TouchableOpacity>
