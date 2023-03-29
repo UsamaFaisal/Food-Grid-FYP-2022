@@ -23,13 +23,14 @@ import { RFValue as rf } from "react-native-responsive-fontsize";
 import * as firebase from 'firebase';
 import { Button, SearchBar } from 'react-native-elements';
 import { AuthContext } from '../routes/Authenticationprovider';
+import Cart from '../components/Cart';
 export default function Dashboard({ navigation }) {
     const Tab = createBottomTabNavigator();
     const [disable,setdisable]=useState(false);
     const [searchText, setSearchText] = useState('');
   const [items, setItems] = useState([]);
     const [error,seterror]=useState("");
-    
+    // Cart=[];
     const {logout}=useContext(AuthContext);
   
     // Access the params object from the route
@@ -101,56 +102,60 @@ export default function Dashboard({ navigation }) {
           />
       
         </View>
-        <View style={styles.containern}>
+        
+    {/* yha ye buutons wala scene shuru ha     */}
+    <View style={styles.containern}>
            <HomeCarousel />
         </View>
-    {/* yha ye buutons wala scene shuru ha     */}
     <ScrollView>
+    
         <View style={styles.container1}>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TabviewScreen')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/Customizeorder.jpg')} />
-                    <Text style={styles.buttonText1} >Customize Order</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/customorder.png')} />
+                    {/* <Text style={styles.buttonText1} >Customize Order</Text> */}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Tabviewallscreen')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Quick Ordering</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/quickorder.png')} />
+                    {/* <Text style={styles.buttonText1}>Quick Ordering</Text> */}
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TrackOrder')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Track Order</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/trackorder.png')} />
+                    {/* <Text style={styles.buttonText1}>Track Order</Text> */}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakePayment')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Make Payment</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/makepayment.png')} />
+                    {/* <Text style={styles.buttonText1}>Make Payment</Text> */}
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Manage Cart</Text>
+                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ManageCart')}>
+                    <Image style={styles.buttonImage1} source={require('../assets/managecart.png')} />
+                    {/* <Text style={styles.buttonText1}>Manage Cart</Text> */}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() => alert('Button 2 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Apply Vouchers</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/applyvouchers.png')} />
+                    {/* <Text style={styles.buttonText1}>Apply Vouchers</Text> */}
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Deals</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/deals.png')} />
+                    {/* <Text style={styles.buttonText1}>Deals</Text> */}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() =>  navigation.navigate('GiveFeedback')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/food.jpg')} />
-                    <Text style={styles.buttonText1}>Give Feedback</Text>
+                    <Image style={styles.buttonImage1} source={require('../assets/feedback.png')} />
+                    {/* <Text style={styles.buttonText1}>Give Feedback</Text> */}
                 </TouchableOpacity>
             </View>     
         </View>
-    </ScrollView>
-        </View>
+    
+        </ScrollView>
         <Footer />
+        
+      </View>
         </SafeAreaView>
     );
 }
@@ -161,6 +166,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         color:'#ff0000',
         fontSize:24
+    },
+    scrollcontainer:{
+      marginBottom:10,
     },
     container: {
         flex: 1,
@@ -202,6 +210,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor:"#D3D3D3",
+        // marginBottom:50,
         //flexDirection: 'row',
 
       },
@@ -226,9 +236,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
       },
       buttonImage1: {
-        height: 150,
-        width: 150,
+        height: 140,
+        width: 140,
         borderRadius:20,
+        backgroundColor:'white',
         opacity:0.8,
       },
       buttonText1: {

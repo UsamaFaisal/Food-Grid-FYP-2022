@@ -217,8 +217,9 @@ export default function Signup({ navigation }) {
                         {
                         if(await register(mail,password))
                             {
+                                const cuser=firebase.auth().currentUser;
                                 var userid = firebase.database().ref().push().key;
-                                firebase.database().ref('Users/'+userid).set({
+                                firebase.database().ref('Users/'+cuser.uid).set({
                                 name:name,
                                 phoneno:phone,
                                 email:mail,

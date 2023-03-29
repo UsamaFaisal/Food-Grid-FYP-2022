@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -11,6 +11,11 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import { AntDesign } from '@expo/vector-icons';
 export default function Welcome({ navigation }) {
+    useEffect(() => {
+        setTimeout(() => {
+          navigation.replace('Signup'); // replace the current screen with the next screen
+        }, 1000); // display the splash screen for 3 seconds
+      }, [navigation]);
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />

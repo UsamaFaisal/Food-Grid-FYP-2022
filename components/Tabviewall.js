@@ -80,7 +80,7 @@ function SecondRoute(){
         data={drinksItems}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity style={styles.itemContainer}>
+            <TouchableOpacity style={styles.itemContainer} onPress={()=>Cart.push(item)}>
             <Image
               style={styles.imgsize}
               source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
@@ -119,7 +119,7 @@ function ThirdRoute() {
         data={biscuitsItems}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity style={styles.itemContainer}>
+            <TouchableOpacity style={styles.itemContainer} onPress={()=>Cart.push(item)}>
             <Image
               style={styles.imgsize}
               source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}

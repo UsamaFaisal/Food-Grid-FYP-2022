@@ -8,9 +8,11 @@ import MakePayment from "../Screens/MakePayment";
 import Onboarding from "../Screens/Onboarding";
 import TabviewScreen from "../Screens/TabviewScreen";
 import Tabviewallscreen from "../Screens/Tabviewallscreen";
+import Profile from "../Screens/Profile";
 import Signup from "../Screens/Signup";
 import ManageCart from "../Screens/ManageCart";
 import Login from "../Screens/Login";
+import MakeOrder from "../Screens/MakeOrder";
 import Admindashboard from "../Screens/Admindashboard";
 import Dashboard from "../Screens/Dashboard";
 import TrackOrder from "../Screens/TrackOrder";
@@ -47,7 +49,8 @@ const onAuthStateChanged=(user)=>{
   if(initializing) return null;
     return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>     
+      <Stack.Navigator screenOptions={{ headerShown: false }}>  
+      {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
         <Stack.Screen name="Signup" component={Signup} />
         {/* <Stack.Screen name="Dashboard" component={Dashboard} /> */}
         <Stack.Screen name="GiveFeedback" component={GiveFeedback} />
@@ -55,11 +58,11 @@ const onAuthStateChanged=(user)=>{
         <Stack.Screen name="TabviewScreen" component={TabviewScreen} />
         <Stack.Screen name="Tabviewallscreen" component={Tabviewallscreen} />
         <Stack.Screen name="Onboarding" component={Onboarding} />
-        
         <Stack.Screen name="Login" component={Login} />
         {user ? <Stack.Screen name="TrackOrder" component={TrackOrder} /> :<Stack.Screen name="TrackOrder" component={TrackOrder} />}
         {user ? <Stack.Screen name="Admindashboard" component={Admindashboard} /> :<Stack.Screen name="Admindashboard" component={Admindashboard} />}
         {user ? <Stack.Screen name="Dashboard" component={Dashboard} /> :<Stack.Screen name="Dashboard" component={Dashboard} />}
+        {user ? <Stack.Screen name="Profile" component={Profile} /> :<Stack.Screen name="Profile" component={Profile} />}
         {user ? <Stack.Screen name="Message" component={Message} /> :<Stack.Screen name="Message" component={Message} />}
         {user ? <Stack.Screen name="AdminMessage" component={AdminMessage} /> :<Stack.Screen name="AdminMessage" component={AdminMessage} />}
         {user ? <Stack.Screen name="ManageUsers" component={ManageUsers} /> :<Stack.Screen name="ManageUsers" component={ManageUsers} />}
@@ -70,6 +73,7 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="EditUser" component={EditUser} /> :<Stack.Screen name="EditUser" component={EditUser} />}
         {user ? <Stack.Screen name="ChatHandling" component={ChatHandling} /> :<Stack.Screen name="ChatHandling" component={ChatHandling} />}
         {user ? <Stack.Screen name="ManageCart" component={ManageCart} /> :<Stack.Screen name="ManageCart" component={ManageCart} />}
+        {user ? <Stack.Screen name="MakeOrder" component={MakeOrder} /> :<Stack.Screen name="MakeOrder" component={MakeOrder} />}
       </Stack.Navigator>
     </NavigationContainer>
   );

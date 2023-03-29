@@ -1,35 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+
+// import PaymentGateway from '../components/PaymentGateway';
+// const stripe = new StripeProvider('sk_test_51Mqh8jB58nmXMVgnvOGXPMri2VVkTXtTsh7sl54PaRyHKIAGcrnEXa4pJRNAtdm7xvk4VHugsRm2oTY4leDXbtkl00VIWBgE0i')
 import firebase from 'firebase';
 
-const MakePayment = () => {
+function MakePayment() {
   const [amount, setAmount] = useState('');
 
-  const handleSubmit = () => {
-    if (amount.trim() !== '') {
-      // TODO: implement payment processing logic
-      firebase.database().ref('payments').push({
-        amount: amount.trim(),
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
-      });
-      setAmount('');
-    }
-  };
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Make Payment</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter amount"
-        keyboardType="numeric"
-        value={amount}
-        onChangeText={(text) => setAmount(text)}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Pay Now</Text>
-      </TouchableOpacity>
-    </View>
+    <View>
+    <Text style={{ fontSize: 20, fontWeight: 'bold', marginVertical: 10 }}>Payment Gateway Demo</Text>
+    {/* <PaymentGateway /> */}
+  </View>
   );
 };
 

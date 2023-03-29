@@ -16,7 +16,7 @@ export default function Footer(){
                   <Image style={styles.footerIcon} source={require('../assets/home_icon.png')} />
                   <Text style={styles.footerButtonText}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Tabviewallscreen')}>
                   <Image style={styles.footerIcon} source={require('../assets/menu_icon.png')} />
                   <Text style={styles.footerButtonText}>Menu</Text>
             </TouchableOpacity>
@@ -28,9 +28,9 @@ export default function Footer(){
                   <Image style={styles.footerIcon} source={require('../assets/chat_icon.png')} />
                   <Text style={styles.footerButtonText}>Chat</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('GiveFeedback')}>
-                  <Image style={styles.footerIcon} source={require('../assets/more_icon.png')} />
-                  <Text style={styles.footerButtonText}>More</Text>
+            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Profile')}>
+                  <Image style={styles.footerIcon} source={require('../assets/account.png')} />
+                  <Text style={styles.footerButtonText}>Profile</Text>
             </TouchableOpacity>
       </View>
     );
