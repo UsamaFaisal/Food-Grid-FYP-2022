@@ -1,12 +1,17 @@
 import React, { useState,useEffect } from 'react';
-import { SafeAreaView,View,ScrollView, Text, TextInput, TouchableOpacity, StyleSheet,FlatList } from 'react-native';
+import { SafeAreaView,View,ScrollView, Text,Button, TextInput, TouchableOpacity, StyleSheet,FlatList,Alert } from 'react-native';
 import * as firebase from 'firebase';
 // import { Piechart } from 'react-native-pie';
 import Cart from '../components/Cart';
-
-import { Button } from 'react-native-elements';
+import GetLocation from 'react-native-get-location';
+import Header from '../components/Header1';
+// import Geolocation from '@react-native-community/geolocation';
 const ManageCart = ({ navigation }) => {
+  const [userLocation, setUserLocation] = useState(null);
     const [username, setusername] = useState([]);
+    const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [error, setError] = useState(null);
     const [userphone, setuserphone] = useState([]);
     const [address, setaddress] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -20,15 +25,16 @@ const ManageCart = ({ navigation }) => {
   const cuser = firebase.auth().currentUser;
     //    console.log('Mange cart',user.email);
    
-  const groupedItems = Cart.reduce((acc, item) => {
-    const existingItem = acc.find((group) => group.itemName === item.itemName);
-    if (existingItem) {
-      existingItem.count += 1;
-    } else {
-      acc.push({ ...item, count: 1 });
-    }
-    return acc;
-  }, []);
+    const groupedItems = Cart.reduce((acc, item) => {
+      const existingItem = acc.find((group) => group.itemName === item.itemName);
+      if (existingItem) {
+        existingItem.count += 1;
+        existingItem.itemPrice += parseInt(item.itemPrice, 10);
+      } else {
+        acc.push({ ...item, count: 1, itemPrice: parseInt(item.itemPrice, 10) });
+      }
+      return acc;
+    }, []);
 //   console.log(groupedItems);
   const getUserInfo = () => {
     const usersRef = firebase.database().ref('Users');
@@ -52,76 +58,122 @@ const ManageCart = ({ navigation }) => {
   useEffect(() => {
     getUserInfo();
   }, []); 
-        const handleOrder = async () => {
-          setLoading(true);
-          try {
-            const ordersRef = firebase.database().ref('Orders');
-            const newOrderRef = ordersRef.child(cuser.uid).push();
-            await newOrderRef.set({
-              userEmail: cuser.email,
-              userNumber: userphone,
-              userAddress: address,
-              orderTime: new Date().toString(),
-              Items: groupedItems,
-              status: 'pending'
-            });
-            console.log('Order placed successfully!');
-          } catch (error) {
-            console.error('Error placing order:', error);
-          }
-          setLoading(false);
+  const handleOrder = async () => {
+    setLoading(true);
+    try {
+      const ordersRef = firebase.database().ref('Orders');
+      const newOrderRef = ordersRef.child(cuser.uid).push();
+      await newOrderRef.set({
+        userEmail: cuser.email,
+        userNumber: userphone,
+        userAddress: address,
+        orderTime: new Date().toString(),
+        Items: groupedItems,
+        status: 'pending'
+      });
+      Cart.splice(0, Cart.length);
+      console.log('Order placed successfully!');
+      Alert.alert(
+        'Order Placed Successfully',
+        'Your order has been placed successfully!',
+        [
+          { text: 'OK', onPress: () => navigation.navigate('Order') }
+        ]
+      );
+    } catch (error) {
+      console.error('Error placing order:', error);
+    }
+    setLoading(false);
+  };
+        const getCurrentLocation = () => {
+          GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 60000,
+        })
+        .then(location => {
+            console.log(location);
+        })
+        .catch(error => {
+            const { code, message } = error;
+            console.warn(code, message);
+        })
         };
+        // console.log('Cart',Cart);
   return (
-    <SafeAreaView>
-    <View >
-          <Text style={styles.title}>Manage Cart</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Header />
+    <View>
+      <Text style={styles.title}>Manage Cart</Text>
     </View>
-    <View >
-      {groupedItems.length > 0 && (
+    {groupedItems.length <= 0 ? (
+      <View style={styles.emptyCartContainer}>
+        <Text style={styles.emptyCartText}>No items selected</Text>
+      </View>
+    ) : (
+      <View style={{ flex: 1 }}>
         <FlatList
           data={groupedItems}
-          renderItem={({ item }) => (
-            // <TouchableOpacity>
-              <View style={styles.messageContainer}>
-                <Text style={styles.itemSubtitle}>Quantity {item.count} {item.itemName}</Text>
-                <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
-                <TouchableOpacity>
-                     <Text style={styles.button}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            // </TouchableOpacity>
+          renderItem={({ item,index }) => (
+            <View style={styles.messageContainer}>
+              <Text style={styles.itemSubtitle}>
+                {item.count} {item.itemName}
+              </Text>
+              <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
+              
+              <TouchableOpacity onPress={() => {
+                Cart.splice(index, 1);
+                Alert.alert('Success', 'Item removed successfully.');
+                }}>
+                <Text style={styles.button}>Remove</Text>
+              </TouchableOpacity>
+            </View>
           )}
         />
-      )}
-      {groupedItems.length > 0 && (
-        <View>
+        <ScrollView>
           <Text style={styles.grandTotal}>Details of Nutrients</Text>
-          <Text style={styles.grandTotal}>Calories {totalcalories}  Protein {totalprotein}</Text>
-          <Text style={styles.grandTotal}>Sugar {totalsugar}  Sodium {totalsodium}</Text>
-          <Text style={styles.grandTotal}>Fats {totalfats}  Carbs {totalcarbs}</Text>
-          <Text style={styles.grandTotal}></Text> 
-          <Text style={styles.grandTotal}>Grand Total: Rs.{totalPrice}</Text>
-         <Text style={styles.heading}>Email</Text>
+          <Text style={styles.grandTotal}>
+            Calories {totalcalories} Protein {totalprotein}
+          </Text>
+          <Text style={styles.grandTotal}>
+            Sugar {totalsugar} Sodium {totalsodium}
+          </Text>
+          <Text style={styles.grandTotal}>
+            Fats {totalfats} Carbs {totalcarbs}
+          </Text>
+          <Text style={styles.grandTotal}></Text>
+          <Text style={styles.grandTotal}>
+            Grand Total: Rs.{totalPrice}
+          </Text>
+          <Text style={styles.heading}>Email</Text>
           <TextInput
-                        style={styles.input}
-                        value={cuser.email}
-                        editable={false}
-                    />
-         <Text style={styles.heading}>Enter Address</Text>
+            style={styles.input}
+            value={cuser.email}
+            editable={false}
+          />
+          <Text style={styles.heading}>Enter Address</Text>
           <TextInput
-                        style={styles.input}
-                        value={address}
-                        onChangeText={setaddress}
-                        // editable={false}
-                    />
-          <TouchableOpacity style={styles.button} onPress={handleOrder} disabled={loading}>
-          <Text style={styles.buttonText}>{loading ? 'Placing order...' : 'Order'}</Text>
+            style={styles.input}
+            value={address}
+            onChangeText={setaddress}
+            // editable={false}
+          />
+          <TouchableOpacity onPress={getCurrentLocation}>
+            <Text>Get Current Location</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleOrder}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? 'Placing order...' : 'Order'}
+            </Text>
           </TouchableOpacity>
           <Text></Text>
-        </View> 
-      )}
-    </View>
-    </SafeAreaView>
+        </ScrollView>
+      </View>
+    )}
+  </SafeAreaView>
   );
 };
 
@@ -136,6 +188,9 @@ const styles = StyleSheet.create({
     width: 200,
     marginBottom: 16,
   },
+  emptyCartContainer:{
+    marginLeft:8,
+  },
   heading: {
     marginLeft:3,
     fontSize: 16,
@@ -146,6 +201,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    marginTop:10,
+    marginLeft:8,
   },
   input: {
     borderWidth: 1,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
-import { View, useWindowDimensions, Text, FlatList,StyleSheet,Image, TouchableOpacity } from 'react-native';
+import { View, useWindowDimensions, Text, FlatList,StyleSheet,Image, TouchableOpacity,Alert } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import * as firebase from 'firebase';
 import { Button } from 'react-native-elements';
@@ -40,7 +40,16 @@ function FirstRoute() {
         data={fastfoodItems}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity style={styles.itemContainer} onPress={()=>Cart.push(item)} >
+            <TouchableOpacity style={styles.itemContainer} onPress={() => {
+                  Alert.alert(
+                    'Add to cart',
+                    `Do you want to add ${item.itemName} to your cart?`,
+                    [
+                      {text: 'No'},
+                      {text: 'Yes', onPress: () => Cart.push(item)},
+                    ]
+                  );
+             }}>
             <Image
               style={styles.imgsize}
               source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
@@ -80,7 +89,16 @@ function SecondRoute(){
         data={drinksItems}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity style={styles.itemContainer} onPress={()=>Cart.push(item)}>
+            <TouchableOpacity style={styles.itemContainer} onPress={() => {
+                  Alert.alert(
+                    'Add to cart',
+                    `Do you want to add ${item.itemName} to your cart?`,
+                    [
+                      {text: 'No'},
+                      {text: 'Yes', onPress: () => Cart.push(item)},
+                    ]
+                  );
+             }}>
             <Image
               style={styles.imgsize}
               source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
@@ -119,7 +137,16 @@ function ThirdRoute() {
         data={biscuitsItems}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity style={styles.itemContainer} onPress={()=>Cart.push(item)}>
+            <TouchableOpacity style={styles.itemContainer} onPress={() => {
+                  Alert.alert(
+                    'Add to cart',
+                    `Do you want to add ${item.itemName} to your cart?`,
+                    [
+                      {text: 'No'},
+                      {text: 'Yes', onPress: () => Cart.push(item)},
+                    ]
+                  );
+             }}>
             <Image
               style={styles.imgsize}
               source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}

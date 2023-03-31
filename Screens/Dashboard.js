@@ -44,28 +44,32 @@ export default function Dashboard({ navigation }) {
         if (searchText.trim() === '') {
           setItems([]);
           return;
-        }
-      
+        }      
         firebase
-          .database()
-          .ref('Food/Fastfood')
-          .orderByChild('itemName')
-          .startAt(searchText)
-          .endAt(searchText + '\uf8ff')
-          .once('value')
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              const data = snapshot.val();
-              const items = Object.values(data);
-              setItems(items);
-            } else {
-              setItems([]);
-              seterror('Item not Found');
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        .database()
+        .ref('Food/Fastfood')
+        .orderByChild('itemName')
+        .once('value')
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            const items = Object.values(data);
+            let filteredItems = items;
+            const searchWords = searchText.trim().toLowerCase().split(' ');
+            searchWords.forEach((word) => {
+              filteredItems = filteredItems.filter((item) =>
+                item.itemName.toLowerCase().includes(word)
+              );
+            });
+            setItems(filteredItems);
+          } else {
+            setItems([]);
+            seterror('Item not Found');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       };
        return (
         <SafeAreaView style={{ flex: 1 }}>

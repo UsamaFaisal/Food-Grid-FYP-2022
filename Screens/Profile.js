@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import {StyleSheet,SafeAreaView,ScrollView, View, Text, Image, TextInput, Button, TouchableOpacity } from 'react-native';
 import * as firebase from 'firebase';
-import Header from '../components/Header';
+import Header from '../components/Header1';
 const Profile = () => {
   const [editable, setEditable] = useState(false);
 

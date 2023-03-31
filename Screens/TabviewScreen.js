@@ -15,7 +15,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 //import SideMenu from 'react-native-sidebar';
 //import HomeCarousel from '../components/Carousel';
 import TabViewComponent from '../components/Tabview';
-import Header from '../components/Header';
+import Header from '../components/Header1';
 import Footer from '../components/Footer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RFValue as rf } from "react-native-responsive-fontsize";

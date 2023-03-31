@@ -88,6 +88,11 @@ export default function Signup({ navigation }) {
             seterror("PhoneNumber Not Valid")
             return false;
         }
+        // const emailRegex = /\S+@gmail\.com\.[a-z]+$/;
+        // if (!emailRegex.test(mail)) {
+        //   seterror('Please enter a valid email address');
+        //   return false;
+        // }
         if (!validator.isEmail(mail) || mail.length==0)
         {
             seterror("Email Not valid")

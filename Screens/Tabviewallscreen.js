@@ -12,7 +12,7 @@ import {
     ScrollView,
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Header from '../components/Header';
+import Header from '../components/Header1';
 import Footer from '../components/Footer';
 import TabViewComponentall from '../components/Tabviewall';
 import { RFValue as rf } from "react-native-responsive-fontsize";

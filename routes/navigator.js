@@ -12,7 +12,7 @@ import Profile from "../Screens/Profile";
 import Signup from "../Screens/Signup";
 import ManageCart from "../Screens/ManageCart";
 import Login from "../Screens/Login";
-import MakeOrder from "../Screens/MakeOrder";
+import Order from "../Screens/Order";
 import Admindashboard from "../Screens/Admindashboard";
 import Dashboard from "../Screens/Dashboard";
 import TrackOrder from "../Screens/TrackOrder";
@@ -73,7 +73,7 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="EditUser" component={EditUser} /> :<Stack.Screen name="EditUser" component={EditUser} />}
         {user ? <Stack.Screen name="ChatHandling" component={ChatHandling} /> :<Stack.Screen name="ChatHandling" component={ChatHandling} />}
         {user ? <Stack.Screen name="ManageCart" component={ManageCart} /> :<Stack.Screen name="ManageCart" component={ManageCart} />}
-        {user ? <Stack.Screen name="MakeOrder" component={MakeOrder} /> :<Stack.Screen name="MakeOrder" component={MakeOrder} />}
+        {user ? <Stack.Screen name="Order" component={Order} /> :<Stack.Screen name="Order" component={Order} />}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -16,9 +16,9 @@ export default function Footer(){
                   <Image style={styles.footerIcon} source={require('../assets/home_icon.png')} />
                   <Text style={styles.footerButtonText}>Home</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Tabviewallscreen')}>
-                  <Image style={styles.footerIcon} source={require('../assets/menu_icon.png')} />
-                  <Text style={styles.footerButtonText}>Menu</Text>
+            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Order')}>
+                  <Image style={styles.footerIcon} source={require('../assets/clipboard.png')} />
+                  <Text style={styles.footerButtonText}>Order</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
                   <Image style={styles.footerIcon} source={require('../assets/deals_icon.png')} />

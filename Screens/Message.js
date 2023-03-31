@@ -12,7 +12,7 @@ import {
 } from 'react-native-responsive-screen';
 import { RFValue as rf } from 'react-native-responsive-fontsize';
 import EmailField from '../components/EmailField';
-import Header from '../components/Header';
+import Header from '../components/Header1';
 import Btn from '../components/Btn';
 import * as firebase from 'firebase';
 
