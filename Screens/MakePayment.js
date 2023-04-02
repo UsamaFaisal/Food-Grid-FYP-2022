@@ -1,118 +1,240 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import axios from 'axios'
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
   TextInput,
   StatusBar,
 } from 'react-native';
-
+import * as Location from 'expo-location';
+import Header from '../components/Header1';
+import * as firebase from 'firebase';
+import Cart from '../components/Cart';
 const CURRENCY = 'USD';
 const API_URL = 'https://api.stripe.com/v1';
 const SECRET_KEY = 'sk_test_51Mqh8jB58nmXMVgnvOGXPMri2VVkTXtTsh7sl54PaRyHKIAGcrnEXa4pJRNAtdm7xvk4VHugsRm2oTY4leDXbtkl00VIWBgE0i';
-const PUBLISHABLE_KEY = 'pk_test_51Mqh8jB58nmXMVgn2VasoYLuEy1ouHjQzR3uMj2LLIHtY79MAXF58v4qCiDpaCbIJaLd8qyuQ8HVborCGOdZq4Sz00E3Xr67IH';
+const PUBLISHABLE_KEY = 'your_publishable_key';
 
-const StripeGateway = () => {
+const MakePayment = ({route,navigation}) => {
+  const { totalPrice } = route.params
   const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
+  const [monthexpiry, setmonthExpiry] = useState('');
+  const [yearexpiry, setyearExpiry] = useState('');
   const [cvc, setCvc] = useState('');
-
+  const [username, setusername] = useState([]);
+  const [location, setLocation] = useState(null);
+    const [longitude, setlongitude] = useState('');
+    const [latitude, setlatitude] = useState('');
+    
+  const [error, setError] = useState(null);
+    const [userphone, setuserphone] = useState([]);
+  // const [email, setemail] = useState('');
+  const cuser = firebase.auth().currentUser;
+  // if (!totalprice) {
+  //   return (
+  //     <View>
+  //       <Text style={styles.title}>Invalid request</Text>
+  //     </View>
+  //   );
+  // }
+  const [loading, setLoading] = useState(false);
+  const groupedItems = Cart.reduce((acc, item) => {
+    const existingItem = acc.find((group) => group.itemName === item.itemName);
+    if (existingItem) {
+      existingItem.count += 1;
+      existingItem.itemPrice += parseInt(item.itemPrice, 10);
+    } else {
+      acc.push({ ...item, count: 1, itemPrice: parseInt(item.itemPrice, 10) });
+    }
+    return acc;
+  }, []);
+  async function handleOrder() {
+    setLoading(true);
+    try {
+      const ordersRef = firebase.database().ref('Orders');
+      const newOrderRef = ordersRef.child(cuser.uid).push();
+      await newOrderRef.set({
+        userEmail: cuser.email,
+        userNumber: userphone,
+        orderTime: new Date().toString(),
+        Items: groupedItems,
+        status: 'pending',
+        longitude:longitude,
+        latitude:latitude,
+      });
+      Cart.splice(0, Cart.length);
+      console.log('Order placed successfully!');
+      Alert.alert(
+        'Payment Successfull',
+        'Your order has been placed successfully!',
+        [
+          { text: 'OK', onPress: () => navigation.navigate('Order') }
+        ]
+      );
+    } catch (error) {
+      console.error('Error placing order:', error);
+    }
+    setLoading(false);
+  };
+  const getUserInfo = () => {
+    const usersRef = firebase.database().ref('Users');
+    const unsubscribe = usersRef.on('value', (snapshot) => {
+      const users = snapshot.val();
+      const usernamesArray = Object.keys(users).map((key) => {
+        const user = users[key];
+        if (user.email === cuser.email) {
+          setusername(user.name);
+          setuserphone(user.phoneno);
+          return user.name;
+        }
+        return null;
+      }).filter((username) => username !== null);
+    });
+  
+    // Unsubscribe when component unmounts
+    return () => unsubscribe();
+  };
+  async function getLocation() {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        throw new Error('Permission to access location was denied');
+      }
+  
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setlongitude(location.coords.longitude);
+      setlatitude(location.coords.latitude);
+      return location;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+  useEffect(() => {
+    getLocation();
+    getUserInfo();
+  }, []);
   const onCardNumberChange = (text) => {
     setCardNumber(text);
   };
-
-  const onExpiryChange = (text) => {
-    setExpiry(text);
+  const onmonthExpiryChange = (text) => {
+    setmonthExpiry(text);
   };
-
+  
+  const onyearExpiryChange = (text) => {
+    setyearExpiry(text);
+  };
   const onCvcChange = (text) => {
     setCvc(text);
   };
   const onSubmit = async () => {
-    const cardDetails = {
-      'number': cardNumber,
-      'exp_month': expiry.split('/')[0],
-      'exp_year': expiry.split('/')[1],
-      'cvc': cvc,
-      
+    const stripeConfig = {
+      headers: {
+        'Authorization': 'Bearer sk_test_51Mqh8jB58nmXMVgnvOGXPMri2VVkTXtTsh7sl54PaRyHKIAGcrnEXa4pJRNAtdm7xvk4VHugsRm2oTY4leDXbtkl00VIWBgE0i',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     };
-    console.log(cardDetails['number']);
-    console.log(cardDetails['exp_month']);
-    console.log(cardDetails['exp_year']);
-     console.log(cardDetails['cvc']);
-     const token = await fetch(`${API_URL}/tokens`, {
+
+    const cardDetails = {
+      'card[number]': cardNumber,
+      'card[exp_month]': monthexpiry,
+      'card[exp_year]': yearexpiry,
+      'card[cvc]': cvc,
+    };
+
+    axios.post('https://api.stripe.com/v1/customers', { email: "f190118@nu.edu.pk" }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': `Bearer ${SECRET_KEY}`,
-      },
-      method: 'POST',
-      body: Object.keys(cardDetails)
-        .map(key => key + '=' + cardDetails[key])
-        .join('&')
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
       }
-      return response.json();
     })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-    console.log('token', token);
+      .then((response) => {
+        const customer = response.data
+        axios.post('https://api.stripe.com/v1/tokens', Object.keys(cardDetails)
+          .map(key => key + '=' + cardDetails[key])
+          .join('&'), stripeConfig)
+          .then((response) => {
+            const token = response.data
+            if (token.id) {
+              axios.post(`https://api.stripe.com/v1/customers/${customer.id}/sources`, { source: `${token.id}` }, {
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization': `Bearer ${SECRET_KEY}`,
+                }
+              })
+                .then((response) => {
+                  const card = response.data
+                  axios.post(`https://api.stripe.com/v1/charges`, { receipt_email: cuser.email, amount: totalPrice, currency: "USD", card: card.id, customer: customer.id }, {
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                      'Authorization': `Bearer ${SECRET_KEY}`,
+                    }
+                  })
+                    .then((response) => {
+                      const charge = response.data
+                      if (charge.status === 'succeeded') {
+                       // alert('Payment Successful');
+                        handleOrder();
+                      } else {
+                        alert('Payment failed');
+                      }
 
-    if (token.id) {
-      console.log('aya');
-      const charge = await fetch(`${API_URL}/charges`, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Bearer ${SECRET_KEY}`,
-        },
-        method: 'POST',
-        body: `amount=5000&currency=${CURRENCY}&description=Developers Sin Subscription&source=${token.id}`
-      }).then(response => response.json());
+                    })
+                })
 
-      console.log('charge', charge);
+            } else {
+              alert('Invalid Card Details');
+            }
 
-      if (charge.status === 'succeeded') {
-        alert('Payment Successful');
-      } else {
-        alert('Payment failed');
-      }
-    } else {
-      alert('Invalid Card Details');
-    }
+          })
+      })
+      .catch(error => console.error(error));
+
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#2471A3" />
-      <Image
-        source={{ uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Stripe_logo%2C_revised_2016.png/1200px-Stripe_logo%2C_revised_2016.png' }}
-        style={styles.ImgStyle}
-      />
-      <View style={styles.cardInputContainer}>
-        <Text style={styles.cardInputLabel}>Card Number</Text>
+        <Text style={styles.heading}>Amount</Text>
         <TextInput
-          style={styles.cardInput}
+          style={styles.input}
+          value={totalPrice}
+          editable={false}
+        />  
+        <Text style={styles.heading}>Card Number</Text>
+        <TextInput
+          style={styles.input}
           placeholder="1234 5678 9012 3456"
           keyboardType="number-pad"
           maxLength={19}
           value={cardNumber}
           onChangeText={onCardNumberChange}
         />
-      </View>
+        
       <View style={styles.cardInputContainer}>
-        <Text style={styles.cardInputLabel}>Expiry</Text>
+        <Text style={styles.cardInputLabel}>Month Expiry</Text>
         <TextInput
           style={styles.cardInput}
-          placeholder="MM/YY"
-          // keyboardType="number-pad"
-          maxLength={5}
-          value={expiry}
-          onChangeText={onExpiryChange}
+          placeholder="MM"
+          keyboardType="number-pad"
+          maxLength={2}
+          value={monthexpiry}
+          onChangeText={onmonthExpiryChange}
+        />
+      </View>
+      <View style={styles.cardInputContainer}>
+        <Text style={styles.cardInputLabel}>Year Expiry</Text>
+        <TextInput
+          style={styles.cardInput}
+          placeholder="YYYY"
+          keyboardType="number-pad"
+          maxLength={4}
+          value={yearexpiry}
+          onChangeText={onyearExpiryChange}
         />
       </View>
       <View style={styles.cardInputContainer}>
@@ -126,11 +248,11 @@ const StripeGateway = () => {
         />
       </View>
       <TouchableOpacity
-        onPress={ onSubmit }
+        onPress={onSubmit}
         style={styles.button}>
         <Text
           style={styles.buttonText}>
-          Pay Now
+           {loading ? 'Placing order...' : 'Pay now'}
         </Text>
       </TouchableOpacity>
     </View>
@@ -170,5 +292,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+  heading: {
+    marginLeft:3,
+    fontSize: 16,
+    fontWeight: 'bold',
+    
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    paddingLeft:9,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 8,
+    color:'black',
+    backgroundColor:'#D3D3D3',
+    marginBottom: 16,
+    marginTop:5,
+    width: '100%',
+    borderRadius: 8,
+  },
 });
-export default StripeGateway;
+export default MakePayment;

@@ -96,7 +96,6 @@ const ManageCart = ({ route,navigation }) => {
       await newOrderRef.set({
         userEmail: cuser.email,
         userNumber: userphone,
-        userAddress: address,
         orderTime: new Date().toString(),
         Items: groupedItems,
         status: 'pending',
@@ -176,7 +175,12 @@ const ManageCart = ({ route,navigation }) => {
             disabled={loading}
           >
             <Text style={styles.buttonText}>
-              {loading ? 'Placing order...' : 'Order'}
+              {loading ? 'Placing order...' : 'Order(Cash On Delivery)'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText} onPress={()=>navigation.navigate('MakePayment',{ totalPrice: totalPrice})}>
+              Online Pay
             </Text>
           </TouchableOpacity>
           <Text></Text>
