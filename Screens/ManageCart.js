@@ -1,19 +1,27 @@
 import React, { useState,useEffect } from 'react';
 import { SafeAreaView,View,ScrollView, Text,Button, TextInput, TouchableOpacity, StyleSheet,FlatList,Alert } from 'react-native';
 import * as firebase from 'firebase';
-// import { Piechart } from 'react-native-pie';
 import Cart from '../components/Cart';
-import GetLocation from 'react-native-get-location';
 import Header from '../components/Header1';
-// import Geolocation from '@react-native-community/geolocation';
-const ManageCart = ({ navigation }) => {
-  const [userLocation, setUserLocation] = useState(null);
+import * as Location from 'expo-location';
+import MapView, { Marker } from 'react-native-maps';
+const ManageCart = ({ route,navigation }) => {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
     const [username, setusername] = useState([]);
-    const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+    const [longitude, setlongitude] = useState('');
+    const [latitude, setlatitude] = useState('');
+    
   const [error, setError] = useState(null);
     const [userphone, setuserphone] = useState([]);
-    const [address, setaddress] = useState([]);
+    // const { longitude, latitude } = route.params;
+    const { reclongitude, reclatitude } = route.params || {};
+    const newReclongitude = reclongitude;
+    const newReclatitude = reclatitude;
+    // console.log("lat",newReclatitude);
+    // console.log("lon",newReclongitude);
+
+    const [gindex, setgindex] = useState([]);
     const [loading, setLoading] = useState(false);
     const totalcalories = Cart.reduce((acc, item) => acc + Number(item.calories), 0);
     const totalcarbs = Cart.reduce((acc, item) => acc + Number(item.carbs), 0);
@@ -24,7 +32,6 @@ const ManageCart = ({ navigation }) => {
   const totalPrice = Cart.reduce((acc, item) => acc + Number(item.itemPrice), 0);
   const cuser = firebase.auth().currentUser;
     //    console.log('Mange cart',user.email);
-   
     const groupedItems = Cart.reduce((acc, item) => {
       const existingItem = acc.find((group) => group.itemName === item.itemName);
       if (existingItem) {
@@ -54,10 +61,33 @@ const ManageCart = ({ navigation }) => {
     // Unsubscribe when component unmounts
     return () => unsubscribe();
   };
+  async function getLocation() {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        throw new Error('Permission to access location was denied');
+      }
   
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setlongitude(location.coords.longitude);
+      setlatitude(location.coords.latitude);
+      return location;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+  function removeitem(index)
+  {
+    // setgindex(index);
+    Cart.splice(index, 1);
+    Alert.alert('Success', 'Item removed successfully.');
+  }
   useEffect(() => {
+    getLocation();
     getUserInfo();
-  }, []); 
+  }, []);
   const handleOrder = async () => {
     setLoading(true);
     try {
@@ -69,7 +99,9 @@ const ManageCart = ({ navigation }) => {
         userAddress: address,
         orderTime: new Date().toString(),
         Items: groupedItems,
-        status: 'pending'
+        status: 'pending',
+        longitude:longitude,
+        latitude:latitude,
       });
       Cart.splice(0, Cart.length);
       console.log('Order placed successfully!');
@@ -85,19 +117,6 @@ const ManageCart = ({ navigation }) => {
     }
     setLoading(false);
   };
-        const getCurrentLocation = () => {
-          GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 60000,
-        })
-        .then(location => {
-            console.log(location);
-        })
-        .catch(error => {
-            const { code, message } = error;
-            console.warn(code, message);
-        })
-        };
         // console.log('Cart',Cart);
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -120,10 +139,7 @@ const ManageCart = ({ navigation }) => {
               </Text>
               <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
               
-              <TouchableOpacity onPress={() => {
-                Cart.splice(index, 1);
-                Alert.alert('Success', 'Item removed successfully.');
-                }}>
+              <TouchableOpacity onPress={() => {removeitem(index)}}>
                 <Text style={styles.button}>Remove</Text>
               </TouchableOpacity>
             </View>
@@ -150,16 +166,10 @@ const ManageCart = ({ navigation }) => {
             value={cuser.email}
             editable={false}
           />
-          <Text style={styles.heading}>Enter Address</Text>
-          <TextInput
-            style={styles.input}
-            value={address}
-            onChangeText={setaddress}
-            // editable={false}
-          />
-          <TouchableOpacity onPress={getCurrentLocation}>
-            <Text>Get Current Location</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Map', { longitude, latitude })}>
+            <Text style={styles.button}>Set Location On Map</Text>
           </TouchableOpacity>
+          {/* <Text style={styles.button} onPress={()=>navigation.navigate('Maps',{newReclatitude,newReclongitude})}></Text> */}
           <TouchableOpacity
             style={styles.button}
             onPress={handleOrder}
@@ -219,6 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     padding: 12,
     borderRadius: 8,
+    marginBottom:10,
   },
   buttonText: {
     color: '#fff',

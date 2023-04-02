@@ -43,6 +43,12 @@ const Order = ({navigation}) => {
               <Text style={styles.button1}>Leave Feedback</Text>
             </TouchableOpacity>
           ) : null}
+          {item.status !== 'Delivered' ? (          
+            <TouchableOpacity onPress={() => navigation.navigate('TrackOrder',{ longitude: item.longitude,latitude: item.latitude })}>
+              <Text></Text>
+              <Text style={styles.button1}>Track Location</Text>
+            </TouchableOpacity>
+          ) : null}
           <Text></Text>
           <TouchableOpacity onPress={() => navigation.navigate('Message')}>
             <Text style={styles.button}>Contact</Text>

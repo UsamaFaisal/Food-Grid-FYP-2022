@@ -122,7 +122,7 @@ const getUserInfo = () => {
       style={styles.input}
         value={password}
          onChangeText={setpassword}
-        editable={editable}
+        editable={false}
       />
       <Text style={styles.heading}>Allergic Items</Text>
       <TextInput

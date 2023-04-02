@@ -13,6 +13,7 @@ import Signup from "../Screens/Signup";
 import ManageCart from "../Screens/ManageCart";
 import Login from "../Screens/Login";
 import Order from "../Screens/Order";
+import Map from "../Screens/Map";
 import Admindashboard from "../Screens/Admindashboard";
 import Dashboard from "../Screens/Dashboard";
 import TrackOrder from "../Screens/TrackOrder";
@@ -30,6 +31,7 @@ import * as firebase from 'firebase';
 import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import TrackLocation from "../Screens/TrackLocation";
 
 const Stack = createStackNavigator();
 
@@ -74,6 +76,8 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="ChatHandling" component={ChatHandling} /> :<Stack.Screen name="ChatHandling" component={ChatHandling} />}
         {user ? <Stack.Screen name="ManageCart" component={ManageCart} /> :<Stack.Screen name="ManageCart" component={ManageCart} />}
         {user ? <Stack.Screen name="Order" component={Order} /> :<Stack.Screen name="Order" component={Order} />}
+        {user ? <Stack.Screen name="Map" component={Map} /> :<Stack.Screen name="Map" component={Map} />}
+        {user ? <Stack.Screen name="TrackLocation" component={TrackLocation} /> :<Stack.Screen name="TrackLocation" component={TrackLocation} />}
       </Stack.Navigator>
     </NavigationContainer>
   );
