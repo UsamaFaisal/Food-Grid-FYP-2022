@@ -45,14 +45,16 @@ export default function Admindashboard({ navigation }) {
                     //title='Dashboard'
                     back={() => navigation.goBack('Login')}
                      />
-                 <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>DASHBOARD</Text>
+                     <Text style ={styles.TextLable}>
+                     <Text style={{ color: 'black' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>DASHBOARD</Text>
+                     </Text>
                 <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
-                        color={disable?'#555555':'green'}
+                        color={disable?'#555555':'#31D2F2'}
                         title='Manage Users'
-                        btntextcolor='#fff'
+                        btntextcolor='#000'
                         navigation={() => {
                             navigation.navigate('ManageUsers');
                             //setdisable(true);
@@ -62,9 +64,9 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.BtnWrapper}>
                     <Btn
                        // disabled={disable}
-                        color={disable?'#555555':'green'}
+                        color={disable?'#555555':'#31D2F2'}
                         title='Manage Food Items'
-                        btntextcolor='#fff'
+                        btntextcolor='#000'
                         navigation={() => {
                             navigation.navigate('ManageFooditems');
                             //setdisable(true);
@@ -74,9 +76,9 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.BtnWrapper}>
                     <Btn
                         //disabled={disable}
-                        color={disable?'#555555':'green'}
+                        color={disable?'#555555':'#31D2F2'}
                         title='Chat'
-                        btntextcolor='#fff'
+                        btntextcolor='#000'
                         navigation={() => {
                             //setdisable(true);
                             navigation.navigate('AdminMessage');
@@ -86,9 +88,9 @@ export default function Admindashboard({ navigation }) {
                 <View style={styles.BtnWrapper}>
                     <Btn
                        // disabled={disable}
-                        color={disable?'#555555':'green'}
-                        title='Notify User'
-                        btntextcolor='#fff'
+                        color={disable?'#555555':'#31D2F2'}
+                        title='Manage Order'
+                        btntextcolor='#000'
                         navigation={() => {
                          //   navigation.navigate('Admindashboard');
                             //setdisable(true);
@@ -121,7 +123,13 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+    },
+    TextLable: {
+        marginTop:25,
+        fontSize: rf(37),
+        color: '#fcfefc',
+        textAlign: 'center',
+        fontWeight: 'bold'
     },
     EmailWrapper: {
         height: hp('15%'),

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -22,9 +22,9 @@ export default function Message({ navigation }) {
     const [error, seterror] = useState('');
     const [messages, setMessages] = useState([]);
     const [usernames, setUsernames] = useState([]);
-    const [process,setProcess]=useState([])
+    const [process, setProcess] = useState([])
     const m = firebase.auth().currentUser && firebase.auth().currentUser.email;
-
+    const cuseremail = firebase.auth().currentUser.email;
     useEffect(() => {
         const unsubscribe = getUserName();
         return () => {
@@ -32,7 +32,7 @@ export default function Message({ navigation }) {
         };
     }, []);
 
-    function getUserName(){
+    function getUserName() {
         const usersRef = firebase.database().ref('Users');
         const unsubscribe = usersRef.on('value', (snapshot) => {
             const users = snapshot.val();
@@ -52,7 +52,7 @@ export default function Message({ navigation }) {
 
     function sendMessage() {
         firebase.database().ref('chat/' + usernames).push({
-            message:msg,
+            message: msg,
             email: m,
             sender: firebase.auth().currentUser.uid,
             timestamp: new Date(),
@@ -67,30 +67,34 @@ export default function Message({ navigation }) {
             });
             setProcess(namm);
         });
-    }    
+    }
     useEffect(() => {
         updatemessages(); // update messages initially
         setMessages(process)
-      
+
     }, [process]);
 
     return (
         <View style={styles.container}>
             {/* {getUserName()} */}
             <StatusBar style="auto" />
-            <Header
+            <Header style={styles.header}
                 title="Admin"
                 back={() => navigation.goBack('Dashboard')}
             ></Header>
-            <View style={styles.error}>
-                <Text style={styles.error}>{error}</Text>
+            <View>
+            <Text style={{textAlign:"center"}}>Admin</Text>
             </View>
             <FlatList
                 data={messages}
                 extraData={messages}
                 renderItem={({ item }) => (
                     <View style={styles.messageContainer}>
-                        <Text style={styles.text}>{item.message}</Text>
+                        {(item.email === cuseremail) > 0 ? (
+                            <Text style={{ textAlign: "right" }}>{item.message}</Text>
+                        ) : (
+                            <Text style={{ textAlign: "left" }}>{item.message}</Text>
+                        )}
                     </View>
                 )}
             />
@@ -117,12 +121,8 @@ export default function Message({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    error: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#ff0000',
-        fontSize: 24
+    header:{
+        marginTop:100
     },
     container: {
         flex: 1,
@@ -152,14 +152,12 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     messageContainer: {
-        flexDirection: 'row',
         padding: 10,
         margin: 10,
         borderWidth: 1,
         color: '#000000',
         borderColor: '#ccc',
         borderRadius: 10,
-        alignItems: 'flex-start',
     },
     sender: {
         fontWeight: 'bold',

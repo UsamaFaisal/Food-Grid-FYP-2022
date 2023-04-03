@@ -20,7 +20,7 @@ const SECRET_KEY = 'sk_test_51Mqh8jB58nmXMVgnvOGXPMri2VVkTXtTsh7sl54PaRyHKIAGcrn
 const PUBLISHABLE_KEY = 'your_publishable_key';
 
 const MakePayment = ({route,navigation}) => {
-  const { totalPrice } = route.params
+  const { totalPrice } = route.params || {}
   const [cardNumber, setCardNumber] = useState('');
   const [monthexpiry, setmonthExpiry] = useState('');
   const [yearexpiry, setyearExpiry] = useState('');
@@ -29,18 +29,17 @@ const MakePayment = ({route,navigation}) => {
   const [location, setLocation] = useState(null);
     const [longitude, setlongitude] = useState('');
     const [latitude, setlatitude] = useState('');
-    
   const [error, setError] = useState(null);
     const [userphone, setuserphone] = useState([]);
   // const [email, setemail] = useState('');
   const cuser = firebase.auth().currentUser;
-  // if (!totalprice) {
-  //   return (
-  //     <View>
-  //       <Text style={styles.title}>Invalid request</Text>
-  //     </View>
-  //   );
-  // }
+  if (!totalPrice) {
+    return (
+      <View>
+        <Text style={styles.title}>Invalid request</Text>
+      </View>
+    );
+  }
   const [loading, setLoading] = useState(false);
   const groupedItems = Cart.reduce((acc, item) => {
     const existingItem = acc.find((group) => group.itemName === item.itemName);
@@ -132,6 +131,7 @@ const MakePayment = ({route,navigation}) => {
   const onCvcChange = (text) => {
     setCvc(text);
   };
+  
   const onSubmit = async () => {
     const stripeConfig = {
       headers: {
@@ -199,54 +199,45 @@ const MakePayment = ({route,navigation}) => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.heading}>Amount</Text>
-        <TextInput
-          style={styles.input}
-          value={totalPrice}
-          editable={false}
-        />  
+         <Text style={styles.heading}>Amount</Text>  
+        <Text style={styles.input}>{totalPrice}</Text>  
         <Text style={styles.heading}>Card Number</Text>
         <TextInput
           style={styles.input}
           placeholder="1234 5678 9012 3456"
           keyboardType="number-pad"
-          maxLength={19}
+          maxLength={16}
           value={cardNumber}
           onChangeText={onCardNumberChange}
         />
         
-      <View style={styles.cardInputContainer}>
-        <Text style={styles.cardInputLabel}>Month Expiry</Text>
+      
+        <Text style={styles.heading}>Month Expiry</Text>
         <TextInput
-          style={styles.cardInput}
+          style={styles.input}
           placeholder="MM"
           keyboardType="number-pad"
           maxLength={2}
           value={monthexpiry}
           onChangeText={onmonthExpiryChange}
         />
-      </View>
-      <View style={styles.cardInputContainer}>
-        <Text style={styles.cardInputLabel}>Year Expiry</Text>
+        <Text style={styles.heading}>Year Expiry</Text>
         <TextInput
-          style={styles.cardInput}
+          style={styles.input}
           placeholder="YYYY"
           keyboardType="number-pad"
           maxLength={4}
           value={yearexpiry}
           onChangeText={onyearExpiryChange}
         />
-      </View>
-      <View style={styles.cardInputContainer}>
-        <Text style={styles.cardInputLabel}>CVC</Text>
+        <Text style={styles.heading}>CVC</Text>
         <TextInput
-          style={styles.cardInput}
+          style={styles.input}
           placeholder="123"
           keyboardType="numeric"
           value={cvc}
           onChangeText={onCvcChange}
         />
-      </View>
       <TouchableOpacity
         onPress={onSubmit}
         style={styles.button}>
@@ -293,7 +284,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   heading: {
-    marginLeft:3,
+    marginLeft:8,
     fontSize: 16,
     fontWeight: 'bold',
     
@@ -304,6 +295,18 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingLeft:9,
   },
+  input1: {
+    borderWidth: 1,
+    //borderColor: '#ccc',
+    padding: 8,
+    color:'black',
+    //backgroundColor:'#D3D3D3',
+    marginBottom: 16,
+    marginTop:5,
+    marginLeft:8,
+    width: '100%',
+    borderRadius: 8,
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -312,6 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#D3D3D3',
     marginBottom: 16,
     marginTop:5,
+    marginLeft:8,
     width: '100%',
     borderRadius: 8,
   },

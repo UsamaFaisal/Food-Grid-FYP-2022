@@ -25,19 +25,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 export default function ChatHandling() {
   const [disable, setdisable] = useState(false);
   const [msg, setmsg] = useState([]);
-  const [error, seterror] = useState('');
   const navigation = useNavigation();
   const [messages, setMessages] = useState([]);
-  const [mid, setmid] = useState([]);
   const route = useRoute();
   const itemId = route.params.id;
-  const sendername = 'Admin: ';
-
-  function errors(value) {
-    seterror(value);
-    console.log(value);
-    setdisable(false);
-  }
 
   const m = firebase.auth().currentUser && firebase.auth().currentUser.email;
 
@@ -46,7 +37,7 @@ export default function ChatHandling() {
       .database()
       .ref('chat/' + itemId)
       .push({
-        message: sendername + msg,
+        message: msg,
         email: m,
         sender: firebase.auth().currentUser.uid,
         timestamp: new Date(),
@@ -82,7 +73,11 @@ export default function ChatHandling() {
         data={messages}
         renderItem={({ item, index }) => (
           <View style={styles.messageContainer}>
-            <Text style={styles.text}>{messages[index].message}</Text>
+            {(messages[index].email === "admin1@gmail.com") > 0 ?(
+              <Text style={{textAlign:"right"}}>{messages[index].message}</Text>
+            ):(
+              <Text style={{textAlign:"left"}}>{messages[index].message}</Text>
+            )}
           </View>
         )}
       />
@@ -144,14 +139,12 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     messageContainer: {
-        flexDirection: 'row',
         padding: 10,
         margin: 10,
         borderWidth: 1,
         color:'#000000',
         borderColor: '#ccc',
         borderRadius: 10,
-        alignItems: 'flex-start',
       },
       sender: {
         fontWeight: 'bold',

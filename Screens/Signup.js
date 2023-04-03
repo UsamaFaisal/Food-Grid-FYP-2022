@@ -84,6 +84,11 @@ export default function Signup({ navigation }) {
             seterror("Name Required")
             return false;
         }
+        const nameRegex = /^[A-Za-z]+$/;
+            if (!nameRegex.test(name)) {
+            seterror('Please enter a valid name without any numbers');
+            return false;
+            }
         if(phone.length==0 || (phone.length<11 || phone.length>11)){
             seterror("PhoneNumber Not Valid")
             return false;

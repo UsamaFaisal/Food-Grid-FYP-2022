@@ -67,16 +67,13 @@ export default function AdminMessage() {
                     back={() => navigation.goBack('AdminDashboard')} /> 
                     <View style={styles.error}><Text style={styles.error}>{error}</Text></View>
             <Text style ={styles.TextLable}>
-        <Text style={{ color: 'white' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>U S E R </Text>
-        <Text style={{ color: 'green' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>M E S S A G E S  </Text></Text>
+        <Text style={{ color: 'black' , fontSize: rf(25) ,textAlign: 'center',fontWeight: 'bold'}}>Messages  </Text></Text>
             <FlatList
                   data = {messages}
                   renderItem={({ item, index }) => (
                 <View style={styles.messageContainer}>
-                 <Text style={styles.itemTitle}>UserId: {messages[index]}</Text>
-                 <Text></Text>
-                 <Button color='green' title="Message"  onPress={() => chatt(messages[index])}
-                />
+                 <Text style={styles.itemTitle}>{messages[index]}</Text>
+                 <Text style={styles.messagebtn} ><Button color='green' title="Message"  onPress={() => chatt(messages[index])}/></Text>
                  {/* <Text style={styles.text}>{item.message}</Text> */}
                  </View>)}/>
         </View>
@@ -89,9 +86,15 @@ const styles = StyleSheet.create({
         color:'#ff0000',
         fontSize:10
     },
+    messageContainer:{
+        marginTop:20,
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 10,
+        margin:35
+    },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
     },
     EmailWrapper: {
         height: hp('15%'),
@@ -99,10 +102,17 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     TextLable: {
+        marginTop:20,
         fontSize: rf(37),
         color: '#fcfefc',
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    messagebtn: {
+        flex:1,
+        width:200,
+        padding:10,
+        marginLeft:30
     },
     PasswordWrapper: {
         height: hp('12%'),
@@ -131,9 +141,11 @@ const styles = StyleSheet.create({
         borderRadius: 4
       },
     itemTitle: {
+        marginLeft:40,
+        marginTop:20,
         fontSize: 16,
         fontWeight: 'bold',
-        color:'white'
+        color:'black'
       }
 
 });

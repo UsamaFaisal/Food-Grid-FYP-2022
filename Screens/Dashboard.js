@@ -98,7 +98,7 @@ export default function Dashboard({ navigation }) {
               <View style={styles.messageContainer}>
                 <Text style={styles.itemSubtitle}>{item.itemName}</Text>
                 <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
-              
+                 
               </View>
               </TouchableOpacity>
              
