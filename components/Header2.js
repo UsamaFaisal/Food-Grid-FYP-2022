@@ -20,33 +20,13 @@ export default function Header (){
     };
     return (
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Image source={require('../assets/exit.png')} style={styles.cartIcon1}/>
+        <TouchableOpacity onPress={() => navigation.navigate('Tabviewallscreen')}>
+          <Image source={require('../assets/arrow.png')} style={styles.cartIcon}/>
         </TouchableOpacity>
             <Image source={require('../assets/foodpic.png')} style={styles.logoIcon} />
         <TouchableOpacity onPress={() => navigation.navigate('ManageCart')}>
           <Image source={require('../assets/cart_icon.png')} style={styles.cartIcon} />
         </TouchableOpacity>
-        {/* <OffCanvas3D
-          active={menuOpen} // pass menuOpen state as active prop
-          onMenuPress={handleMenu} // pass handleMenu function as onMenuPress prop
-          backgroundColor={'#222222'}
-          menuTextStyles={{color: 'white'}}
-          handleBackPress={true}
-          menuItems={[
-            {
-                title: 'Menu 1',
-                icon: <Icon name="camera" size={35} color='#ffffff' />,
-                // renderScene: <MyScene/>
-            },
-            {
-                title:'Menu 2',
-                icon: <Icon name="bell" size={35} color='#ffffff' />,
-                // renderScene: <AnotherScene/>
-            }
-        ]}
-        
-        /> */}
         
       </View>
     );
@@ -69,10 +49,5 @@ export default function Header (){
         width: 30,
         height: 30,
         marginLeft: 10,
-      },
-      cartIcon1: {
-        width: 28,
-        height: 28,
-        // marginLeft: 1,
       },
 });

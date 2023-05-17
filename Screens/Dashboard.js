@@ -14,6 +14,7 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { OffCanvas3D } from 'react-native-off-canvas-menu';
 import Icon from 'react-native-vector-icons/EvilIcons';
+import { FontAwesome5 } from 'react-native-vector-icons';
 import HomeCarousel from '../components/Carousel';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -80,18 +81,27 @@ export default function Dashboard({ navigation }) {
         <Header />
          <View style={styles.container}>
             <StatusBar style='auto' />
+         <View  style={{ marginTop: 10}}>
          <View>
-         <View style={{ flexDirection: 'row', justifyContent: 'space-around',marginTop:15 }}>
          {/* ye search bar ha */}
-         
+         <View style={styles.inputContainer}> 
                 <TextInput 
-                    style={{ borderRadius: 15,alignSelf: 'center', backgroundColor:'white',width:'70%',height: 40, borderColor: 'gray', borderWidth: 1,paddingLeft:10,marginLeft:10 }}
+                    // style={{ borderRadius: 15,alignSelf: 'center', backgroundColor:'white',width:'70%',height: 40, borderColor: 'gray', borderWidth: 1,paddingLeft:10,marginLeft:10 }}
                     onChangeText={setSearchText}
                     value={searchText}
+                    placeholder='Search'
                   /> 
-                <Button buttonStyle={{ borderRadius: 15 }} title="Search" onPress={searchfun} />
+                  <TouchableOpacity
+                                   onPress={searchfun}
+                                    style={styles.iconContainer}>
+                                    <FontAwesome5 
+                                        name={'search'} 
+                                        size={17} 
+                                        color='gray' 
+                                    />
+                            </TouchableOpacity>
+                </View>
         </View> 
-        <Text></Text>
 
         {/* ye jb search hoga to list show krega */}
         <View>
@@ -136,36 +146,27 @@ export default function Dashboard({ navigation }) {
                     {/* <Text style={styles.buttonText1}>Quick Ordering</Text> */}
                 </TouchableOpacity>
             </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TrackLocation')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/trackorder.png')} />
-                    {/* <Text style={styles.buttonText1}>Track Order</Text> */}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('MakePayment')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/makepayment.png')} />
-                    {/* <Text style={styles.buttonText1}>Make Payment</Text> */}
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ManageCart')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/managecart.png')} />
-                    {/* <Text style={styles.buttonText1}>Manage Cart</Text> */}
-                </TouchableOpacity>
+            <View style={styles.buttonContainer}>    
                 <TouchableOpacity style={styles.button1} onPress={() =>  navigation.navigate('Vouchers')}>
                     <Image style={styles.buttonImage1} source={require('../assets/applyvouchers.png')} />
                     {/* <Text style={styles.buttonText1}>Apply Vouchers</Text> */}
-                </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 1 pressed!')}>
-                    <Image style={styles.buttonImage1} source={require('../assets/deals.png')} />
-                    {/* <Text style={styles.buttonText1}>Deals</Text> */}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() =>  navigation.navigate('GiveFeedback')}>
                     <Image style={styles.buttonImage1} source={require('../assets/feedback.png')} />
                     {/* <Text style={styles.buttonText1}>Give Feedback</Text> */}
                 </TouchableOpacity>
-            </View>     
+            </View>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('TrackLocation')}>
+                    <Image style={styles.buttonImage1} source={require('../assets/trackorder.png')} />
+                    {/* <Text style={styles.buttonText1}>Track Order</Text> */}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Deals')}>
+                    <Image style={styles.buttonImage1} source={require('../assets/deals.png')} />
+                    {/* <Text style={styles.buttonText1}>Deals</Text> */}
+                </TouchableOpacity>
+            </View>
+            
         </View>
     
         </ScrollView>
@@ -186,6 +187,10 @@ const styles = StyleSheet.create({
     scrollcontainer:{
       marginBottom:10,
     },
+    iconContainer: {
+      padding: 10,
+      
+    },
     container: {
         flex: 1,
         //backgroundColor: "#47b749",
@@ -193,7 +198,8 @@ const styles = StyleSheet.create({
     containern: {
       width: '100%',
       height:'40%',
-      paddingBottom:15,
+      // paddingBottom:15,
+      // marginTop:-20,
     backgroundColor:"#eeeee4",
   },
     itemSubtitle: {
@@ -220,6 +226,8 @@ const styles = StyleSheet.create({
       },
     buttonContainer: {
         flexDirection: 'row',
+        justifyContent:'space-evenly',
+        // flexWrap:'wrap-reverse',
       },
     //
     container1: {
@@ -243,7 +251,7 @@ const styles = StyleSheet.create({
       },
       button1: {
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent:'center', 
         height: 150,
         width: 150,
         //backgroundColor: '#cccccc',
@@ -252,8 +260,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
       },
       buttonImage1: {
-        height: 140,
-        width: 140,
+        height: 125,
+        width: 150,
         borderRadius:20,
         backgroundColor:'white',
         opacity:0.8,
@@ -320,6 +328,17 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginRight: 10,
+      },
+      inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#fff',
+        borderRadius: 7,
+        borderWidth:1,
+        paddingHorizontal: 10,
+        marginHorizontal: 15,
+        marginBottom: 35,        
       },
 
 });

@@ -20,7 +20,7 @@ const SECRET_KEY = 'sk_test_51Mqh8jB58nmXMVgnvOGXPMri2VVkTXtTsh7sl54PaRyHKIAGcrn
 const PUBLISHABLE_KEY = 'your_publishable_key';
 
 const MakePayment = ({route,navigation}) => {
-  const { totalPrice } = route.params || {}
+  const { totalPriceWithDiscount } = route.params || {}
   const [cardNumber, setCardNumber] = useState('');
   const [monthexpiry, setmonthExpiry] = useState('');
   const [yearexpiry, setyearExpiry] = useState('');
@@ -33,7 +33,7 @@ const MakePayment = ({route,navigation}) => {
     const [userphone, setuserphone] = useState([]);
   // const [email, setemail] = useState('');
   const cuser = firebase.auth().currentUser;
-  if (!totalPrice) {
+  if (!totalPriceWithDiscount) {
     return (
       <View>
         <Text style={styles.title}>Invalid request</Text>
@@ -169,7 +169,7 @@ const MakePayment = ({route,navigation}) => {
               })
                 .then((response) => {
                   const card = response.data
-                  axios.post(`https://api.stripe.com/v1/charges`, { receipt_email: cuser.email, amount: totalPrice, currency: "USD", card: card.id, customer: customer.id }, {
+                  axios.post(`https://api.stripe.com/v1/charges`, { receipt_email: cuser.email, amount: totalPriceWithDiscount, currency: "USD", card: card.id, customer: customer.id }, {
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded',
                       'Authorization': `Bearer ${SECRET_KEY}`,
@@ -200,7 +200,7 @@ const MakePayment = ({route,navigation}) => {
   return (
     <View style={styles.container}>
          <Text style={styles.heading}>Amount</Text>  
-        <Text style={styles.input}>{totalPrice}</Text>  
+        <Text style={styles.input}>{totalPriceWithDiscount}</Text>  
         <Text style={styles.heading}>Card Number</Text>
         <TextInput
           style={styles.input}

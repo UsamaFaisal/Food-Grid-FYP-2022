@@ -75,6 +75,18 @@ export default function Admindashboard({ navigation }) {
                 </View>
                 <View style={styles.BtnWrapper}>
                     <Btn
+                       // disabled={disable}
+                        color={disable?'#555555':'#31D2F2'}
+                        title='Track Orders'
+                        btntextcolor='#000'
+                        navigation={() => {
+                            navigation.navigate('AdminTrackOrders');
+                            //setdisable(true);
+                    }} 
+                        />
+                </View>
+                <View style={styles.BtnWrapper}>
+                    <Btn
                         //disabled={disable}
                         color={disable?'#555555':'#31D2F2'}
                         title='Chat'

@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#47b749',
+    backgroundColor: '#000000',
   },
   EmailWrapper: {
     height: hp('15%'),

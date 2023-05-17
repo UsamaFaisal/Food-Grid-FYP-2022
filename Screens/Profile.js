@@ -196,15 +196,18 @@ const styles = StyleSheet.create({
       backgroundColor:'#D3D3D3',
       marginBottom: 16,
       marginTop:5,
-      width: '100%',
+      width: '94%',
       borderRadius: 8,
+      marginLeft:10,
     },
     button: {
-      backgroundColor: '#4CAF50',
+      backgroundColor: 'steelblue',
       padding: 12,
-      width:'100%',
+      width:'94%',
       borderRadius: 8,
       marginBottom:30,
+      marginLeft:10,
+      
     },
     button1: {
         backgroundColor: '#ADD8E6',
@@ -212,6 +215,9 @@ const styles = StyleSheet.create({
         width:'100%',
         borderRadius: 8,
         marginBottom:30,
+        marginLeft:8,
+        marginRight:18,
+
       },
   });
   

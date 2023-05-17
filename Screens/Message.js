@@ -83,22 +83,22 @@ export default function Message({ navigation }) {
                 back={() => navigation.goBack('Dashboard')}
             ></Header>
             <View>
-            <Text style={{textAlign:"center"}}>Admin</Text>
+            <Text style={styles.adminText}>Admin</Text>
             </View>
             <FlatList
                 data={messages}
                 extraData={messages}
                 renderItem={({ item }) => (
-                    <View style={styles.messageContainer}>
+                    <View style={[styles.messageContainer, { backgroundColor: item.email === cuseremail ? '#4CAF50' : '#EFEFEF' }]}>
                         {(item.email === cuseremail) > 0 ? (
-                            <Text style={{ textAlign: "right" }}>{item.message}</Text>
+                            <Text style={[styles.text, { color: '#000000',textAlign: "right" }]}>{item.message}</Text>                     
                         ) : (
-                            <Text style={{ textAlign: "left" }}>{item.message}</Text>
+                            <Text style={[styles.text,{ textAlign: "left",color: '#000000' }]}>{item.message}</Text>
                         )}
                     </View>
                 )}
             />
-            <View>
+            <View  >
                 <EmailField
                     email="Enter Message"
                     onChange={setmsg}
@@ -106,7 +106,7 @@ export default function Message({ navigation }) {
             </View>
             <View style={styles.BtnWrapper}>
                 <Btn
-                    color={disable ? '#555555' : '#000000'}
+                    color={disable ? '#555555' : 'steelblue'}
                     title="Send"
                     btntextcolor="#fff"
                     navigation={() => {
@@ -121,14 +121,32 @@ export default function Message({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    textInputContainer: {
+    backgroundColor: 'white',
+       
+      },
+    text: {
+        padding: 10,
+        color: '#000000',
+        borderRadius: 10,
+        fontSize: rf(16)
+      },
+    adminText: {
+        fontWeight: 'bold',
+        fontSize: rf(20),
+        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 10,
+      },
     header:{
         marginTop:100
     },
     container: {
         flex: 1,
-        backgroundColor: "#47b749",
+        backgroundColor: "#D3D3D3",
     },
-    EmailWrapper: {
+    EmailWrapper: 
+    {
         height: hp('15%'),
         justifyContent: 'flex-end',
         marginBottom: 10

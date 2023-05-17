@@ -20,7 +20,7 @@ export default function Footer(){
                   <Image style={styles.footerIcon} source={require('../assets/clipboard.png')} />
                   <Text style={styles.footerButtonText}>Order</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Deals')}>
                   <Image style={styles.footerIcon} source={require('../assets/deals_icon.png')} />
                   <Text style={styles.footerButtonText}>Deals</Text>
             </TouchableOpacity>

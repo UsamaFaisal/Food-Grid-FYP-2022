@@ -27,13 +27,15 @@ import AddUser from "../Screens/AddUser";
 import AddFooditem from "../Screens/AddFooditem";
 import ChatHandling from "../Screens/ChatHandling";
 import Vouchers from "../Screens/Vouchers";
+import Details from "../Screens/Details";
 import { AuthContext } from "./Authenticationprovider";
 import * as firebase from 'firebase';
 import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import TrackLocation from "../Screens/TrackLocation";
-
+import AdminTrackOrders from '../Screens/AdminTrackOrders';
+import Deals from "../Screens/Deals";
 const Stack = createStackNavigator();
 
 function AppNavigator() {
@@ -80,7 +82,9 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="Map" component={Map} /> :<Stack.Screen name="Map" component={Map} />}
         {user ? <Stack.Screen name="TrackLocation" component={TrackLocation} /> :<Stack.Screen name="TrackLocation" component={TrackLocation} />}
         {user ? <Stack.Screen name="Vouchers" component={Vouchers} /> :<Stack.Screen name="Vouchers" component={Vouchers} />}
-      
+        {user ? <Stack.Screen name="Details" component={Details} /> :<Stack.Screen name="Details" component={Details} />}
+        {user ? <Stack.Screen name="AdminTrackOrders" component={AdminTrackOrders} /> :<Stack.Screen name="AdminTrackOrders" component={AdminTrackOrders} />}
+        {user ? <Stack.Screen name="Deals" component={Deals} /> :<Stack.Screen name="Deals" component={Deals} />}
       </Stack.Navigator>
     </NavigationContainer>
   );

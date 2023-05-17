@@ -6,6 +6,9 @@ import Header from '../components/Header1';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 const ManageCart = ({ route,navigation }) => {
+  const [voucher,setvoucher]=useState("");
+  const [totalPriceWithDiscount, setTotalPriceWithDiscount] = useState(totalPrice); // Set initial value as totalPrice
+  const [allvouchers, setallvouchers] = useState('');
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
     const [username, setusername] = useState([]);
@@ -20,7 +23,7 @@ const ManageCart = ({ route,navigation }) => {
     const newReclatitude = reclatitude;
     // console.log("lat",newReclatitude);
     // console.log("lon",newReclongitude);
-
+    const [isDetailsVisible, setDetailsVisible] = useState(false);
     const [gindex, setgindex] = useState([]);
     const [loading, setLoading] = useState(false);
     const totalcalories = Cart.reduce((acc, item) => acc + Number(item.calories), 0);
@@ -30,7 +33,30 @@ const ManageCart = ({ route,navigation }) => {
     const totalsodium = Cart.reduce((acc, item) => acc + Number(item.sodium), 0);
     const totalsugar = Cart.reduce((acc, item) => acc + Number(item.sugar), 0);
   const totalPrice = Cart.reduce((acc, item) => acc + Number(item.itemPrice), 0);
+  
   const cuser = firebase.auth().currentUser;
+  function getvoucher(val) {
+    setvoucher(val);
+    //console.log(mail)
+}
+function setvalue(val) {
+  setTotalPriceWithDiscount(val);
+  //console.log(mail)
+}
+
+const voucherbutton = () => {
+  const matchedVoucher = allvouchers.find((voucher1) => voucher1.vcode === voucher);
+  if (matchedVoucher) {
+    const discountedPrice = totalPrice - (totalPrice * (matchedVoucher.vdiscountpercentage / 100));
+    setTotalPriceWithDiscount(discountedPrice);
+  } else {
+    setTotalPriceWithDiscount(totalPrice);
+    Alert.alert('Error', 'Invalid Voucher.');
+  }
+};
+  const data =[totalcalories,totalprotein,totalsugar,totalsodium,totalfats,totalcarbs];
+  const labels = ["Calories", "Protein", "Sugar", "Sodium", "Fats", "Carbs"];
+  const maxDataValue = Math.max(...data);
     //    console.log('Mange cart',user.email);
     const groupedItems = Cart.reduce((acc, item) => {
       const existingItem = acc.find((group) => group.itemName === item.itemName);
@@ -92,6 +118,18 @@ const ManageCart = ({ route,navigation }) => {
   useEffect(() => {
     getLocation();
     getUserInfo();
+    setvalue(totalPrice);
+    const userEmail = cuser.email;
+    const userOrdersRef = firebase.database().ref('Vouchers');
+    userOrdersRef.on('value', (snapshot) => {
+      const vouchersData = snapshot.val();
+      if (vouchersData) {
+        const userVouchers = Object.values(vouchersData).filter((voucher) => voucher.userid === userEmail);
+        setallvouchers(userVouchers);
+      } else {
+        setallvouchers([]);
+      }
+    });
   }, []);
   const handleOrder = async () => {
     setLoading(true);
@@ -144,32 +182,67 @@ const ManageCart = ({ route,navigation }) => {
               <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
               
               <TouchableOpacity onPress={() => {removeitem(index)}}>
-                <Text style={styles.button}>Remove</Text>
+              <Text style={styles.button2}>Remove</Text>
               </TouchableOpacity>
             </View>
           )}
         />
+        <View style={styles.container1}>
+          {data.map((value, index) => {
+            // Calculate the bar height relative to the maximum value
+            const barHeight = (value / maxDataValue) * 200;
+
+            return (
+              
+              <View>
+              {isDetailsVisible && (
+                <View>
+                  <View key={index} style={[styles.bar, { height: barHeight }]}>
+                    <Text style={styles.valueText}>{value}</Text>            
+                  </View>
+                  <View>
+                    <Text>{labels[index]}</Text>
+                  </View>
+                </View>
+              )}
+            </View>
+            
+
+                      
+            );
+          })}
+        </View>
         <ScrollView>
-          <Text style={styles.grandTotal}>Details of Nutrients</Text>
-          <Text style={styles.grandTotal}>
-            Calories {totalcalories} Protein {totalprotein}
-          </Text>
-          <Text style={styles.grandTotal}>
-            Sugar {totalsugar} Sodium {totalsodium}
-          </Text>
-          <Text style={styles.grandTotal}>
-            Fats {totalfats} Carbs {totalcarbs}
-          </Text>
-          <Text style={styles.grandTotal}></Text>
-          <Text style={styles.grandTotal}>
-            Grand Total: Rs.{totalPrice}
-          </Text>
-          <Text style={styles.heading}>Email</Text>
-          <TextInput
-            style={styles.input}
-            value={cuser.email}
-            editable={false}
-          />
+        <TouchableOpacity onPress={() => setDetailsVisible(!isDetailsVisible)}   style={styles.buttontxt}>
+          
+          <Text style={styles.Detail}>
+          Show Details
+            </Text>
+
+        </TouchableOpacity>
+        <Text>
+       <Text style={styles.grandTotal}>
+       Grand Total:
+       </Text>
+       <Text style={styles.grandTotal1}>
+         Rs.{totalPrice}
+       </Text>
+       </Text>
+       <TextInput
+                        style={styles.input}
+                        placeholder='Apply Voucher'
+                        value={voucher}
+                        onChangeText={getvoucher}
+                    />
+                    <Text onPress={voucherbutton}>Apply</Text>
+                    <Text>
+       <Text style={styles.grandTotal}>
+       Final Grand Total:
+       </Text>
+       <Text style={styles.grandTotal1}>
+         Rs.{totalPriceWithDiscount}
+       </Text>
+       </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Map', { longitude, latitude })}>
             <Text style={styles.button}>Set Location On Map</Text>
           </TouchableOpacity>
@@ -184,7 +257,7 @@ const ManageCart = ({ route,navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText} onPress={()=>navigation.navigate('MakePayment',{ totalPrice: totalPrice})}>
+            <Text style={styles.buttonText} onPress={()=>navigation.navigate('MakePayment',{ totalPriceWithDiscount: totalPriceWithDiscount})}>
               Online Pay
             </Text>
           </TouchableOpacity>
@@ -197,6 +270,21 @@ const ManageCart = ({ route,navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container1: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  bar: {
+    width: 25,
+    alignItems:'center',
+    alignSelf:'center',
+    backgroundColor: 'steelblue',
+    // marginRight: 8,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -222,6 +310,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop:10,
     marginLeft:8,
+    textAlign:'center'
   },
   input: {
     borderWidth: 1,
@@ -235,14 +324,28 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: 'steelblue',
     padding: 12,
     borderRadius: 8,
     marginBottom:10,
+    color:'black',
+    textAlign:'center',
+    marginLeft:5,
+    marginRight:5,
+  },
+  button2: {
+    backgroundColor: 'red',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom:10,
+     color:'black',
+     textAlign: 'center',
+      marginLeft:5,
+      marginRight:5,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: 'black',
+    // fontWeight: 'bold',
     textAlign: 'center',
   },
   grandTotal: {
@@ -250,17 +353,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     // marginVertical: 6,
   },
+  grandTotal1: {
+    fontSize: 20,
+    // fontWeight: 'bold',
+    // marginVertical: 6,
+  },
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:'#D3D3D3',
+    backgroundColor:'white',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 8,
+    marginLeft:5,
+      marginRight:5,
   },
   itemSubtitle: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  Detail: {
+    color: 'black',
+    fontSize: 16,
+    //fontWeight: 'bold',
+  },
+  buttontxt:
+  {
+    backgroundColor: 'steelblue',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft:5,
+    marginRight:5
   },
 });
 

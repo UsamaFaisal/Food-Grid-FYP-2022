@@ -19,7 +19,7 @@ export default function EmailField(props) {
             <View style={styles.EmailBody}>
                 <TextInput
                     placeholder={props.email}
-                    placeholderTextColor='white'
+                    placeholderTextColor='black'
                     style={styles.InputText} 
                     onChangeText={props.onChange}/>
                 {props?.Icon?<View style={styles.IconBody}>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#6ebe44',
+        backgroundColor: 'white',
         paddingHorizontal: 10,
         overflow: 'hidden',
         borderWidth: 1,

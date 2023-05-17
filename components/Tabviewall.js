@@ -4,6 +4,7 @@ import { View, useWindowDimensions, Text, FlatList,StyleSheet,Image, TouchableOp
 import { TabView, SceneMap } from 'react-native-tab-view';
 import * as firebase from 'firebase';
 import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 //import { ScrollView } from 'react-navigation';
 import Cart from './Cart';
 const images = new Map();
@@ -17,6 +18,7 @@ images.set('DietCoke', require('../assets/DietCoke.png'));
 images.set('ChocolateBiscuit', require('../assets/ChocolateBiscuit.png'));
 
 function FirstRoute() {
+  const navigation=useNavigation();
   const [fastfoodItems, setFastfoodItems] = useState([]);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ function FirstRoute() {
   }, []);
   // Cart.push("Hello");
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <FlatList
         data={fastfoodItems}
         renderItem={({ item }) => (
@@ -57,6 +59,9 @@ function FirstRoute() {
             <Text style={styles.itemTitle}>{item.itemName}</Text>
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
+            <TouchableOpacity style={styles.caloriesButton} onPress={() =>navigation.navigate('Details',{ item})}>
+                <Text style={styles.caloriesButtonText}>Calories</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
             
           </View>
@@ -67,6 +72,7 @@ function FirstRoute() {
 }
 
 function SecondRoute(){
+  const navigation=useNavigation();
     const [drinksItems, setDrinksItems] = useState([]);
     useEffect(() => {
         const fetchDrinksItems = async () => {
@@ -84,7 +90,7 @@ function SecondRoute(){
       }, []);
     
   return (
-  <View style={{ flex: 1, backgroundColor: '#fff' }}>
+  <View style={{ flex: 1, backgroundColor: 'white' }}>
     <FlatList
         data={drinksItems}
         renderItem={({ item }) => (
@@ -107,6 +113,9 @@ function SecondRoute(){
             <Text style={styles.itemTitle}>{item.itemName}</Text>
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
+            <TouchableOpacity style={styles.caloriesButton} onPress={() =>navigation.navigate('Details',{ item})}>
+                <Text style={styles.caloriesButtonText}>Calories</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
            
           </View>
@@ -116,6 +125,7 @@ function SecondRoute(){
   );
 };
 function ThirdRoute() { 
+  const navigation=useNavigation();
     const [biscuitsItems, setBiscuitsItems] = useState([]);
     useEffect(() => {
         const fetchBiscuitsItems = async () => {
@@ -132,7 +142,7 @@ function ThirdRoute() {
         fetchBiscuitsItems();
       }, []);
     return(
-  <View style={{ flex: 1, backgroundColor: '#fff' }}>
+  <View style={{ flex: 1, backgroundColor: 'white' }}>
     <FlatList
         data={biscuitsItems}
         renderItem={({ item }) => (
@@ -154,6 +164,9 @@ function ThirdRoute() {
             <Text style={styles.itemTitle}>{item.itemName}</Text>
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
+            <TouchableOpacity style={styles.caloriesButton} onPress={() =>navigation.navigate('Details',{ item})}>
+                <Text style={styles.caloriesButtonText}>Calories</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
           </View>
         )}
@@ -197,10 +210,10 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 8,
         marginHorizontal: 16,
-        borderWidth: 1,
+        borderWidth: 3,
         alignContent:'center',
         alignItems:'center',
-        borderColor: '#ddd',
+        borderColor: 'white',
         borderRadius: 4
       },
       itemTitle: {
