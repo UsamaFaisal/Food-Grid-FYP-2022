@@ -27,6 +27,7 @@ import Cart from '../components/Cart';
 export default function Dashboard({ navigation }) {
     const Tab = createBottomTabNavigator();
     const [disable,setdisable]=useState(false);
+    const [isSearchClicked, setIsSearchClicked] = useState(false);
     const [searchText, setSearchText] = useState('');
   const [items, setItems] = useState([]);
     const [error,seterror]=useState("");
@@ -41,10 +42,13 @@ export default function Dashboard({ navigation }) {
     } 
       
       const searchfun = () => {
+       
         if (searchText.trim() === '') {
+          setIsSearchClicked(false);
           setItems([]);
           return;
-        }      
+        }     
+        setIsSearchClicked(true); 
         firebase
         .database()
         .ref('Food/Fastfood')
@@ -90,21 +94,29 @@ export default function Dashboard({ navigation }) {
         <Text></Text>
 
         {/* ye jb search hoga to list show krega */}
-      
-          <FlatList
-            data={items}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => navigation.navigate('Tabviewallscreen')}>
-              <View style={styles.messageContainer}>
-                <Text style={styles.itemSubtitle}>{item.itemName}</Text>
-                <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
-                 
-              </View>
-              </TouchableOpacity>
-             
-            )}
-          />
-      
+        <View>
+          {/* Display FlatList only if items array is populated */}
+          {isSearchClicked && items.length > 0 && (
+            <FlatList
+              data={items}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => navigation.navigate('Tabviewallscreen')}>
+                  <View style={styles.messageContainer}>
+                    <Text style={styles.itemSubtitle}>{item.itemName}</Text>
+                    <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          )}
+
+          {/* Display "No items found" message if items array is empty */}
+          {isSearchClicked && searchText.trim() !== '' && items.length === 0 && (
+          <View style={styles.messageContainer}>
+            <Text style={styles.itemSubtitle}>No items found</Text>
+          </View>
+        )}
+        </View>
         </View>
         
     {/* yha ye buutons wala scene shuru ha     */}
@@ -139,7 +151,7 @@ export default function Dashboard({ navigation }) {
                     <Image style={styles.buttonImage1} source={require('../assets/managecart.png')} />
                     {/* <Text style={styles.buttonText1}>Manage Cart</Text> */}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => alert('Button 2 pressed!')}>
+                <TouchableOpacity style={styles.button1} onPress={() =>  navigation.navigate('Vouchers')}>
                     <Image style={styles.buttonImage1} source={require('../assets/applyvouchers.png')} />
                     {/* <Text style={styles.buttonText1}>Apply Vouchers</Text> */}
                 </TouchableOpacity>

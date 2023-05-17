@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
-import { View, useWindowDimensions, Text, FlatList,StyleSheet,TouchableOpacity, ScrollView,Image } from 'react-native';
+import { View, useWindowDimensions, Text, FlatList,StyleSheet,Alert,TouchableOpacity, ScrollView,Image } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import * as firebase from 'firebase';
 import { Button } from 'react-native-elements';
+import Cart from './Cart';
 
 const images = new Map();
 
@@ -49,42 +50,74 @@ images.set('Honey', require('../assets/Honey.png'));
 images.set('Round', require('../assets/Round.png'));
 images.set('Square', require('../assets/Square.png'));
 images.set('Heart', require('../assets/Heart.png'));
-const HorizontalList = ({ title, data, onSelect }) => {
+
+const HorizontalList = ({ title, data, selected, onSelect, allowMultipleSelections }) => {
+  const handleSelect = (item) => {
+    if (allowMultipleSelections) {
+      const isSelected = selected && selected.some((selectedItem) => selectedItem.itemName === item.itemName);
+
+      if (isSelected) {
+        const updatedSelected = selected.filter((selectedItem) => selectedItem.itemName !== item.itemName);
+        onSelect(updatedSelected);
+      } else {
+        const updatedSelected = [...selected, item];
+        onSelect(updatedSelected);
+      }
+    } else {
+      if (selected === item) {
+        onSelect(null);
+      } else {
+        onSelect(item);
+      }
+    }
+  };
+
   return (
     <View>
-        <View style={styles.itemContainer}>
-          <Text>{title}</Text>
-          <FlatList
-            horizontal
-            data={data}
-            renderItem={({ item }) => (
-            <View style={styles.itemContainerinner}> 
-            <TouchableOpacity>
-            <Image
-              style={styles.imgsize}
-              source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
-            />
-            {/* <Image style={styles.imgsize} source={images.get(item.itemName)} /> */}
-           
-              <Text style= {styles.listtext} onPress={() => onSelect(item)}> 
-              {item.itemName}  
-              </Text>
-            </TouchableOpacity>
-              </View>
-            )}
-            //keyExtractor={(item) => item.id}
-          />
-          
-        </View>
-        
+      <View style={styles.itemContainer}>
+        <Text>{title}</Text>
+        <FlatList
+          horizontal
+          data={data}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainerinner}>
+              <TouchableOpacity onPress={() => handleSelect(item)}>
+                <Image
+                  style={styles.imgsize}
+                  source={images.get(item.itemName) ? images.get(item.itemName) : require('../assets/loading.png')}
+                />
+                <Text
+                  style={[
+                    styles.listtext,
+                    allowMultipleSelections && selected.some((selectedItem) => selectedItem.itemName === item.itemName)
+                      ? styles.selectedText
+                      : selected === item
+                      ? styles.selectedText
+                      : null,
+                  ]}
+                >
+                  {item.itemName}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </View>
     </View>
   );
 };
+
+
 function FirstRoute() {
   const [breads, setBreads] = useState([]);
   const [flavors, setFlavors] = useState([]);
   const [sauces, setSauces] = useState([]);
   const [veggies, setVeggies] = useState([]);
+
+  const [selectedBread, setSelectedBread] = useState([]);
+  const [selectedflavors, setselectedflavors] = useState([]);
+  const [selectedsauces, setSelectedSauces] = useState([]);
+  const [selectedveggies, setSelectedVeggies] = useState([]);
 
   useEffect(() => {
     // fetch breads data from Firebase
@@ -98,6 +131,7 @@ function FirstRoute() {
       });
       setBreads(Bitems);
     };
+    
     const fetchflavours = async () => {
       const dbRef = firebase.database().ref('/Singlefooditem/Pizza/Flavours');
       const snapshot = await dbRef.once('value');
@@ -140,19 +174,18 @@ function FirstRoute() {
   }, []);
 
   const handleBreadSelect = (bread) => {
-    // handle bread selection
+    setSelectedBread(bread);
   };
-
   const handleFlavorSelect = (flavor) => {
-    // handle flavor selection
+    setselectedflavors(flavor);
   };
 
   const handleSauceSelect = (sauce) => {
-    // handle sauce selection
+    setSelectedSauces(sauce);
   };
 
   const handleVeggieSelect = (veggie) => {
-    // handle veggie selection
+    setSelectedVeggies(veggie);
   };
   const [count, setCount] = useState(1);
   const decrement = () => {
@@ -166,25 +199,65 @@ function FirstRoute() {
   };
 
   const addToCart = () => {
-    // code to add item to cart
+    try{
+    const selectedItems = [selectedBread, selectedflavors, ...selectedsauces, ...selectedveggies];
+    const totalCalories = selectedItems.reduce((sum, item) => sum + parseInt(item.calories), 0);
+    const totalCarbs =selectedItems.reduce((sum, item) => sum + parseInt(item.carbs), 0);
+    const totalfats =selectedItems.reduce((sum, item) => sum + parseInt(item.fats), 0);
+    const totalprice =selectedItems.reduce((sum, item) => sum + parseInt(item.itemPrice), 0);
+    const totalprotein =selectedItems.reduce((sum, item) => sum + parseInt(item.protein), 0);
+    const totalsodium =selectedItems.reduce((sum, item) => sum + parseInt(item.sodium), 0);
+    const totalsugar =selectedItems.reduce((sum, item) => sum + parseInt(item.sugar), 0);
+    const veggiesNames = selectedveggies.map((veggie) => veggie.itemName).join(", ");
+    const saucesNames = selectedsauces.map((sauce) => sauce.itemName).join(", ");
+    const selectedItem = {
+      calories: totalCalories.toString(),
+      carbs: totalCarbs.toString(), 
+      fats: totalfats.toString(),
+      itemName : "Quantity \n Bread: " + selectedBread.itemName.toString() + "\n Flavour: " + selectedflavors.itemName.toString() + "\n Sauces: " + saucesNames + "\n Veggies: " + veggiesNames,
+      itemPrice: totalprice.toString(), 
+      itemQuantity:"0",
+      protein: totalprotein.toString(),
+      sodium: totalsodium.toString(),
+      sugar: totalsugar.toString(),
+    };
+    Alert.alert(
+      'Add to cart',
+      `Do you want to add selected item to your cart?`,
+      [
+        { text: 'Cancel' },
+        {
+          text: 'Add to cart',
+          onPress: () => {
+            // Define the item to add to the cart (e.g. selectedBread)
+            const itemToAdd = selectedItem;
+            
+            // Add the item to the cart (e.g. using setState if you're using React state)
+            Cart.push(selectedItem);
+            // console.log("selected item:",selectedItem);
+            // Display a confirmation message to the user (optional)
+            Alert.alert('Item added to cart!');
+          }
+        }
+      ]
+    );
+  }catch (error) {
+    Alert.alert('Error', 'An error occurred while adding the item to the cart.');
+  }
   };
+  
+  
   return(
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View>
-                <HorizontalList title="Breads" data={breads} onSelect={handleBreadSelect} />
-                <HorizontalList title="Flavors" data={flavors} onSelect={handleFlavorSelect} />
-                <HorizontalList title="Sauces" data={sauces} onSelect={handleSauceSelect} />
-                <HorizontalList title="Veggies" data={veggies} onSelect={handleVeggieSelect} />
+                {/* <HorizontalList title="Breads" data={breads} onSelect={handleBreadSelect} /> */}
+                <HorizontalList title="Breads" data={breads} selected={selectedBread} onSelect={handleBreadSelect} />
+                <HorizontalList title="Flavors" data={flavors} selected={selectedflavors} onSelect={handleFlavorSelect} />
+                <HorizontalList title="Sauces" data={sauces} selected={selectedsauces} onSelect={handleSauceSelect} allowMultipleSelections/>
+                <HorizontalList title="Veggies" data={veggies} selected={selectedveggies} onSelect={handleVeggieSelect} allowMultipleSelections/>
+
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={decrement}>
-                <Text style={styles.buttonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={{ marginHorizontal: 10 }}>{count}</Text>
-                <TouchableOpacity onPress={increment}>
-                <Text style={styles.buttonText}>+</Text>          
-              </TouchableOpacity>
-            
                 <Button title="Add to cart" onPress={addToCart} />   
             </View>
     </ScrollView>
@@ -195,6 +268,11 @@ function SecondRoute (){
   const [flavors, setFlavors] = useState([]);
   const [sauces, setSauces] = useState([]);
   const [veggies, setVeggies] = useState([]);
+
+  const [selectedBread, setSelectedBread] = useState([]);
+  const [selectedflavors, setselectedflavors] = useState([]);
+  const [selectedsauces, setSelectedSauces] = useState([]);
+  const [selectedveggies, setSelectedVeggies] = useState([]);
 
   useEffect(() => {
     // fetch breads data from Firebase
@@ -248,20 +326,20 @@ function SecondRoute (){
      fetchvegies();
   }, []);
 
+  
   const handleBreadSelect = (bread) => {
-    // handle bread selection
+    setSelectedBread(bread);
   };
-
   const handleFlavorSelect = (flavor) => {
-    // handle flavor selection
+    setselectedflavors(flavor);
   };
 
   const handleSauceSelect = (sauce) => {
-    // handle sauce selection
+    setSelectedSauces(sauce);
   };
 
   const handleVeggieSelect = (veggie) => {
-    // handle veggie selection
+    setSelectedVeggies(veggie);
   };
   const [count, setCount] = useState(1);
   const decrement = () => {
@@ -275,25 +353,61 @@ function SecondRoute (){
   };
 
   const addToCart = () => {
-    // code to add item to cart
+    try{
+    const selectedItems = [selectedBread, selectedflavors, ...selectedsauces, ...selectedveggies];
+    const totalCalories = selectedItems.reduce((sum, item) => sum + parseInt(item.calories), 0);
+    const totalCarbs =selectedItems.reduce((sum, item) => sum + parseInt(item.carbs), 0);
+    const totalfats =selectedItems.reduce((sum, item) => sum + parseInt(item.fats), 0);
+    const totalprice =selectedItems.reduce((sum, item) => sum + parseInt(item.itemPrice), 0);
+    const totalprotein =selectedItems.reduce((sum, item) => sum + parseInt(item.protein), 0);
+    const totalsodium =selectedItems.reduce((sum, item) => sum + parseInt(item.sodium), 0);
+    const totalsugar =selectedItems.reduce((sum, item) => sum + parseInt(item.sugar), 0);
+    const veggiesNames = selectedveggies.map((veggie) => veggie.itemName).join(", ");
+    const saucesNames = selectedsauces.map((sauce) => sauce.itemName).join(", ");
+    const selectedItem = {
+      calories: totalCalories.toString(),
+      carbs: totalCarbs.toString(), 
+      fats: totalfats.toString(),
+      itemName : "Quantity \n Bread: " + selectedBread.itemName.toString() + "\n Flavour: " + selectedflavors.itemName.toString() + "\n Sauces: " + saucesNames + "\n Veggies: " + veggiesNames,
+      itemPrice: totalprice.toString(), 
+      itemQuantity:"0",
+      protein: totalprotein.toString(),
+      sodium: totalsodium.toString(),
+      sugar: totalsugar.toString(),
+    };
+    Alert.alert(
+      'Add to cart',
+      `Do you want to add selected item to your cart?`,
+      [
+        { text: 'Cancel' },
+        {
+          text: 'Add to cart',
+          onPress: () => {
+            // Define the item to add to the cart (e.g. selectedBread)
+            const itemToAdd = selectedItem;
+            
+            // Add the item to the cart (e.g. using setState if you're using React state)
+            Cart.push(selectedItem);
+            // console.log("selected item:",selectedItem);
+            // Display a confirmation message to the user (optional)
+            Alert.alert('Item added to cart!');
+          }
+        }
+      ]
+    );
+  }catch (error) {
+    Alert.alert('Error', 'An error occurred while adding the item to the cart.');
+  }
   };
   return(
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View>
-                <HorizontalList title="Breads" data={breads} onSelect={handleBreadSelect} />
-                <HorizontalList title="Flavors" data={flavors} onSelect={handleFlavorSelect} />
-                <HorizontalList title="Sauces" data={sauces} onSelect={handleSauceSelect} />
-                <HorizontalList title="Veggies" data={veggies} onSelect={handleVeggieSelect} />
+                <HorizontalList title="Breads" data={breads} selected={selectedBread} onSelect={handleBreadSelect} />
+                <HorizontalList title="Flavors" data={flavors} selected={selectedflavors} onSelect={handleFlavorSelect} />
+                <HorizontalList title="Sauces" data={sauces} selected={selectedsauces} onSelect={handleSauceSelect} allowMultipleSelections/>
+                <HorizontalList title="Veggies" data={veggies} selected={selectedveggies} onSelect={handleVeggieSelect} allowMultipleSelections/>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={decrement}>
-                <Text style={styles.buttonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={{ marginHorizontal: 10 }}>{count}</Text>
-                <TouchableOpacity onPress={increment}>
-                <Text style={styles.buttonText}>+</Text>          
-              </TouchableOpacity>
-            
                 <Button title="Add to cart" onPress={addToCart} />   
             </View>
     </ScrollView>
@@ -304,6 +418,11 @@ function ThirdRoute() {
   const [toppings, setToppings] = useState([]);
   const [coatings, setCoatings] = useState([]);
   const [shape, setShape] = useState([]);
+
+  const [selectedflavors, setselectedflavors] = useState([]);
+  const [selectedtoppings, setSelectedtoppings] = useState([]);
+  const [selectedcoatings, setSelectedcoatings] = useState([]);
+  const [selectedshape, setSelectedshape] = useState([]);
 
   useEffect(() => {
     // fetch breads data from Firebase
@@ -361,18 +480,18 @@ function ThirdRoute() {
   
 
   const handleFlavorSelect = (flavor) => {
-    // handle flavor selection
+    setselectedflavors(flavor);
   };
   const handleToppingsSelect = (topping) => {
-    // handle bread selection
+    setSelectedtoppings(topping);
   };
 
   const handleCoatingsSelect = (coating) => {
-    // handle sauce selection
+     setSelectedcoatings(coating);
   };
 
   const handleShapeSelect = (shape) => {
-    // handle veggie selection
+    setSelectedshape(shape);
   };
   const [count, setCount] = useState(1);
   const decrement = () => {
@@ -386,25 +505,61 @@ function ThirdRoute() {
   };
 
   const addToCart = () => {
-    // code to add item to cart
+    try{
+    const selectedItems = [selectedflavors, ...selectedtoppings, ...selectedtoppings,selectedshape];
+    const totalCalories = selectedItems.reduce((sum, item) => sum + parseInt(item.calories), 0);
+    const totalCarbs =selectedItems.reduce((sum, item) => sum + parseInt(item.carbs), 0);
+    const totalfats =selectedItems.reduce((sum, item) => sum + parseInt(item.fats), 0);
+    const totalprice =selectedItems.reduce((sum, item) => sum + parseInt(item.itemPrice), 0);
+    const totalprotein =selectedItems.reduce((sum, item) => sum + parseInt(item.protein), 0);
+    const totalsodium =selectedItems.reduce((sum, item) => sum + parseInt(item.sodium), 0);
+    const totalsugar =selectedItems.reduce((sum, item) => sum + parseInt(item.sugar), 0);
+    const toppingsNames = selectedtoppings.map((topping) => topping.itemName).join(", ");
+    const coatingsNames = selectedcoatings.map((coating) => coating.itemName).join(", ");
+    const selectedItem = {
+      calories: totalCalories.toString(),
+      carbs: totalCarbs.toString(), 
+      fats: totalfats.toString(),
+      itemName : "kg \n Flavour: " + selectedflavors.itemName.toString() + "\n Toppings: " + toppingsNames + "\n Coatings: " + coatingsNames + "\n Shape: " + selectedshape.itemName.toString(),
+      itemPrice: totalprice.toString(), 
+      itemQuantity:"0",
+      protein: totalprotein.toString(),
+      sodium: totalsodium.toString(),
+      sugar: totalsugar.toString(),
+    };
+    Alert.alert(
+      'Add to cart',
+      `Do you want to add selected items to your cart?`,
+      [
+        { text: 'Cancel' },
+        {
+          text: 'Add to cart',
+          onPress: () => {
+            // Define the item to add to the cart (e.g. selectedBread)
+            const itemToAdd = selectedItem;
+            
+            // Add the item to the cart (e.g. using setState if you're using React state)
+            Cart.push(selectedItem);
+            // console.log("selected item:",selectedItem);
+            // Display a confirmation message to the user (optional)
+            Alert.alert('Item added to cart!');
+          }
+        }
+      ]
+    );
+  }catch (error) {
+    Alert.alert('Error', 'An error occurred while adding the item to the cart.');
+  }
   };
   return(
     <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
             <View>
-                <HorizontalList title="Flavours" data={flavors} onSelect={handleFlavorSelect} />
-                <HorizontalList title="Toppings" data={toppings} onSelect={handleToppingsSelect} />
-                <HorizontalList title="Coatings" data={coatings} onSelect={handleCoatingsSelect} />
-                <HorizontalList title="Shapes" data={shape} onSelect={handleShapeSelect} />
+                <HorizontalList title="Flavours" data={flavors} selected={selectedflavors} onSelect={handleFlavorSelect} />
+                <HorizontalList title="Toppings" data={toppings} selected={selectedtoppings} onSelect={handleToppingsSelect} allowMultipleSelections/>
+                <HorizontalList title="Coatings" data={coatings} selected={selectedcoatings} onSelect={handleCoatingsSelect} allowMultipleSelections/>
+                <HorizontalList title="Shapes" data={shape} selected={selectedshape} onSelect={handleShapeSelect} />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={decrement}>
-                <Text style={styles.buttonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={{ marginHorizontal: 10 }}>{count}</Text>
-                <TouchableOpacity onPress={increment}>
-                <Text style={styles.buttonText}>+</Text>          
-              </TouchableOpacity>
-            
                 <Button title="Add to cart" onPress={addToCart} />   
             </View>
     </ScrollView>
@@ -450,9 +605,15 @@ const styles = StyleSheet.create({
       borderColor: '#000000',
       borderRadius: 4
     },
-    listtext:{
-      textAlign:'center',
+    listtext: {
+      color: 'black',
     },
+    selectedText: {
+      color: 'red',
+    },
+    // listtext:{
+    //   textAlign:'center',
+    // },
     itemContainerinner: {
       height:100,
       width:90,

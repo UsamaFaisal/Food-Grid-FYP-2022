@@ -25,7 +25,8 @@ import EditUser from "../Screens/EditUser";
 import EditFooditem from "../Screens/EditFooditem";
 import AddUser from "../Screens/AddUser";
 import AddFooditem from "../Screens/AddFooditem";
-import ChatHandling from "../Screens/ChatHandling"
+import ChatHandling from "../Screens/ChatHandling";
+import Vouchers from "../Screens/Vouchers";
 import { AuthContext } from "./Authenticationprovider";
 import * as firebase from 'firebase';
 import { useContext } from "react";
@@ -78,6 +79,8 @@ const onAuthStateChanged=(user)=>{
         {user ? <Stack.Screen name="Order" component={Order} /> :<Stack.Screen name="Order" component={Order} />}
         {user ? <Stack.Screen name="Map" component={Map} /> :<Stack.Screen name="Map" component={Map} />}
         {user ? <Stack.Screen name="TrackLocation" component={TrackLocation} /> :<Stack.Screen name="TrackLocation" component={TrackLocation} />}
+        {user ? <Stack.Screen name="Vouchers" component={Vouchers} /> :<Stack.Screen name="Vouchers" component={Vouchers} />}
+      
       </Stack.Navigator>
     </NavigationContainer>
   );

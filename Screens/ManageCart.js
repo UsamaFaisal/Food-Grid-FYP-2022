@@ -38,10 +38,15 @@ const ManageCart = ({ route,navigation }) => {
         existingItem.count += 1;
         existingItem.itemPrice += parseInt(item.itemPrice, 10);
       } else {
-        acc.push({ ...item, count: 1, itemPrice: parseInt(item.itemPrice, 10) });
+        const count = existingItem ? existingItem.count : 1;
+        acc.push({ ...item, count: count, itemPrice: parseInt(item.itemPrice, 10) });
       }
       return acc;
     }, []);
+    
+    
+    
+    
 //   console.log(groupedItems);
   const getUserInfo = () => {
     const usersRef = firebase.database().ref('Users');
