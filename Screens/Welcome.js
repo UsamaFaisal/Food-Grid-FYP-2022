@@ -14,7 +14,7 @@ export default function Welcome({ navigation }) {
     useEffect(() => {
         setTimeout(() => {
           navigation.replace('Signup'); // replace the current screen with the next screen
-        }, 1000); // display the splash screen for 3 seconds
+        }, 3000); // display the splash screen for 3 seconds
       }, [navigation]);
     return (
         <View style={styles.container}>

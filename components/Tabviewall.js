@@ -60,7 +60,7 @@ function FirstRoute() {
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
             <TouchableOpacity style={styles.caloriesButton} onPress={() =>navigation.navigate('Details',{ item})}>
-                <Text style={styles.caloriesButtonText}>Calories</Text>
+                <Text style={styles.caloriesButtonText}>Details</Text>
               </TouchableOpacity>
             </TouchableOpacity>
             
@@ -114,7 +114,7 @@ function SecondRoute(){
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
             <TouchableOpacity style={styles.caloriesButton} onPress={() =>navigation.navigate('Details',{ item})}>
-                <Text style={styles.caloriesButtonText}>Calories</Text>
+                <Text style={styles.caloriesButtonText}>Details</Text>
               </TouchableOpacity>
             </TouchableOpacity>
            
@@ -165,7 +165,7 @@ function ThirdRoute() {
             <Text style={styles.itemSubtitle}>Rs.{item.itemPrice}</Text>
             <Text></Text>
             <TouchableOpacity style={styles.caloriesButton} onPress={() =>navigation.navigate('Details',{ item})}>
-                <Text style={styles.caloriesButtonText}>Calories</Text>
+                <Text style={styles.caloriesButtonText}>Details</Text>
               </TouchableOpacity>
             </TouchableOpacity>
           </View>
@@ -215,6 +215,10 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderColor: 'white',
         borderRadius: 4
+      },
+      caloriesButtonText:{
+          color:'blue',
+          
       },
       itemTitle: {
 

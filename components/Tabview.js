@@ -257,7 +257,7 @@ function FirstRoute() {
                 <HorizontalList title="Veggies" data={veggies} selected={selectedveggies} onSelect={handleVeggieSelect} allowMultipleSelections/>
 
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{margin:15}}>
                 <Button title="Add to cart" onPress={addToCart} />   
             </View>
     </ScrollView>
@@ -407,7 +407,7 @@ function SecondRoute (){
                 <HorizontalList title="Sauces" data={sauces} selected={selectedsauces} onSelect={handleSauceSelect} allowMultipleSelections/>
                 <HorizontalList title="Veggies" data={veggies} selected={selectedveggies} onSelect={handleVeggieSelect} allowMultipleSelections/>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{margin:15}}>
                 <Button title="Add to cart" onPress={addToCart} />   
             </View>
     </ScrollView>
@@ -559,7 +559,7 @@ function ThirdRoute() {
                 <HorizontalList title="Coatings" data={coatings} selected={selectedcoatings} onSelect={handleCoatingsSelect} allowMultipleSelections/>
                 <HorizontalList title="Shapes" data={shape} selected={selectedshape} onSelect={handleShapeSelect} />
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{margin:15}}>
                 <Button title="Add to cart" onPress={addToCart} />   
             </View>
     </ScrollView>

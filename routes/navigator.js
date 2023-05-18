@@ -55,7 +55,7 @@ const onAuthStateChanged=(user)=>{
     return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>  
-      {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
+      <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Signup" component={Signup} />
         {/* <Stack.Screen name="Dashboard" component={Dashboard} /> */}
         <Stack.Screen name="GiveFeedback" component={GiveFeedback} />
