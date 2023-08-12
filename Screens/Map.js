@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-const Map = ({ route, navigation }) => {
+const Map = ({ route, navigation }) => 
+{
   const { longitude, latitude } = route.params || {};
   const [location, setLocation] = useState({ longitude, latitude });
 

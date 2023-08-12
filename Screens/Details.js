@@ -14,11 +14,7 @@ const Details = () => {
     const sugar = parseInt(item.sugar);
     const data = [calories, carbs,fats,protein, sodium,sugar];
     const labels = ["Calories", "Carbs", "Fats", "Proteins", "Sodium", "Sugar"];
-    const chartData = [
-        { value: 30, color: '#F44336' },
-        { value: 45, color: '#2196F3' },
-        { value: 25, color: '#4CAF50' },
-      ];
+  
 //    const data = [20, 50, 35, 70, 45,40];
   return (
     <View>
