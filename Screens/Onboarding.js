@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
-import PagerView from 'react-native-pager-view'
+// import PagerView from 'react-native-pager-view'
 export default function Onboarding({ navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar style='auto' />
-            <PagerView style={styles.viewPager} initialPage={0}>
+            {/* <PagerView style={styles.viewPager} initialPage={0}>
                 <View style={styles.page} key="1">
                  
                     <View style={styles.PicWrapper}>
@@ -92,7 +92,7 @@ export default function Onboarding({ navigation }) {
                     </View>
 
                 </View>
-            </PagerView>
+            </PagerView> */}
 
         </View>
     );

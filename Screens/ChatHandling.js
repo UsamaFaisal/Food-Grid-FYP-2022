@@ -19,7 +19,6 @@ import EmailField from '../components/EmailField';
 import Btn from '../components/Btn';
 import Header from '../components/Header';
 import * as firebase from 'firebase';
-import { GiftedChat } from 'react-native-gifted-chat';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function ChatHandling() {

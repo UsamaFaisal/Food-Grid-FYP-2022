@@ -4,7 +4,7 @@
     "slug": "FoodGrid",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/l1img.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

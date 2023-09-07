@@ -4,22 +4,16 @@ import {
     Text,
     View,
     StatusBar,
-    Image,
-    TouchableOpacity,
     ScrollView,
     Alert
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import Header from '../components/Header'
-
 import EmailField from '../components/EmailField';
-import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
 import * as firebase from 'firebase'
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-
 export default function AddFooditem({ navigation }) {
     const [disable,setdisable]=useState(false);
     

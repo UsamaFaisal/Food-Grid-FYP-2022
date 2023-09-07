@@ -1,15 +1,7 @@
-import React, { useState,useContext ,useEffect,useRef} from 'react';
+import React, { useState,useContext} from 'react';
 import {
     StyleSheet,
-    Text,
-    TextInput,
-    View,
-    FlatList,
-    StatusBar,
     SafeAreaView,
-    Image,
-    TouchableOpacity,
-    ScrollView,
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 //import SideMenu from 'react-native-sidebar';

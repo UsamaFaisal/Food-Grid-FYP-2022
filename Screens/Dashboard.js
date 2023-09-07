@@ -12,8 +12,7 @@ import {
     ScrollView,
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { OffCanvas3D } from 'react-native-off-canvas-menu';
-import Icon from 'react-native-vector-icons/EvilIcons';
+
 import { FontAwesome5 } from 'react-native-vector-icons';
 import HomeCarousel from '../components/Carousel';
 import { useNavigation } from '@react-navigation/native';

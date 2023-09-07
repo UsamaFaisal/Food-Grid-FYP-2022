@@ -11,13 +11,10 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue as rf } from "react-native-responsive-fontsize";
 import { FontAwesome5 } from 'react-native-vector-icons';
-import EmailField from '../components/EmailField';
-import PasswordField from '../components/PasswordField';
 import Btn from '../components/Btn';
 import { AuthContext } from '../routes/Authenticationprovider';
 import * as firebase from 'firebase'
 import { createStackNavigator } from '@react-navigation/stack';
-// import { TextInput } from 'react-native-paper';
 
 
 const Stack = createStackNavigator();
